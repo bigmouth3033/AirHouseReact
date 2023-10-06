@@ -1,0 +1,42 @@
+.carousel-button-group-body {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  & .icon {
+    background-color: black;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: white;
+    visibility: hidden;
+  }
+
+}
+
+.body-item-arrowleft {
+  border: 0;
+  background-color: rgba(0, 0, 0, 0.01);
+
+  > .icon {
+    font-size: 1.5rem;
+  }
+
+  &:hover{ 
+    transform: scale(1.3);
+  }
+}
+
+.body-item-arrowright {
+  border: 0;
+  background-color: rgba(0, 0, 0, 0.01);
+
+  > .icon {
+    font-size: 1.5rem;
+  }
+
+  &:hover{ 
+    transform: scale(1.3);
+  }
+}
