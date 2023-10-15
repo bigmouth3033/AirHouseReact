@@ -1,11 +1,7 @@
 import styled, { css } from "styled-components";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { useState } from "react";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
 
 // import image
 
@@ -24,11 +20,11 @@ import treehouses from "../../assets/nav-slider-img/treehouses.jpg";
 import trending from "../../assets/nav-slider-img/trending.jpg";
 
 const items = [
-  { img: amazingPools, name: "Amazing pools", border: true },
-  { img: amazingViews, name: "Amazing views", border: false },
+  { img: amazingViews, name: "Amazing views", border: true },
   { img: beach, name: "Beach", border: false },
   { img: boats, name: "Boats", border: false },
   { img: farm, name: "Farm", border: false },
+  { img: amazingPools, name: "Amazing pools", border: false },
   { img: golfing, name: "Golfing", border: false },
   { img: iconicCities, name: "Iconic cities", border: false },
   { img: nationPark, name: "Nation park", border: false },
@@ -43,7 +39,7 @@ const StyledItemContainer = styled.button`
   border: 0;
   background-color: white;
   border-bottom: 2px solid white;
-  width: fit-content;
+  width: max-content;
   padding-top: 1rem;
   gap: 10px;
   cursor: pointer;
@@ -51,6 +47,7 @@ const StyledItemContainer = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
+ 
 
   > p {
     padding-bottom: 10px;
@@ -62,18 +59,24 @@ const StyledItemContainer = styled.button`
   }
 
   &:hover > p {
-    border-bottom: 3px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
   }
 
   ${(props) => {
     if (props.border === false) {
       return css`
         & > p {
-          border-bottom: 3px solid rgba(255, 255, 255);
+          border-bottom: 2px solid rgba(255, 255, 255);
         }
 
         &:hover > p {
-          border-bottom: 3px solid rgba(0, 0, 0, 0.3);
+          border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+        }
+
+        filter: opacity(0.6);
+
+        &:hover {
+          filter: opacity(1);
         }
       `;
     }
@@ -81,21 +84,15 @@ const StyledItemContainer = styled.button`
     if (props.border === true) {
       return css`
         & > p {
-          border-bottom: 3px solid rgba(0, 0, 0);
+          border-bottom: 2px solid rgba(0, 0, 0);
         }
 
         &:hover > p {
-          border-bottom: 3px solid rgba(0, 0, 0, 1);
+          border-bottom: 2px solid rgba(0, 0, 0, 1);
         }
       `;
     }
   }};
-`;
-
-const StyledCarousel = styled(Carousel)`
-  & ${StyledItemContainer} {
-    margin: auto;
-  }
 `;
 
 function SliderItem({ img, name, click, borderEffect }) {
@@ -108,43 +105,73 @@ function SliderItem({ img, name, click, borderEffect }) {
 }
 
 const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
+  reponsive_1: {
+    breakpoint: { max: 1640, min: 1100 },
+    items: 12,
+  },
+  reponsive_2: {
+    breakpoint: { max: 1500, min: 1400 },
     items: 10,
   },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 10,
+  reponsive_3: {
+    breakpoint: { max: 1400, min: 1300 },
+    items: 9,
   },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
+  reponsive_4: {
+    breakpoint: { max: 1300, min: 1200 },
+    items: 8,
   },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
+  reponsive_5: {
+    breakpoint: { max: 1200, min: 1100 },
+    items: 7,
+  },
+  reponsive_6: {
+    breakpoint: { max: 1100, min: 1000 },
+    items: 6,
+  },
+  reponsive_7: {
+    breakpoint: { max: 1000, min: 900 },
+    items: 5,
+  },
+  reponsive_8: {
+    breakpoint: { max: 900, min: 800 },
+    items: 4,
+  },
+  reponsive_9: {
+    breakpoint: { max: 800, min: 744 },
+    items: 4,
+  },
+  reponsive_10: {
+    breakpoint: { max: 744, min: 650 },
+    items: 7,
+  },
+  reponsive_11: {
+    breakpoint: { max: 650, min: 550 },
+    items: 6,
+  },
+  reponsive_12: {
+    breakpoint: { max: 550, min: 450 },
+    items: 5,
+  },
+  reponsive_13: {
+    breakpoint: { max: 450, min: 350 },
+    items: 4,
+  },
+  reponsive_14: {
+    breakpoint: { max: 350, min: 0 },
+    items: 3,
   },
 };
 
-const ButtonGroup = ({ next, previous, goToSlide, ...rest }) => {
-  const {
-    carouselState: { currentSlide },
-  } = rest;
-  return (
-    <div className="carousel-button-group">
-      <button className={currentSlide === 0 ? "disable" : "left"} onClick={() => previous()}>
-        <FontAwesomeIcon className="icon" icon={faChevronCircleLeft} />
-      </button>
-      <button className={currentSlide === 3 ? "disable" : "right"} onClick={() => next()}>
-        <FontAwesomeIcon className="icon" icon={faChevronCircleRight} />
-      </button>
-    </div>
-  );
-};
+
+const StyledCarousel = styled(Carousel)`
+  & ${StyledItemContainer} {
+    margin: auto;
+  }
+`;
 
 const StyledContainer = styled.div`
-  width: 75%;
+  display: grid;
 `;
 
 function NavCarousel() {
@@ -162,13 +189,27 @@ function NavCarousel() {
     setShowBorder(newList);
   }
 
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => setWidth(window.innerWidth));
+  }, []);
+
   return (
     <StyledContainer>
-      <StyledCarousel arrows={false} customButtonGroup={<ButtonGroup />} responsive={responsive}>
-        {showBorder.map((item, index) => (
-          <SliderItem click={() => onClickShowBorder(index)} borderEffect={item.border} img={item.img} name={item.name} key={item.name} />
-        ))}
-      </StyledCarousel>
+      {width > 744 ? (
+        <StyledCarousel  draggable={false} swipeable={false} arrows={true} containerClass="carousel-container" responsive={responsive}>
+          {showBorder.map((item, index) => (
+            <SliderItem click={() => onClickShowBorder(index)} borderEffect={item.border} img={item.img} name={item.name} key={item.name} />
+          ))}
+        </StyledCarousel>
+      ) : (
+        <StyledCarousel arrows={false} centerMode={true} containerClass="carousel-container" responsive={responsive}>
+          {showBorder.map((item, index) => (
+            <SliderItem click={() => onClickShowBorder(index)} borderEffect={item.border} img={item.img} name={item.name} key={item.name} />
+          ))}
+        </StyledCarousel>
+      )}
     </StyledContainer>
   );
 }

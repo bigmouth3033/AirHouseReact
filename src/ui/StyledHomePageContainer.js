@@ -4,6 +4,7 @@ const StyledHomePageContainer = styled.div`
   width: 90%;
   margin: auto;
 
+
   @media only screen and (max-width: 1400px) {
     & {
       width: 93%;

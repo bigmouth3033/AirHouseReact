@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope&family=Poppins:wght@300;500;700&display=swap");
-  
+
 html {
   font-family: "Manrope", sans-serif;
   font-family: "Poppins", sans-serif;
@@ -138,6 +138,7 @@ html {
   font-size: 16px;
 }
 
+
 .carousel-button-group {
   position: absolute;
   width: 100%;
@@ -243,5 +244,36 @@ html {
   transform: translateX(16px);
 }
 
+
+.react-multiple-carousel__arrow::before {
+  color: black;
+}
+
+.react-multiple-carousel__arrow {
+  box-sizing: content-box;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  min-width: 5px;
+  min-height: 5px;
+  border-radius: 50px;
+  padding: 5px 10px;
+  background-color: white;
+  font-weight: 800;
+  transform: scale(80%);
+  transition: all 0s;
+  z-index: 0;
+}
+
+.react-multiple-carousel__arrow:hover {
+  background: white;
+  transform: scale(90%);
+}
+
+.react-multiple-carousel__arrow--left {
+  left: calc(0% + 1px);
+}
+
+.react-multiple-carousel__arrow--right {
+  right: calc(0% + 1px);
+}
 
 

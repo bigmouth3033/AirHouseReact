@@ -2,6 +2,7 @@ import styled from "styled-components";
 import StyledHomePageContainer from "../../ui/StyledHomePageContainer";
 import { useState, useEffect, useRef } from "react";
 
+import Overlay from "../../ui/Overlay";
 import NavUser from "./NavUser";
 import NavTopCenter from "./NavTopCenter";
 import NavLogo from "./NavLogo";
@@ -9,16 +10,27 @@ import UserDropDown from "./UserDropDown";
 import NavStay from "./NavStay";
 import NavExperiences from "./NavExperiences";
 import AfterEffectNavCenter from "./AfterEffectNavCenter";
+import FilterButton from "./FIlterButton";
+import SignUp from "../signup/SignUp";
 
 const StyledNav = styled.div`
-  
+  background-color: white;
+  position: relative;
+  z-index: 3;
 `;
 
 const StyledContainer = styled(StyledHomePageContainer)`
   display: flex;
   justify-content: space-between;
+
   align-items: center;
   padding: 1rem 0;
+
+  > .user-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 `;
 
 const StyledDropDownContainer = styled(StyledHomePageContainer)`
@@ -32,20 +44,18 @@ const StyledPopupContainer = styled.div`
   position: absolute;
   width: 100%;
   background-color: white;
-  border-bottom: thin solid rgba(0, 0, 0, 0.1);
-  z-index: 999;
+  /* border-bottom: thin solid rgba(0, 0, 0, 0.1); */
+  z-index: 9999;
 `;
 
-function NavTop() {
-  const [showDropDown, setShowDropDown] = useState(false);
+const StyledNavOverlay = styled(Overlay)`
+  z-index: 2;
+`;
 
-  function onClickDropDown() {
-    setShowDropDown(!showDropDown);
-  }
 
-  function onBlurDropDown() {
-    setShowDropDown(false);
-  }
+
+function NavTop({ resizeWidth }) {
+
 
   const [showNavEffect, setShowNavEffect] = useState(0);
 
@@ -61,47 +71,32 @@ function NavTop() {
     setShowNavEffect(0);
   }
 
-  function useOutsideAlerter(ref) {
-    useEffect(() => {
-      /**
-       * Alert if clicked on outside of element
-       */
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          onBlurHide();
-        }
-      }
-      // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        // Unbind the event listener on clean up
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  }
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      onBlurHide();
+    });
+  }, []);
 
-  const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef);
+  
 
   return (
-    <StyledNav ref={wrapperRef}>
-      <StyledContainer>
-        <NavLogo />
-        {/* {showNavEffect === 0 ? <NavTopCenter clickStay={showStay} clickEx={showExperiences} /> : <AfterEffectNavCenter clickStay={showStay} clickEx={showExperiences} />} */}
-        <NavTopCenter effect={showNavEffect} clickStay={showStay} clickEx={showExperiences} />
-        <AfterEffectNavCenter effect={showNavEffect} clickStay={showStay} clickEx={showExperiences} />
-        
-        <NavUser click={onClickDropDown} blur={onBlurDropDown} />
-        
-
-      </StyledContainer>
-      <StyledDropDownContainer>{showDropDown && <UserDropDown />}</StyledDropDownContainer>
-
-      <StyledPopupContainer>
-        <NavStay effect={showNavEffect} />
-        <NavExperiences effect={showNavEffect} />
-      </StyledPopupContainer>
-    </StyledNav>
+    <>
+      {showNavEffect === 0 ? false : <StyledNavOverlay onClick={onBlurHide} />}
+      
+      <StyledNav>
+        <StyledContainer>
+          {resizeWidth >= 744 ? <NavLogo /> : <></>}
+          <NavTopCenter resizeWidth={resizeWidth} effect={showNavEffect} clickStay={showStay} clickEx={showExperiences} />
+          <AfterEffectNavCenter effect={showNavEffect} clickStay={showStay} clickEx={showExperiences} />
+          {resizeWidth >= 744 ? <NavUser/> : <></>}
+          {resizeWidth < 744 ? <FilterButton resizeWidth={resizeWidth} /> : <></>}
+        </StyledContainer>
+        <StyledPopupContainer>
+          <NavStay effect={showNavEffect} />
+          <NavExperiences effect={showNavEffect} />
+        </StyledPopupContainer>
+      </StyledNav>
+    </>
   );
 }
 

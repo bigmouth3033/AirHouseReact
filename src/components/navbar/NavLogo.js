@@ -1,7 +1,14 @@
 import styled from "styled-components";
 
+import logo from "../../assets/airbnb-logo-3023AC4CBA-seeklogo.com.png"
+
+const StyledImg = styled.img`
+  height: 2rem;
+
+`;
+
 function NavLogo(){
-  return <p>logo</p>
+  return <StyledImg src={logo}/>
 }
 
 

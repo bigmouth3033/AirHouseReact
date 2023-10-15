@@ -30,7 +30,7 @@ const StyledContainer = styled(StyledButtonContainer)`
     background-color: #ebebeb;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   }
-  transition: width .2s, opacity .2s, transform .2s, visibility 300ms linear ;
+  transition: width 300ms, opacity 300ms, transform 300ms, visibility 300ms linear ;
   
 
   ${(props) => {

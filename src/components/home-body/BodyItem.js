@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -36,10 +36,10 @@ const ButtonGroup = ({ next, previous, goToSlide, ...rest }) => {
   return (
     <div className="carousel-button-group-body">
       <button className={currentSlide === 0 ? "disable" : "body-item-arrowleft"} onClick={() => previous()}>
-        <FontAwesomeIcon className="icon" icon={faChevronCircleLeft} />
+        <FontAwesomeIcon className="icon" icon={faChevronLeft} />
       </button>
       <button className={currentSlide === 3 ? "disable" : "body-item-arrowright"} onClick={() => next()}>
-        <FontAwesomeIcon className="icon" icon={faChevronCircleRight} />
+        <FontAwesomeIcon className="icon" icon={faChevronRight} />
       </button>
     </div>
   );
@@ -61,8 +61,22 @@ const StyledCarousel = styled(Carousel)`
   }
 
   &:hover .icon {
-    visibility: visible;
+    display: block;
   }
+
+  & .icon{
+    font-size: 15px;
+  }
+
+  & .body-item-arrowleft, & .body-item-arrowright{
+    display: none;
+  }
+
+  &:hover .body-item-arrowleft, &:hover .body-item-arrowright{
+    display: inline;
+  }
+
+ 
 `;
 
 const StyledInfoBox = styled.div`
@@ -78,7 +92,7 @@ const StyledInfoBox = styled.div`
 function BodyItem() {
   return (
     <StyledItemContainer>
-      <StyledCarousel customButtonGroup={<ButtonGroup />} arrows={false} responsive={responsive}>
+      <StyledCarousel dotListClass="custom-dot-list-style" showDots={true} customButtonGroup={<ButtonGroup />} arrows={false} responsive={responsive}>
         <p>A</p>
         <p>B</p>
         <p>C</p>
