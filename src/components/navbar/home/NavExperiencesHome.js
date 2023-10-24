@@ -1,15 +1,38 @@
+import React from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
-import StyledButtonContainer from "../../ui/StyledButtonContainer";
+import StyledButtonContainer from "../../../ui/StyledButtonContainer";
+import StyledButtonBoxContainer from "../../../ui/StyledButtonBoxContainer";
 
-const StyledContainer = styled(StyledButtonContainer)`
+const StyledContainer = styled(motion.div)`
+  border-radius: 50px;
+  border: 0;
+  background-color: white;
+  display: inline-block;
+  cursor: pointer;
+  padding: 0;
+  font-family: Montserrat;
+
   width: 50rem;
   display: flex;
-  margin: auto;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+  ${(props) => {
+    if (props.$isShow) {
+      return css`
+        display: flex;
+      `;
+    } else {
+      return css`
+        display: none;
+      `;
+    }
+  }}
 
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
@@ -30,37 +53,6 @@ const StyledContainer = styled(StyledButtonContainer)`
     background-color: #ebebeb;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   }
-  transition: width 300ms, opacity 300ms, transform 300ms, visibility 300ms linear ;
-  
-
-  ${(props) => {
-    if (props.onEffect == 2) {
-      return css`
-        opacity: 1;
-        visibility: visible;
-        position: static;
-        transform: translateY(0);
-        width: 50rem;
-      `;
-    }
-    
-    if(props.onEffect == 1){
-      return css`
-        position: absolute;
-        visibility: hidden;
-      `
-    }
-    
-    if(props.onEffect == 0) {
-      return css`
-        opacity: 0;
-        visibility: hidden;
-        position: absolute;
-        width: 22rem;
-        transform: translateY(-70%);
-      `;
-    }
-  }}
 `;
 
 const StyledWhere = styled(StyledButtonContainer)`
@@ -86,9 +78,18 @@ const StyledWho = styled(StyledButtonContainer)`
   }
 `;
 
-function NavExperiences({ effect }) {
+export default function NavExperiencesHome({ isShow }) {
   return (
-    <StyledContainer onEffect={effect}>
+    <StyledContainer
+      exit={{ y: "-100%", scale: 0.5 }}
+      initial={{ y: "-100%", scale: 0.5 }}
+      animate={{ y: "0%", scale: 1 }}
+      transition={{
+        ease: "easeInOut",
+        duration: 0.1,
+      }}
+      $isShow={isShow}
+    >
       <StyledWhere>
         <p>Where</p>
         <p>Search destinations</p>
@@ -107,5 +108,3 @@ function NavExperiences({ effect }) {
     </StyledContainer>
   );
 }
-
-export default NavExperiences;

@@ -1,93 +1,76 @@
-import styled, {css} from "styled-components"
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import styled, { css } from "styled-components";
+import { motion } from "framer-motion";
 
-import StyledButtonContainer from "../../ui/StyledButtonContainer";
+import StyledButtonContainer from "../../../ui/StyledButtonContainer";
 
-const StyledContainer = styled(StyledButtonContainer)`
+const StyledContainer = styled(motion.div)`
+  font-family: Montserrat;
+  border-radius: 50px;
+  border: 0;
+  background-color: white;
+  display: inline-block;
+  cursor: pointer;
+  padding: 0;
   width: 50rem;
   display: flex;
-  margin: auto;
-  margin-bottom: 1rem;
+  margin: 1rem auto;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 
-  &:hover{
+  &:hover {
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   }
-
-  z-index: 2;
-
 
   & button {
     text-align: left;
     box-shadow: none;
     padding: 1rem;
 
-    & p:nth-of-type(1){
+    & p:nth-of-type(1) {
       margin-bottom: 5px;
       font-weight: 600;
     }
   }
 
-  & button:hover{
-    background-color: #EBEBEB;
+  & button:hover {
+    background-color: #ebebeb;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   }
-  transition: width 300ms, opacity 300ms, transform 300ms, visibility 300ms linear ;
-  
 
   ${(props) => {
-    if(props.onEffect == 1){
+    if (props.$isShow) {
       return css`
-        opacity: 1;
-        visibility: visible;
-        position: static;
-        transform: translateY(0);
-        width: 50rem;
+        display: flex;
+      `;
+    } else {
+      return css`
+        display: none;
       `;
     }
-
-    if(props.onEffect == 2){
-      return css`
-        position: absolute;
-        visibility: hidden;
-      `
-    }
-    
-    if(props.onEffect == 0){
-      return css`
-        transform: translateY(-70%);
-        opacity: 0;
-        visibility: hidden;
-        position: absolute;
-        width: 22rem;
-      `;
-    }
-
-    
   }}
-
 `;
 
 const StyledWhere = styled(StyledButtonContainer)`
-  flex-grow: 2; 
+  flex-grow: 2;
 `;
 
 const StyledCheckIn = styled(StyledButtonContainer)`
-  flex-grow: 1; 
+  flex-grow: 1;
 `;
 
 const StyledCheckOut = styled(StyledButtonContainer)`
-  flex-grow: 1; 
+  flex-grow: 1;
 `;
 
 const StyledWho = styled(StyledButtonContainer)`
-  flex-grow: 2; 
+  flex-grow: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  & .icon{
+  & .icon {
     background-color: red;
     border-radius: 50%;
     font-size: 20px;
@@ -96,10 +79,18 @@ const StyledWho = styled(StyledButtonContainer)`
   }
 `;
 
-
-function NavStay({effect}){
+export default function NavStayHome({ isShow }) {
   return (
-    <StyledContainer onEffect={effect}>
+    <StyledContainer
+      exit={{ y: "-100%", scale: 0.5 }}
+      initial={{ y: "-100%", scale: 0.5 }}
+      animate={{ y: "0%", scale: 1 }}
+      transition={{
+        ease: "easeInOut",
+        duration: 0.1,
+      }}
+      $isShow={isShow}
+    >
       <StyledWhere>
         <p>Where</p>
         <p>Search destinations</p>
@@ -117,14 +108,8 @@ function NavStay({effect}){
           <p>Who</p>
           <p>Add guests</p>
         </div>
-        <FontAwesomeIcon className="icon" icon={faMagnifyingGlass}/>
-
+        <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
       </StyledWho>
-
     </StyledContainer>
-
-
   );
 }
-
-export default NavStay;

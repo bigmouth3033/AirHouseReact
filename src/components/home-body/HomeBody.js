@@ -40,6 +40,7 @@ function HomeBody() {
   return (
     <StyledBody>
       <StyledContainer>
+      
         <BodyItem className="item" />
         <BodyItem className="item" />
         <BodyItem className="item" />
@@ -57,6 +58,7 @@ function HomeBody() {
         <BodyItem className="item" />
         <BodyItem className="item" />
         <BodyItem className="item" />
+
       </StyledContainer>
     </StyledBody>
   );

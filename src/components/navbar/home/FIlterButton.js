@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 
-import StyledBoxContainer from "../../ui/StyledBoxContainer";
+import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 
 const StyledFilterButton = styled(StyledBoxContainer)`
   padding: 16px 1rem;
@@ -18,17 +18,17 @@ const StyledResizeFilterButton = styled.div`
   margin-left: 10px;
 `;
 
-function FilterButton({ resizeWidth }) {
+function FilterButton() {
   return (
     <>
-      {resizeWidth >= 744 ? (
+      {window.innerHeight >= 744 ? (
         <StyledFilterButton>
           <FontAwesomeIcon icon={faSliders} />
           <p>Filters</p>
         </StyledFilterButton>
       ) : (
         <StyledResizeFilterButton>
-          <FontAwesomeIcon icon={faSliders}/>
+          <FontAwesomeIcon icon={faSliders} />
         </StyledResizeFilterButton>
       )}
     </>

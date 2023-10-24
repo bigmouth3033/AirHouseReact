@@ -139,7 +139,7 @@ html {
 }
 
 
-.carousel-button-group {
+/* .carousel-button-group {
   position: absolute;
   width: 100%;
   display: flex;
@@ -162,7 +162,7 @@ html {
 .right {
   border: 0;
   background-color: rgba(0, 0, 0, 0.01);
-}
+} */
 
 /* button switch */
 
@@ -249,7 +249,7 @@ html {
   color: black;
 }
 
-.react-multiple-carousel__arrow {
+/* .react-multiple-carousel__arrow {
   box-sizing: content-box;
   border: 2px solid rgba(0, 0, 0, 0.3);
   min-width: 5px;
@@ -274,6 +274,9 @@ html {
 
 .react-multiple-carousel__arrow--right {
   right: calc(0% + 1px);
-}
+} */
 
+*{
+  font-family: Montserrat;
+}
 

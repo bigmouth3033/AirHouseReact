@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import StyledBoxContainer from "../../ui/StyledBoxContainer";
 
-import SignUp from "../signup/SignUp";
-import Overlay from "../../ui/Overlay";
+import StyledBoxContainer from "../../../ui/StyledBoxContainer";
+
+import SignUp from "../../signup/SignUp";
+import Overlay from "../../../ui/Overlay";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -10,11 +11,8 @@ const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
   padding: 10px 0;
   position: absolute;
-  /* transform: translateY(-5%); */
-  transform: translate(-60%, 5%);
-
+  transform: translate(-105%, 15%);
   background-color: white;
-  z-index: 9999999;
 
   & p {
     padding: 0.7rem 1rem;
@@ -22,7 +20,7 @@ const StyledDropDownContainer = styled(StyledBoxContainer)`
 
   & .first {
     border-top-left-radius: 50;
-    border-top-right-radius: 50;
+    border-top-right-radius: 50;  
   }
 
   & p:hover {
@@ -31,21 +29,18 @@ const StyledDropDownContainer = styled(StyledBoxContainer)`
 `;
 
 const StyledSignUpOverlay = styled(Overlay)`
-  z-index: 4;
+  z-index: 1;
 `;
 
 const StyledContainer = styled.div``;
 
-function UserDropDown({blur, showDropDown}) {
-
-
+function UserDropDown({ blur, showDropDown }) {
   function useOutsideAlerter(ref) {
     useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
           blur();
         }
-        console.log(event.target);
       }
 
       document.addEventListener("mousedown", handleClickOutside);
@@ -65,7 +60,6 @@ function UserDropDown({blur, showDropDown}) {
     blur();
   }
 
-  
   return (
     <StyledContainer>
       {showDropDown && (
@@ -79,7 +73,8 @@ function UserDropDown({blur, showDropDown}) {
       )}
       {showSignUp ? (
         <>
-          <StyledSignUpOverlay onClick={() => setShowSignUp(false)} /> <SignUp />
+          <StyledSignUpOverlay onClick={() => setShowSignUp(false)} />
+          <SignUp />
         </>
       ) : (
         <></>

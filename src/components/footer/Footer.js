@@ -108,6 +108,8 @@ const StyleGetswaysItem = styled.div`
   border-bottom: 1px solid #717171;
   padding-bottom: 48px;
 `;
+
+
 const Footer = () => {
   const [activeButton, setActiveButton] = useState(true);
   const handleClick = (status) => {

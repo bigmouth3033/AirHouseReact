@@ -1,30 +1,34 @@
-import styled, { css, keyframes } from "styled-components";
-import NavBar from "./components/navbar/NavBar";
+import React from "react";
+
 import "./App.css";
-import HomeBody from "./components/home-body/HomeBody";
+import "@fontsource/montserrat";
+import "@fontsource/montserrat/100.css";
+import "@fontsource/montserrat/200.css";
+import "@fontsource/montserrat/300.css";
+import "@fontsource/montserrat/400.css";
+import "@fontsource/montserrat/500.css";
+import "@fontsource/montserrat/600.css";
+import "@fontsource/montserrat/700.css";
+import "@fontsource/montserrat/800.css";
+import "@fontsource/montserrat/900.css";
 
-
-import BoxContainer from "./ui/StyledBoxContainer";
-
-import CloseButton from "./ui/CloseButton";
-
-import Footer from "./components/footer/Footer"
-
-import UserDropDown from "./components/navbar/UserDropDown";
-
-
-
-
-const Test = styled.div`
-  height: 5000px;
-`;
+import Test from "./components/test/Test";
+import Home from "./pages/Home";
+import { useEffect, useState } from "react";
+import ProductCreation from "./pages/ProductCreation";
 
 function App() {
+  const [pageWidth, setPageWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setPageWidth(window.innerWidth);
+    });
+  }, []);
+
   return (
     <>
-      <NavBar />
-      <HomeBody/>
-      
+      <Home />
     </>
   );
 }
