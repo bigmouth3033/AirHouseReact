@@ -23,6 +23,14 @@ const StyledUserContainer = styled(StyledButtonContainer)`
   & .bar {
     font-size: 1rem;
   }
+
+  &:hover {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  }
+
+  &:active {
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  }
 `;
 
 const StyledTextLink = styled(StyledButtonContainer)`
@@ -46,19 +54,17 @@ function NavUser() {
   const [showDropDown, setShowDropDown] = useState(false);
 
   function onClickDropDown() {
-    setShowDropDown(true);
+    setShowDropDown(!showDropDown);
   }
 
   function onBlurDropDown() {
     setShowDropDown(false);
   }
 
-  const userRef = useRef(null);
-
   return (
     <StyledContainer>
       <StyledTextLink>Airbnb your home</StyledTextLink>
-      <StyledUserContainer onClick={onClickDropDown}>
+      <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
         <FontAwesomeIcon className="bar" icon={faBars} />
         <FontAwesomeIcon className="user" icon={faCircleUser} />
       </StyledUserContainer>

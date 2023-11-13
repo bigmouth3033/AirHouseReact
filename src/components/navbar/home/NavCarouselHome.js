@@ -189,15 +189,9 @@ function NavCarouselHome() {
     setShowBorder(newList);
   }
 
-  const [width, setWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    window.addEventListener("resize", () => setWidth(window.innerWidth));
-  }, []);
-
   return (
     <StyledContainer>
-      {width > 800 ? (
+      {window.innerWidth > 800 ? (
         <StyledCarousel draggable={false} swipeable={false} arrows={true} containerClass="carousel-container" responsive={responsive}>
           {showBorder.map((item, index) => (
             <SliderItem click={() => onClickShowBorder(index)} borderEffect={item.border} img={item.img} name={item.name} key={item.name} />

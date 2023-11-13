@@ -19,8 +19,7 @@ const StyledContainer = styled(motion.div)`
   width: 50rem;
   display: flex;
   margin-bottom: 1rem;
-  margin-top: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
   ${(props) => {
     if (props.$isShow) {
@@ -34,9 +33,7 @@ const StyledContainer = styled(motion.div)`
     }
   }}
 
-  &:hover {
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-  }
+  
 
   & button {
     text-align: left;
@@ -81,12 +78,12 @@ const StyledWho = styled(StyledButtonContainer)`
 export default function NavExperiencesHome({ isShow }) {
   return (
     <StyledContainer
-      exit={{ y: "-100%", scale: 0.5 }}
-      initial={{ y: "-100%", scale: 0.5 }}
+      exit={{ y: "-100%", scale: 0.4 }}
+      initial={{ y: "-100%", scale: 0.4 }}
       animate={{ y: "0%", scale: 1 }}
       transition={{
         ease: "easeInOut",
-        duration: 0.1,
+        duration: 0.2,
       }}
       $isShow={isShow}
     >

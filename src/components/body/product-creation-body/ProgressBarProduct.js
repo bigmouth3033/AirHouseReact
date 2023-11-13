@@ -1,7 +1,6 @@
 import React from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 
-export default function ProgressBarProduct({progress}) {
-  
-  return (<ProgressBar completed={4} />);
+export default function ProgressBarProduct({ progress }) {
+  return <ProgressBar completed={progress} />;
 }

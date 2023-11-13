@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useState, useRef, useEffect, useReducer } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -20,11 +20,36 @@ const StyledBreak = styled.div`
   flex-basis: 100%;
 `;
 
-const StyledPopUp = styled.div`
+const StyledScrollPopUp = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: position 1s;
+  background-color: white;
+
+  ${(props) => {
+    if (props.$position) {
+      return css`
+        position: static;
+      `;
+    } else {
+      return css`
+        position: absolute;
+        width: 100%;
+      `;
+    }
+  }}
+`;
+
+const StyledClickPopUp = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: position 1s;
+  position: absolute;
+  width: 100%;
 `;
 
 const ACTIONS = {
@@ -38,7 +63,7 @@ const ACTIONS = {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.SCROLL_TOP:
-      return { ...state, isShow: true };
+      return { ...state, isShow: true, isClick: false };
 
     case ACTIONS.NOT_SCROLL_TOP:
       return { ...state, isShow: false };
@@ -89,19 +114,18 @@ export default function NavTopHome() {
     <>
       <NavBarContainer zIndex={5} variant={"home"}>
         {window.innerWidth >= 800 ? <NavLogo /> : <></>}
+        <AnimatePresence>{state.isShow || <NavTopCenterHome />}</AnimatePresence>
         <AnimatePresence>
-          {state.isShow === false ? 
-          <NavTopCenterHome /> : 
-          <AfterEffectNavCenterHome isStay={state.isStay} clickStay={clickStay} clickEx={clickEx} />}
+          {state.isShow && <AfterEffectNavCenterHome isStay={state.isStay} clickStay={clickStay} clickEx={clickEx} />}
         </AnimatePresence>
         {window.innerWidth >= 800 ? <NavUser /> : <></>}
       </NavBarContainer>
 
-      <StyledPopUp>
+      <StyledScrollPopUp $position={state.isShow}>
         <AnimatePresence>{state.isShow && <NavExperiencesHome isShow={state.isStay} />}</AnimatePresence>
         <StyledBreak></StyledBreak>
         <AnimatePresence>{state.isShow && <NavStayHome isShow={!state.isStay} />}</AnimatePresence>
-      </StyledPopUp>
+      </StyledScrollPopUp>
     </>
   );
 }

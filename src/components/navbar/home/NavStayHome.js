@@ -16,12 +16,9 @@ const StyledContainer = styled(motion.div)`
   padding: 0;
   width: 50rem;
   display: flex;
-  margin: 1rem auto;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  margin-bottom: 1rem;
 
-  &:hover {
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-  }
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
   & button {
     text-align: left;
@@ -82,12 +79,12 @@ const StyledWho = styled(StyledButtonContainer)`
 export default function NavStayHome({ isShow }) {
   return (
     <StyledContainer
-      exit={{ y: "-100%", scale: 0.5 }}
-      initial={{ y: "-100%", scale: 0.5 }}
+      exit={{ y: "-100%", scale: 0.4 }}
+      initial={{ y: "-100%", scale: 0.4 }}
       animate={{ y: "0%", scale: 1 }}
       transition={{
         ease: "easeInOut",
-        duration: 0.1,
+        duration: 0.2,
       }}
       $isShow={isShow}
     >

@@ -20,7 +20,7 @@ const StyledDropDownContainer = styled(StyledBoxContainer)`
 
   & .first {
     border-top-left-radius: 50;
-    border-top-right-radius: 50;  
+    border-top-right-radius: 50;
   }
 
   & p:hover {
@@ -38,7 +38,8 @@ function UserDropDown({ blur, showDropDown }) {
   function useOutsideAlerter(ref) {
     useEffect(() => {
       function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
+        const dropDownButton = document.querySelector(".navbar-dropdown");
+        if (ref.current && !ref.current.contains(event.target) && !dropDownButton.contains(event.target)) {
           blur();
         }
       }
@@ -81,6 +82,7 @@ function UserDropDown({ blur, showDropDown }) {
       )}
     </StyledContainer>
   );
+  
 }
 
 export default UserDropDown;

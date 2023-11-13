@@ -14,19 +14,11 @@ const StyledContainer = styled(StyledButtonBoxContainer)`
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
   position: absolute;
   left: 50%;
-
-  @media only screen and (max-width: 1000px) {
-    & {
-      position: static;
-      transform: translateX(0);
-    }
-  }
-
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
@@ -36,9 +28,10 @@ const StyledContainer = styled(StyledButtonBoxContainer)`
   & .item {
     flex-grow: 1;
     border: 0;
-    cursor: pointer;
     height: 1.3rem;
     font-size: 14px;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
   }
 
   & .anywhere,
@@ -67,6 +60,13 @@ const StyledContainer = styled(StyledButtonBoxContainer)`
       font-weight: 900;
     }
   }
+
+  @media only screen and (max-width: 1000px) {
+    & {
+      position: static;
+      transform: translateX(0);
+    }
+  }
 `;
 
 const StyledResizeNavTop = styled(StyledButtonContainer)`
@@ -90,12 +90,11 @@ const StyledResizeNavTop = styled(StyledButtonContainer)`
   }
 `;
 
-const exit = {x: "-50%" , opacity: 0};
-const initial = { x: "-50%",  opacity: 0 };
-const animate = { x: "-50%",  opacity: 1 };
+const exit = { x: "-50%", opacity: 0, transition: { duration: 0.01 } };
+const initial = { x: "-50%", opacity: 0 };
+const animate = { x: "-50%", opacity: 1, transition: { duration: 0.5 } };
 const transition = {
   ease: "easeInOut",
-  delay: 0.1,
 };
 
 export default function NavTopCenterHome({ clickStay, clickEx }) {
@@ -103,16 +102,16 @@ export default function NavTopCenterHome({ clickStay, clickEx }) {
     <>
       {window.innerWidth >= 800 ? (
         <StyledContainer exit={exit} initial={initial} animate={animate} transition={transition}>
-          <p className="item anywhere" onClick={clickStay}>
+          <button className="item anywhere" onClick={clickStay}>
             Anywhere
-          </p>
-          <p className="item anyweek" onClick={clickEx}>
+          </button>
+          <button className="item anyweek" onClick={clickEx}>
             Any week
-          </p>
-          <div className="item addguest">
-            <p>Add guests</p>
+          </button>
+          <button className="item addguest">
+            <span>Add guests</span>
             <FontAwesomeIcon className="icon" icon={faMagnifyingGlass}></FontAwesomeIcon>
-          </div>
+          </button>
         </StyledContainer>
       ) : (
         <StyledResizeNavTop>
