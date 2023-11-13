@@ -16,8 +16,6 @@ import Test from "./components/test/Test";
 import Home from "./pages/Home";
 import { useEffect, useState } from "react";
 import AircoverForHosts from "../src/components/home-body/AirCoverForHost/AircoverForHosts";
-import BestHost from "../src/components/home-body/BestHost/BestHost";
-import Foster from "../src/components/footer/Footer";
 import ProductCreation from "./pages/ProductCreation";
 
 function App() {
@@ -33,8 +31,6 @@ function App() {
     <>
       <Home />
       <AircoverForHosts></AircoverForHosts>
-      <BestHost></BestHost>
-      <Foster></Foster>
     </>
   );
 }
