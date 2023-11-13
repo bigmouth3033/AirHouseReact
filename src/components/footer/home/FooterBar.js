@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import About from "./About";
+import Overlay from "../../../ui/Overlay";
+
+const StyledOverlay = styled(Overlay)`
+  z-index: 3;
+`;
 
 const StyledFooter = styled.div`
   font-family: "Poppins", sans-serif;
@@ -50,6 +56,7 @@ const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 15px 0;
+  align-items: center;
 `;
 
 const StyledLeftContent = styled.div`
@@ -66,43 +73,69 @@ const StyledLink = styled(Link)`
   &:hover {
     text-decoration: underline;
   }
+`;
 
-  ${(props) => {
-    if (props.$position === "right") {
-      return css`
-        font-weight: 600;
-        color: black;
-        font-size: 15px;
-      `;
-    }
-  }}
+const StyledShowButton = styled.button`
+  border: 0;
+  background-color: white;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const StyledRightContent = styled.div``;
 
 export default function FooterBar({ variant }) {
+  const [isShowMain, setIsShowMain] = useState(false);
+
+  const clickShow = () => {
+    setIsShowMain(!isShowMain);
+  };
+
+  useEffect(() => {
+    if (isShowMain === true) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  }, [isShowMain]);
+
   return (
-    <StyledFooter $variant={variant}>
-      <StyledContainer $variant={variant}>
-        <StyledLeftContent>
-          <p>&#169; 2023 Airbnb, Inc.</p>
-          <span>&#183;</span>
-          <StyledLink>Terms</StyledLink>
-          <span>&#183;</span>
-          <StyledLink>Sitemap</StyledLink>
-          <span>&#183;</span>
-          <StyledLink>Privacy</StyledLink>
-          <span>&#183;</span>
-          <StyledLink>
-            Your Privacy Choices <FontAwesomeIcon icon={faCheck} />
-          </StyledLink>
-        </StyledLeftContent>
-        <StyledRightContent>
-          <StyledLink $position="right">
-            Support & resources <FontAwesomeIcon icon={faChevronUp} />
-          </StyledLink>
-        </StyledRightContent>
-      </StyledContainer>
-    </StyledFooter>
+    <>
+      {isShowMain === false ? (
+        <StyledFooter $variant={variant}>
+          <StyledContainer $variant={variant}>
+            <StyledLeftContent>
+              <p>&#169; 2023 Airbnb, Inc.</p>
+              <span>&#183;</span>
+              <StyledLink>Terms</StyledLink>
+              <span>&#183;</span>
+              <StyledLink>Sitemap</StyledLink>
+              <span>&#183;</span>
+              <StyledLink>Privacy</StyledLink>
+              <span>&#183;</span>
+              <StyledLink>
+                Your Privacy Choices <FontAwesomeIcon icon={faCheck} />
+              </StyledLink>
+            </StyledLeftContent>
+            <StyledRightContent>
+              <StyledShowButton onClick={clickShow}>
+                Support & resources <FontAwesomeIcon icon={faChevronUp} />
+              </StyledShowButton>
+            </StyledRightContent>
+          </StyledContainer>
+        </StyledFooter>
+      ) : (
+        <>
+          <StyledOverlay onClick={clickShow} />
+          <About />
+        </>
+      )}
+    </>
   );
 }

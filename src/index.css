@@ -245,3 +245,8 @@ html {
 .react-multiple-carousel__arrow::before {
   color: black;
 }
+
+.no-scroll {
+  height: 100%;
+  overflow-y: hidden;
+}
