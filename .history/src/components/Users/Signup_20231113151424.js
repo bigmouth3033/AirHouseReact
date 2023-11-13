@@ -1,0 +1,15 @@
+import React from "react";
+
+const Signup = () => {
+  return (
+    <div>
+      <div>
+        <h2>Log in or sign up</h2>
+        <h1>Welcome to Airbnb</h1>
+        <form></form>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
