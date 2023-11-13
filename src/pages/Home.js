@@ -11,7 +11,7 @@ function Home() {
     <>
       <NavHome />
       <HomeBody />
-      <FooterBar variant={"home"}/>
+      <FooterBar variant={"home"} />
     </>
   );
 }
