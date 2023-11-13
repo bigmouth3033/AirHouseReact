@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const StyledContainer = styled.div`
-  font-family: Montserrat;
+  font-family: "Poppins", sans-serif;
   flex-grow: 1;
   overflow: scroll;
 

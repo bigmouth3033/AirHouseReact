@@ -1,6 +1,5 @@
 import React from "react";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
 
@@ -9,6 +8,7 @@ const StateContext = createContext({
   token: null,
   setUser: () => {},
   setToken: () => {},
+  pageWidth: window.innerWidth,
 });
 
 export const ContextProvider = ({ children }) => {
@@ -25,17 +25,26 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  const [pageWidth, setPageWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setPageWidth(window.innerWidth);
+    });
+  }, []);
+
   return (
-    <ContextProvider.Provider
+    <StateContext.Provider
       value={{
         user,
         token,
         setUser,
         setToken,
+        pageWidth,
       }}
     >
       {children}
-    </ContextProvider.Provider>
+    </StateContext.Provider>
   );
 };
 

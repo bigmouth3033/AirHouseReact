@@ -6,7 +6,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-import StyledBoxContainer from "../../ui/StyledBoxContainer";
+import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const responsive = {
@@ -64,19 +64,19 @@ const StyledCarousel = styled(Carousel)`
     display: block;
   }
 
-  & .icon{
+  & .icon {
     font-size: 15px;
   }
 
-  & .body-item-arrowleft, & .body-item-arrowright{
+  & .body-item-arrowleft,
+  & .body-item-arrowright {
     display: none;
   }
 
-  &:hover .body-item-arrowleft, &:hover .body-item-arrowright{
+  &:hover .body-item-arrowleft,
+  &:hover .body-item-arrowright {
     display: inline;
   }
-
- 
 `;
 
 const StyledInfoBox = styled.div`
@@ -84,7 +84,7 @@ const StyledInfoBox = styled.div`
   justify-content: space-between;
   margin-top: 0.7rem;
 
-  .first-box >p{
+  .first-box > p {
     margin-bottom: 10px;
   }
 `;
@@ -92,7 +92,13 @@ const StyledInfoBox = styled.div`
 function BodyItem() {
   return (
     <StyledItemContainer>
-      <StyledCarousel dotListClass="custom-dot-list-style" showDots={true} customButtonGroup={<ButtonGroup />} arrows={false} responsive={responsive}>
+      <StyledCarousel
+        dotListClass="custom-dot-list-style"
+        showDots={true}
+        customButtonGroup={<ButtonGroup />}
+        arrows={false}
+        responsive={responsive}
+      >
         <p>A</p>
         <p>B</p>
         <p>C</p>
