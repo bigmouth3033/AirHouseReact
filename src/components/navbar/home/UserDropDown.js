@@ -82,7 +82,6 @@ function UserDropDown({ blur, showDropDown }) {
       )}
     </StyledContainer>
   );
-  
 }
 
 export default UserDropDown;
