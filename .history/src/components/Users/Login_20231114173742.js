@@ -183,16 +183,6 @@ const Login = () => {
     console.log(response);
     // Xử lý response, ví dụ: gửi nó đến máy chủ để xác thực
   };
-
-  const onFailure = (error) => {
-    console.error(error);
-    if (error.error === "popup_closed_by_user") {
-      // Xử lý khi người dùng đóng cửa sổ popup
-      console.log("User closed the popup");
-    } else {
-      // Xử lý các trường hợp lỗi khác nếu cần
-    }
-  };
   return (
     <StyledContainer>
       <Styledh2>Log in</Styledh2>
@@ -225,7 +215,7 @@ const Login = () => {
             clientId="319614159285-eln3i0gnaatil4qt75007vhgsl8phas5.apps.googleusercontent.com"
             buttonText="Login with Google"
             onSuccess={responseGoogle}
-            onFailure={onFailure}
+            onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
           />
           {/* <StyledA href="">
@@ -233,7 +223,7 @@ const Login = () => {
           </StyledA> */}
         </StyledIcon>
         <StyledIcon>
-          {/* <StyledAa href="">
+          <StyledAa href="">
             <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
           </StyledAa>
           <StyledAa href="">
@@ -241,7 +231,7 @@ const Login = () => {
           </StyledAa>
           <StyledAa href="">
             <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledAa> */}
+          </StyledAa>
           {/* <StyledAa href="">
             <FontAwesomeIcon icon={faEnvelope} />
           </StyledAa> */}
@@ -259,6 +249,3 @@ const Login = () => {
 };
 
 export default Login;
-// Lỗi "popup_closed_by_user" xuất hiện khi cửa sổ popup mà bạn mở để đăng nhập với Google đã bị đóng bởi người dùng trước khi quá trình xác thực hoàn tất. Đây là một phản hồi thông thường khi người dùng đóng cửa sổ đăng nhập trước khi xác thực được hoàn thành.
-
-// Để xử lý trường hợp này, bạn có thể thêm xử lý trong hàm onFailure của react-google-login.

@@ -37,7 +37,7 @@ function App() {
       <AircoverForHosts></AircoverForHosts>
       <BestHost></BestHost>
       <Foster></Foster>
-      {/* <Signup></Signup> */}
+      <Signup></Signup>
       <Login></Login>
     </>
   );

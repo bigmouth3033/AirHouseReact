@@ -183,16 +183,6 @@ const Login = () => {
     console.log(response);
     // Xử lý response, ví dụ: gửi nó đến máy chủ để xác thực
   };
-
-  const onFailure = (error) => {
-    console.error(error);
-    if (error.error === "popup_closed_by_user") {
-      // Xử lý khi người dùng đóng cửa sổ popup
-      console.log("User closed the popup");
-    } else {
-      // Xử lý các trường hợp lỗi khác nếu cần
-    }
-  };
   return (
     <StyledContainer>
       <Styledh2>Log in</Styledh2>
@@ -225,7 +215,7 @@ const Login = () => {
             clientId="319614159285-eln3i0gnaatil4qt75007vhgsl8phas5.apps.googleusercontent.com"
             buttonText="Login with Google"
             onSuccess={responseGoogle}
-            onFailure={onFailure}
+            onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
           />
           {/* <StyledA href="">

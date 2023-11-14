@@ -5,7 +5,6 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import GoogleLogin from "react-google-login";
 
 const StyledContainer = styled.div`
   max-width: 530px;
@@ -167,32 +166,8 @@ const StyledCreateAccount = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
-  font-size: 22px;
-`;
-const StyledSpan = styled.span`
-  color: #717171;
-  padding: 5px;
-  text-decoration: none;
-`;
-const StyledCreate = styled.a`
-  text-decoration: none;
 `;
 const Login = () => {
-  const responseGoogle = (response) => {
-    console.log(response);
-    // Xử lý response, ví dụ: gửi nó đến máy chủ để xác thực
-  };
-
-  const onFailure = (error) => {
-    console.error(error);
-    if (error.error === "popup_closed_by_user") {
-      // Xử lý khi người dùng đóng cửa sổ popup
-      console.log("User closed the popup");
-    } else {
-      // Xử lý các trường hợp lỗi khác nếu cần
-    }
-  };
   return (
     <StyledContainer>
       <Styledh2>Log in</Styledh2>
@@ -221,19 +196,15 @@ const Login = () => {
           <StyledA href="">
             <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
           </StyledA>
-          <GoogleLogin
-            clientId="319614159285-eln3i0gnaatil4qt75007vhgsl8phas5.apps.googleusercontent.com"
-            buttonText="Login with Google"
-            onSuccess={responseGoogle}
-            onFailure={onFailure}
-            cookiePolicy={"single_host_origin"}
-          />
-          {/* <StyledA href="">
+          <StyledA href="">
+            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
+          </StyledA>
+          <StyledA href="">
             <FontAwesomeIcon icon={faEnvelope} />
-          </StyledA> */}
+          </StyledA>
         </StyledIcon>
         <StyledIcon>
-          {/* <StyledAa href="">
+          <StyledAa href="">
             <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
           </StyledAa>
           <StyledAa href="">
@@ -241,17 +212,16 @@ const Login = () => {
           </StyledAa>
           <StyledAa href="">
             <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledAa> */}
-          {/* <StyledAa href="">
+          </StyledAa>
+          <StyledAa href="">
             <FontAwesomeIcon icon={faEnvelope} />
-          </StyledAa> */}
+          </StyledAa>
         </StyledIcon>
-
         <StyledCreateAccount>
-          <StyledSpan>Not Registered?</StyledSpan>
-          <StyledSpan>
-            <StyledCreate href=""> Create an account</StyledCreate>
-          </StyledSpan>
+          <span>Not Registered?</span>
+          <span>
+            <a href="">Create account</a>
+          </span>
         </StyledCreateAccount>
       </StyledForm>
     </StyledContainer>
@@ -259,6 +229,3 @@ const Login = () => {
 };
 
 export default Login;
-// Lỗi "popup_closed_by_user" xuất hiện khi cửa sổ popup mà bạn mở để đăng nhập với Google đã bị đóng bởi người dùng trước khi quá trình xác thực hoàn tất. Đây là một phản hồi thông thường khi người dùng đóng cửa sổ đăng nhập trước khi xác thực được hoàn thành.
-
-// Để xử lý trường hợp này, bạn có thể thêm xử lý trong hàm onFailure của react-google-login.

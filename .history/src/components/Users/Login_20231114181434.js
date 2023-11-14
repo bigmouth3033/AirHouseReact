@@ -225,7 +225,7 @@ const Login = () => {
             clientId="319614159285-eln3i0gnaatil4qt75007vhgsl8phas5.apps.googleusercontent.com"
             buttonText="Login with Google"
             onSuccess={responseGoogle}
-            onFailure={onFailure}
+            onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
           />
           {/* <StyledA href="">
