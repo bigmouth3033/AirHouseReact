@@ -25,7 +25,7 @@ function FilterButton() {
 
   return (
     <>
-      {pageWidth >= 744 ? (
+      {pageWidth >= 800 ? (
         <StyledFilterButton>
           <FontAwesomeIcon icon={faSliders} />
           <p>Filters</p>
