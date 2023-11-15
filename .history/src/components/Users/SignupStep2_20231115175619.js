@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
@@ -7,7 +7,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
-  max-width: 530px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 25px;
   border-radius: 12px;
@@ -23,22 +23,16 @@ const Styledh2 = styled.h2`
   margin: 0 -25px;
 `;
 const StyledForm = styled.form`
-  height: 520px;
+  height: 500px;
   overflow: auto;
   margin-right: -25px;
 `;
-const StyledH2 = styled.h2`
-  font-size: 22px;
-  line-height: 26px;
-  font-weight: 600;
-  padding: 25px;
-`;
 const StyledFormContainer = styled.div`
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 const StyledInput = styled.input`
-  width: 460px;
-  height: 50px;
+  width: 440px;
+  height: 45px;
   border-radius: 8px;
   border: 1px solid #dddddd;
   padding: 0 10px;
@@ -75,8 +69,30 @@ const StyledInput = styled.input`
     border-radius: 12px;
   }
 `;
+const StyledSpan = styled.p`
+  font-size: 14px;
+  width: 400px;
+  color: #717171;
+  padding: 10px 0 30px 0;
+`;
+const CustomDateInput = styled.div`
+  position: relative;
+`;
+
+const DateInput = styled.input`
+  padding: 5px;
+`;
+
+const DateLabel = styled.label`
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: 0.2s;
+`;
 const StyledSubmitReset = styled.div`
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
   margin: 30px;
@@ -85,28 +101,17 @@ const StyledSubmitReset = styled.div`
   }
   &:nth-child(2) {
     border-radius: 0 8px 8px 0;
-  }
+  } */
 `;
 const StyledButtonSubmit = styled.button`
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px;
-  padding: 7px;
-  width: 180px;
+  width: 440px;
+  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px; */
+  padding: 10px 25px;
   font-size: 18px;
   font-weight: 500;
-  background-color: #0962fb;
-  border: none;
-  &:active {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-  }
-`;
-const StyledButtonReset = styled.button`
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px;
-  font-size: 18px;
-  padding: 7px;
-  width: 180px;
-  font-weight: 500;
-  background-color: red;
+  color: white;
+  background-color: #db0c63;
+  border-radius: 12px;
   border: none;
   &:active {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
@@ -115,9 +120,8 @@ const StyledButtonReset = styled.button`
 `;
 const StyledWith = styled.div`
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 50px;
+  font-size: 16px;
+  margin: 30px 0;
   &::after {
     content: "";
     display: inline-block;
@@ -162,31 +166,44 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const Signup = () => {
+const SignupStep2 = () => {
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
   return (
     <StyledContainer>
-      <Styledh2>Log in or sign up</Styledh2>
+      <Styledh2>Finish signing up</Styledh2>
       <StyledForm>
         <form>
-          <StyledH2>Welcome to AirHouse</StyledH2>
           <StyledFormContainer>
-            <StyledInput type="email" name="email" placeholder="Email" />
-
-            <StyledInput
-              type="password"
-              name="password"
-              placeholder="Password"
-            />
-
-            <StyledInput
-              type="password"
-              name="PasswordConfirm"
-              placeholder="Password confirm"
-            />
+            <StyledInput type="text" placeholder="Fisrt name" />
+            <StyledInput type="text" placeholder="Last name" />
+            <StyledSpan>
+              Make sure it matches the name on your goverment ID.
+            </StyledSpan>
+            {/* <StyledInput type="date" placeholder="Birthday" /> */}
+            <CustomDateInput>
+              <DateInput
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+              />
+              <DateLabel>Birthday</DateLabel>
+            </CustomDateInput>
+            <StyledSpan>
+              To signup, you need to be at least 18. Your birthday won't be
+              share with other people who use AirHouse.
+            </StyledSpan>
+            <StyledInput type="email" placeholder="Email" />
+            <StyledSpan>
+              We'll email you trip confirmations and receipts.
+            </StyledSpan>
+            <StyledInput type="password" placeholder="Password" />
           </StyledFormContainer>
           <StyledSubmitReset>
-            <StyledButtonSubmit type="submit">Sign up</StyledButtonSubmit>
-            <StyledButtonReset type="reset">Reset</StyledButtonReset>
+            <StyledButtonSubmit type="submit">Continute</StyledButtonSubmit>
           </StyledSubmitReset>
         </form>
         <StyledWith>Login with</StyledWith>
@@ -223,4 +240,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupStep2;
