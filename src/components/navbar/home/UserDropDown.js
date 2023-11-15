@@ -1,11 +1,9 @@
 import styled from "styled-components";
-
 import StyledBoxContainer from "../../../ui/StyledBoxContainer";
-
 import Signup from "../../user/Signup";
 import Overlay from "../../../ui/Overlay";
-
 import { useState, useEffect, useRef } from "react";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
@@ -35,6 +33,8 @@ const StyledSignUpOverlay = styled(Overlay)`
 const StyledContainer = styled.div``;
 
 function UserDropDown({ blur, showDropDown }) {
+  const { user } = useStateContext();
+
   const [showSignUp, setShowSignUp] = useState(false);
 
   function onShowSignUpHandler() {
@@ -72,6 +72,7 @@ function UserDropDown({ blur, showDropDown }) {
     <StyledContainer>
       {showDropDown && (
         <StyledDropDownContainer ref={wrapperRef}>
+          <p>{user.email}</p>
           <p onClick={onShowSignUpHandler}>Signup</p>
           <p>Log in</p>
           <hr />

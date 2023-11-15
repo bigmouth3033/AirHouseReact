@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AboutSession from "./AboutSession";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const TitleAbout = ["Support", "Hosting", "Airbnb"];
 const link = "https://www.airbnb.com/";
+const secondColumnLink = ["", "aircover-for-hosts", "/best-host", "", "", ""];
 
 const SupportDetail = [
   "Help Center",
@@ -55,6 +57,14 @@ const StyleAbout = styled.div`
     gap: 2rem;
   }
 `;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  font-size: 14px;
+  margin-top: 3px;
+`;
+
 const StyleA = styled.a`
   display: block;
   text-decoration: none;
@@ -82,6 +92,16 @@ const StyledFooter = styled.div`
 `;
 
 const About = () => {
+  useEffect(() => {
+    const links = document.querySelectorAll(".link");
+
+    for (let i = 0; i < links.length; i++) {
+      links[i].addEventListener("click", function () {
+        document.body.classList.remove("no-scroll");
+      });
+    }
+  }, []);
+
   return (
     <StyledFooter>
       <StyleAbout>
@@ -94,7 +114,9 @@ const About = () => {
         <AboutSession
           title={TitleAbout[1]}
           item={HostingDetail.map((value, index) => (
-            <StyleA href={link}>{value}</StyleA>
+            <StyledLink key={index} className="link" to={secondColumnLink[index]}>
+              {value}
+            </StyledLink>
           ))}
         ></AboutSession>
         <AboutSession
