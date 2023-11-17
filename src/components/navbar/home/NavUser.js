@@ -71,8 +71,8 @@ function NavUser() {
       <StyledTextLink>Airbnb your home</StyledTextLink>
       <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
         <FontAwesomeIcon className="bar" icon={faBars} />
-        {token ? (
-          <Avatar className="avatar" size="25" textSizeRatio={1.5} round={true} name={user.first_name} />
+        {token && user.first_name ? (
+          <Avatar size="30px" textSizeRatio={2} round={true} name={user.first_name} />
         ) : (
           <FontAwesomeIcon className="user" icon={faCircleUser} />
         )}

@@ -1,28 +1,29 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { useState } from "react";
 import { useRef } from "react";
 
-import { createUser } from "../../api/userApi";
-import { useReducedMotion } from "framer-motion";
+import { onLogin } from "../../api/userApi";
 import { useStateContext } from "../../contexts/ContextProvider";
 
+// npm install react-hook-form date-fns  --force
+
 const StyledContainer = styled.div`
-  max-width: 530px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 4;
+  z-index: 6;
   position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translateX(-50%);
   background-color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 170%;
 `;
 const Styledh2 = styled.h2`
   text-align: center;
@@ -34,46 +35,23 @@ const Styledh2 = styled.h2`
   margin: 0 -25px;
 `;
 const StyledForm = styled.form`
-  height: 520px;
+  height: 440px;
   overflow: auto;
   margin-right: -25px;
 `;
-const StyledH2 = styled.h2`
-  font-size: 22px;
-  line-height: 26px;
-  font-weight: 600;
-  padding: 25px;
-`;
 const StyledFormContainer = styled.div`
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 const StyledInput = styled.input`
-  margin-bottom: 0.5rem;
-  width: 460px;
+  width: 440px;
+  margin-bottom: 20px;
   height: 50px;
   border-radius: 8px;
   border: 1px solid #dddddd;
   padding: 0 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
-  &:nth-child(1) {
-    font-size: 18px;
-    border-radius: 8px 8px 0 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: none;
-  }
-  &:nth-child(2) {
-    font-size: 18px;
-    border-radius: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: none;
-  }
-  &:nth-child(3) {
-    font-size: 18px;
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: none;
-  }
+
   &:hover {
     border: none;
     border-radius: 12px;
@@ -85,37 +63,14 @@ const StyledInput = styled.input`
     border-radius: 12px;
   }
 `;
-const StyledSubmitReset = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 30px;
-  &:nth-child(1) {
-    border-radius: 8px 0 0 8px;
-  }
-  &:nth-child(2) {
-    border-radius: 0 8px 8px 0;
-  }
-`;
 const StyledButtonSubmit = styled.button`
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px;
-  padding: 7px;
-  width: 180px;
+  width: 440px;
+  padding: 10px 25px;
   font-size: 18px;
   font-weight: 500;
-  background-color: #0962fb;
-  border: none;
-  &:active {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-  }
-`;
-const StyledButtonReset = styled.button`
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px;
-  font-size: 18px;
-  padding: 7px;
-  width: 180px;
-  font-weight: 500;
-  background-color: red;
+  color: white;
+  background-color: #db0c63;
+  border-radius: 12px;
   border: none;
   &:active {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
@@ -123,9 +78,8 @@ const StyledButtonReset = styled.button`
 `;
 const StyledWith = styled.div`
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 50px;
+  font-size: 16px;
+  margin: 30px 0;
   &::after {
     content: "";
     display: inline-block;
@@ -162,41 +116,54 @@ const StyledAa = styled.p`
   transform: rotateX(210deg);
   perspective: 200px;
 `;
-const Signup = ({ setShowSignUp }) => {
-  const { setToken, setUser } = useStateContext();
+const StyledError = styled.p`
+  color: red;
+`;
+const SignupStep2 = ({ setShowLogin }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorText, setErrorText] = useState("");
 
   const emailRef = useRef();
   const passwordRef = useRef();
-  const passwordCofirmmationRef = useRef();
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
-  const birthdayRef = useRef();
 
-  const onSubmit = (ev) => {
-    ev.preventDefault();
+  const { setUser, setToken } = useStateContext();
 
+  const validateForm = (e) => {
+    // if (email.trim() === "") {
+    //   e.preventDefault();
+    //   setErrorText("Email is required.");
+    // } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    //   e.preventDefault();
+    //   setErrorText("Email should contain special characters or numbers.");
+    // } else if (password.trim() === "") {
+    //   e.preventDefault();
+    //   setErrorText("Password is required");
+    // } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/.test(password)) {
+    //   e.preventDefault();
+    //   setErrorText("Password should contain special characters or numbers.");
+    // } else {
+    //   setErrorText("");
+    // }
+
+    e.preventDefault();
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
-      password_confirmation: passwordCofirmmationRef.current.value,
-      first_name: firstNameRef.current.value,
-      last_name: lastNameRef.current.value,
-      birthday: birthdayRef.current.value,
     };
 
     console.log(payload);
 
-    const response = createUser(payload);
+    const response = onLogin(payload);
 
     response
       .then((data) => {
         setUser(data.user);
         setToken(data.token);
-        setShowSignUp(false);
+        setShowLogin(false);
       })
       .catch((err) => {
         const error = err.response;
-
         console.log(error.status);
         console.log(error.data);
       });
@@ -204,32 +171,28 @@ const Signup = ({ setShowSignUp }) => {
 
   return (
     <StyledContainer>
-      <Styledh2>Log in or sign up</Styledh2>
+      <Styledh2>Login</Styledh2>
+      <StyledError>{errorText}</StyledError>
       <StyledForm>
-        <StyledH2>Welcome to AirHouse</StyledH2>
         <StyledFormContainer>
-          <StyledInput ref={emailRef} type="email" name="email" placeholder="Email" />
-
-          <StyledInput ref={passwordRef} type="password" name="password" placeholder="Password" />
-
           <StyledInput
-            ref={passwordCofirmmationRef}
-            type="password"
-            name="PasswordConfirm"
-            placeholder="Password confirm"
+            ref={emailRef}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-
-          <StyledInput ref={firstNameRef} type="text" name="first_name" placeholder="First Name" />
-          <StyledInput ref={lastNameRef} type="text" name="last_name" placeholder="Last Name" />
-          <StyledInput ref={birthdayRef} type="date" name="birthday" placeholder="birthday" />
+          <StyledInput
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
+          />
         </StyledFormContainer>
-        <StyledSubmitReset>
-          <StyledButtonSubmit onClick={onSubmit} type="submit">
-            Sign up
-          </StyledButtonSubmit>
-          <StyledButtonReset type="reset">Reset</StyledButtonReset>
-        </StyledSubmitReset>
-
+        <StyledButtonSubmit type="submit" onClick={validateForm}>
+          Continute
+        </StyledButtonSubmit>
         <StyledWith>Login with</StyledWith>
         <StyledIcon>
           <StyledA href="">
@@ -264,4 +227,4 @@ const Signup = ({ setShowSignUp }) => {
   );
 };
 
-export default Signup;
+export default SignupStep2;
