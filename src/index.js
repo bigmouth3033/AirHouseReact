@@ -6,11 +6,15 @@ import reportWebVitals from "./reportWebVitals";
 import { ContextProvider } from "./contexts/ContextProvider";
 import { RouterProvider } from "react-router-dom";
 import router from "./router";
+import { Suspense } from "react";
+import Loading from "./components/Loading";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ContextProvider>
-    <RouterProvider router={router} />
+    <Suspense fallback={<Loading />}>
+      <RouterProvider router={router} />
+    </Suspense>
   </ContextProvider>
 );
 

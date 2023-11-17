@@ -1,30 +1,37 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home";
-import DefaultLayout from "./layouts/DefaultLayout";
-import AircoverForHosts from "./components/body/AirCoverForHost/AircoverForHosts";
-import BestHost from "./components/body/BestHost/BestHost";
-import ProfileDetail from "./components/body/profile/ProfileDetail";
+import { lazy } from "react";
+
+const Home = lazy(() => import("./pages/Home"));
+const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
+const AircoverForHosts = lazy(() => import("./components/body/AirCoverForHost/AircoverForHosts"));
+const BestHost = lazy(() => import("./components/body/BestHost/BestHost"));
+const ProfileDetail = lazy(() => import("./components/body/profile/ProfileDetail"));
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <DefaultLayout />,
+    element: <DefaultLayout/>,
+    exact: true,
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Home/>,
+        exact: true,
       },
       {
         path: "/aircover-for-hosts",
-        element: <AircoverForHosts />,
+        element: <AircoverForHosts/>,
+        exact: true,
       },
       {
         path: "/best-host",
-        element: <BestHost />,
+        element: <BestHost/>,
+        exact: true,
       },
       {
         path: "/profile",
-        element: <ProfileDetail />,
+        element: <ProfileDetail/>,
+        exact: true,
       },
     ],
   },
