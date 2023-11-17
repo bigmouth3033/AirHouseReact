@@ -12,6 +12,8 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/800.css";
 import "@fontsource/montserrat/900.css";
 
+import Blog from "./components/blog/Blog";
+
 import Test from "./components/test/Test";
 import Home from "./pages/Home";
 import { useEffect, useState } from "react";
@@ -28,7 +30,7 @@ function App() {
 
   return (
     <>
-      <Home />
+      <Blog />
     </>
   );
 }
