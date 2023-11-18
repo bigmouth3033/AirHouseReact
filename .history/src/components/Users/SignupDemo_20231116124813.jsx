@@ -127,35 +127,132 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const SignupStep2 = () => {
+const SignupDemo = () => {
+  const [fname, setfName] = useState("");
+  const [lname, setlName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [errorText, setErrorText] = useState("");
+
+  const validateForm = (e) => {
+    const selectedDate = new Date(birthday);
+    const today = new Date();
+    const age = today.getFullYear() - selectedDate.getFullYear();
+
+    if (fname.trim() === "") {
+      e.preventDefault();
+      setErrorText("First name is required.");
+    } else if (!/^[a-zA-Z ]+$/.test(fname)) {
+      e.preventDefault();
+      setErrorText(
+        "First name should not contain special characters or numbers."
+      );
+    } else if (lname.trim() === "") {
+      e.preventDefault();
+      setErrorText("Last name is required.");
+    } else if (!/^[a-zA-Z ]+$/.test(lname)) {
+      e.preventDefault();
+      setErrorText(
+        "Last name should not contain special characters or numbers."
+      );
+    } else if (isNaN(selectedDate.getTime())) {
+      e.preventDefault();
+      setErrorText("Invalid date of birth.");
+    } else if (age < 18) {
+      e.preventDefault();
+      setErrorText("You must be at least 18 years old.");
+    } else if (selectedDate > today) {
+      e.preventDefault();
+      setErrorText("Date of birth cannot be in the future.");
+    } else if (email.trim() === "") {
+      e.preventDefault();
+      setErrorText("Email is required.");
+    } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      e.preventDefault();
+      setErrorText("Email should contain special characters or numbers.");
+    } else if (password.trim() === "") {
+      e.preventDefault();
+      setErrorText("Password is required");
+    } else if (
+      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/.test(password)
+    ) {
+      e.preventDefault();
+      setErrorText("Password should contain special characters or numbers.");
+    } else if (password !== passwordConfirm) {
+      e.preventDefault();
+      setErrorText("Password isn't confirm ");
+    } else {
+      setErrorText("");
+      // Thực hiện các hành động gửi form tại đây
+    }
+  };
+
+  const { user, token } = useStateContext();
+
   return (
     <StyledContainer>
       <Styledh2>Finish signing up</Styledh2>
+      <StyledError>{errorText}</StyledError>
       <StyledForm>
         <form>
           <StyledFormContainer>
-            <StyledInput type="text" placeholder="First name" />
+            <StyledInput
+              type="text"
+              placeholder="First name"
+              value={fname}
+              onChange={(e) => setfName(e.target.value)}
+            />
             {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
-            <StyledInput type="text" placeholder="Last name" />
+            <StyledInput
+              type="text"
+              placeholder="Last name"
+              value={lname}
+              onChange={(e) => setlName(e.target.value)}
+            />
             <StyledSpan>
               Make sure it matches the name on your goverment ID.
             </StyledSpan>
             {/* <StyledInput type="date" placeholder="Birthday" /> */}
-            <StyledInput type="date" id="birthday" name="birthday" />
+            <StyledInput
+              type="date"
+              id="birthday"
+              name="birthday"
+              value={birthday}
+              onChange={(e) => setBirthday(e.target.value)}
+            />
             {/* <p style={{ color: "red" }}>{errorText}</p> */}
 
             <StyledSpan>
               To signup, you need to be at least 18. Your birthday won't be
               share with other people who use AirHouse.
             </StyledSpan>
-            <StyledInput type="email" placeholder="Email" />
+            <StyledInput
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <StyledSpan>
               We'll email you trip confirmations and receipts.
             </StyledSpan>
-            <StyledInput type="password" placeholder="Password" />
-            <StyledInput type="password" placeholder="Password Confirm" />
+            <StyledInput
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <StyledInput
+              type="password"
+              placeholder="Password Confirm"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+            />
           </StyledFormContainer>
-          <StyledButtonSubmit type="submit">Continute</StyledButtonSubmit>
+          <StyledButtonSubmit type="submit" onClick={validateForm}>
+            Continute
+          </StyledButtonSubmit>
         </form>
         <StyledWith>Login with</StyledWith>
         <StyledIcon>
@@ -191,4 +288,4 @@ const SignupStep2 = () => {
   );
 };
 
-export default SignupStep2;
+export default SignupDemo;

@@ -127,10 +127,11 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const SignupStep2 = () => {
+const SignupDemo = () => {
   return (
     <StyledContainer>
       <Styledh2>Finish signing up</Styledh2>
+      <StyledError>{errorText}</StyledError>
       <StyledForm>
         <form>
           <StyledFormContainer>
@@ -191,4 +192,4 @@ const SignupStep2 = () => {
   );
 };
 
-export default SignupStep2;
+export default SignupDemo;

@@ -12,7 +12,6 @@ const StateContext = createContext({
 });
 //Tạo Provider
 export const ContextProvider = ({ children }) => {
-  //children. Đây là thành phần cung cấp Context cho cây thành phần con của nó.
   const [user, setUser] = useState(null);
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
 
@@ -33,7 +32,7 @@ export const ContextProvider = ({ children }) => {
       setPageWidth(window.innerWidth);
     });
   }, []);
-  //Các giá trị này sẽ được cung cấp cho tất cả các thành phần con trong cây thành phần
+
   return (
     <StateContext.Provider
       value={{
@@ -48,5 +47,5 @@ export const ContextProvider = ({ children }) => {
     </StateContext.Provider>
   );
 };
-//useStateContext là một hàm hook sử dụng useContext để trả về giá trị của Context.
+
 export const useStateContext = () => useContext(StateContext);

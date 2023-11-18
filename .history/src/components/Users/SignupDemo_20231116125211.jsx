@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { getYear } from "date-fns";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
+import { useRef } from "react";
 // npm install react-hook-form date-fns  --force
 const StyledError = styled.p`
   color: red;
@@ -127,7 +128,11 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const SignupStep2 = () => {
+const SignupDemo = () => {
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const paswordRef = useRef();
+  const passwordConfirmRef = useRef();
   return (
     <StyledContainer>
       <Styledh2>Finish signing up</Styledh2>
@@ -191,4 +196,4 @@ const SignupStep2 = () => {
   );
 };
 
-export default SignupStep2;
+export default SignupDemo;

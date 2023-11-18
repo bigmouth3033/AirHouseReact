@@ -48,5 +48,5 @@ export const ContextProvider = ({ children }) => {
     </StateContext.Provider>
   );
 };
-//useStateContext là một hàm hook sử dụng useContext để trả về giá trị của Context.
+
 export const useStateContext = () => useContext(StateContext);

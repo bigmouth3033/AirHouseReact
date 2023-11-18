@@ -33,7 +33,7 @@ export const ContextProvider = ({ children }) => {
       setPageWidth(window.innerWidth);
     });
   }, []);
-  //Các giá trị này sẽ được cung cấp cho tất cả các thành phần con trong cây thành phần
+
   return (
     <StateContext.Provider
       value={{
@@ -48,5 +48,5 @@ export const ContextProvider = ({ children }) => {
     </StateContext.Provider>
   );
 };
-//useStateContext là một hàm hook sử dụng useContext để trả về giá trị của Context.
+
 export const useStateContext = () => useContext(StateContext);

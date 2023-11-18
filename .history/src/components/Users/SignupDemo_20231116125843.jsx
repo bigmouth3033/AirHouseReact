@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { getYear } from "date-fns";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
+import { useRef } from "react";
 // npm install react-hook-form date-fns  --force
 const StyledError = styled.p`
   color: red;
@@ -127,12 +128,30 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const SignupStep2 = () => {
+const SignupDemo = () => {
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const emailRef = useRef();
+  const birthdayRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmationRef = useRef();
+  const onsubmit = (ev) => {
+    ev.preventDefault();
+    const payload = {
+      fisrt_name: firstNameRef.current.value,
+      last_name: lastNameRef.current.value,
+      birthday: birthdayRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      password_confirmation: passwordConfirmationRef.current.value,
+    };
+    console.log(payload);
+  };
   return (
     <StyledContainer>
       <Styledh2>Finish signing up</Styledh2>
       <StyledForm>
-        <form>
+        <form onsubmit={onsubmit}>
           <StyledFormContainer>
             <StyledInput type="text" placeholder="First name" />
             {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
@@ -191,4 +210,4 @@ const SignupStep2 = () => {
   );
 };
 
-export default SignupStep2;
+export default SignupDemo;

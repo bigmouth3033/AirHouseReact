@@ -5,13 +5,7 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { getYear } from "date-fns";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { Navigate } from "react-router-dom";
-// npm install react-hook-form date-fns  --force
-const StyledError = styled.p`
-  color: red;
-`;
+
 const StyledContainer = styled.div`
   max-width: 500px;
   margin: 0 auto;
@@ -29,16 +23,22 @@ const Styledh2 = styled.h2`
   margin: 0 -25px;
 `;
 const StyledForm = styled.form`
-  height: 500px;
+  height: 450px;
   overflow: auto;
-  margin-right: -25px;
+  /* margin-right: -25px; */
+`;
+const StyledH2 = styled.h2`
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 600;
+  padding: 25px;
 `;
 const StyledFormContainer = styled.div`
-  margin: 20px 0;
+  margin-bottom: 20px;
 `;
 const StyledInput = styled.input`
   width: 440px;
-  height: 40px;
+  height: 50px;
   border-radius: 8px;
   border: 1px solid #dddddd;
   padding: 0 10px;
@@ -58,15 +58,8 @@ const StyledInput = styled.input`
     border-radius: 12px;
   }
 `;
-const StyledSpan = styled.p`
-  font-size: 14px;
-  width: 400px;
-  color: #717171;
-  padding: 10px 0 20px 0;
-`;
 const StyledButtonSubmit = styled.button`
-  width: 440px;
-  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px; */
+  width: 100%;
   padding: 10px 25px;
   font-size: 18px;
   font-weight: 500;
@@ -81,8 +74,8 @@ const StyledButtonSubmit = styled.button`
 `;
 const StyledWith = styled.div`
   text-align: center;
-  font-size: 16px;
-  margin: 30px 0;
+  font-size: 18px;
+  margin: 40px 0;
   &::after {
     content: "";
     display: inline-block;
@@ -127,35 +120,42 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const SignupStep2 = () => {
+const StyledError = styled.p`
+  color: red;
+`;
+const SignupDemo = () => {
+  const [email, setEmail] = useState("");
+  const [errorText, setErrorText] = useState("");
+  const validateForm = (e) => {
+    if (email.trim() === "") {
+      e.preventDefault();
+      setErrorText("Email is required.");
+    } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      e.preventDefault();
+      setErrorText("Email should contain special characters or numbers.");
+    } else {
+      setErrorText("");
+      // Thực hiện các hành động gửi form tại đây
+    }
+  };
   return (
     <StyledContainer>
-      <Styledh2>Finish signing up</Styledh2>
+      <Styledh2>Log in or sign up</Styledh2>
+      <StyledError>{errorText}</StyledError>
       <StyledForm>
         <form>
+          <StyledH2>Welcome to AirHouse</StyledH2>
           <StyledFormContainer>
-            <StyledInput type="text" placeholder="First name" />
-            {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
-            <StyledInput type="text" placeholder="Last name" />
-            <StyledSpan>
-              Make sure it matches the name on your goverment ID.
-            </StyledSpan>
-            {/* <StyledInput type="date" placeholder="Birthday" /> */}
-            <StyledInput type="date" id="birthday" name="birthday" />
-            {/* <p style={{ color: "red" }}>{errorText}</p> */}
-
-            <StyledSpan>
-              To signup, you need to be at least 18. Your birthday won't be
-              share with other people who use AirHouse.
-            </StyledSpan>
-            <StyledInput type="email" placeholder="Email" />
-            <StyledSpan>
-              We'll email you trip confirmations and receipts.
-            </StyledSpan>
-            <StyledInput type="password" placeholder="Password" />
-            <StyledInput type="password" placeholder="Password Confirm" />
+            <StyledInput
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </StyledFormContainer>
-          <StyledButtonSubmit type="submit">Continute</StyledButtonSubmit>
+          <StyledButtonSubmit type="submit" onClick={validateForm}>
+            Continute
+          </StyledButtonSubmit>
         </form>
         <StyledWith>Login with</StyledWith>
         <StyledIcon>
@@ -191,4 +191,4 @@ const SignupStep2 = () => {
   );
 };
 
-export default SignupStep2;
+export default SignupStep1;
