@@ -1,4 +1,3 @@
-import { Button } from "antd";
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { blogDetailArr } from "../../data/data";
@@ -25,6 +24,10 @@ const StyleTabTop = styled.div`
   font-size: 1.7rem;
   font-weight: 600;
   padding-left: 3rem;
+  @media (max-width: 576px) {
+    margin: 1rem 1rem;
+    padding-left: 0;
+  }
 `;
 
 const StyleTabButton = styled.button`
@@ -57,18 +60,17 @@ const StyleTabBody = styled.div`
   row-gap: 13rem;
 
   @media (max-width: 1023px) {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 768px) {
-    display: grid;
     grid-template-columns: 1fr 1fr;
+    margin: 1rem 1.5rem;
   }
 
   @media (max-width: 576px) {
-    display: grid;
     grid-template-columns: 1fr;
+    margin: 1rem 1rem;
   }
 `;
 

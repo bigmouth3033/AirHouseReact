@@ -1,5 +1,5 @@
 import React from "react";
-import "./Blog.css";
+
 import styled from "styled-components";
 import LatestNews from "./LatestNews";
 import BlogSlick from "./BlogSlick";
