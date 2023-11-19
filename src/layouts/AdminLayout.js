@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../store";
 import { Suspense } from "react";
+import "../scss/style.scss";
 
 export default function AdminLayout() {
   return (

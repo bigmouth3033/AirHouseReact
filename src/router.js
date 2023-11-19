@@ -90,7 +90,7 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminLayout />,
     children: [
-      { path: "/admin/dashboard", name: "Dashboard", element: <Dashboard/> },
+      { path: "/admin", name: "Dashboard", element: <Dashboard/> },
       { path: "/admin/theme", name: "Theme", element: <Colors/>, exact: true },
       { path: "/admin/theme/colors", name: "Colors", element: <Colors/> },
       { path: "/admin/theme/typography", name: "Typography", element: <Typography/> },

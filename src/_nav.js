@@ -19,7 +19,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Dashboard',
-    to: '/dashboard',
+    to: 'dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     badge: {
       color: 'info',
@@ -33,13 +33,13 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Colors',
-    to: '/theme/colors',
+    to: 'theme/colors',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Typography',
-    to: '/theme/typography',
+    to: 'theme/typography',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
   {
@@ -49,101 +49,101 @@ const _nav = [
   {
     component: CNavGroup,
     name: 'Base',
-    to: '/base',
+    to: 'base',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'Accordion',
-        to: '/base/accordion',
+        to: 'base/accordion',
       },
       {
         component: CNavItem,
         name: 'Breadcrumb',
-        to: '/base/breadcrumbs',
+        to: 'base/breadcrumbs',
       },
       {
         component: CNavItem,
         name: 'Cards',
-        to: '/base/cards',
+        to: 'base/cards',
       },
       {
         component: CNavItem,
         name: 'Carousel',
-        to: '/base/carousels',
+        to: 'base/carousels',
       },
       {
         component: CNavItem,
         name: 'Collapse',
-        to: '/base/collapses',
+        to: 'base/collapses',
       },
       {
         component: CNavItem,
         name: 'List group',
-        to: '/base/list-groups',
+        to: 'base/list-groups',
       },
       {
         component: CNavItem,
         name: 'Navs & Tabs',
-        to: '/base/navs',
+        to: 'base/navs',
       },
       {
         component: CNavItem,
         name: 'Pagination',
-        to: '/base/paginations',
+        to: 'base/paginations',
       },
       {
         component: CNavItem,
         name: 'Placeholders',
-        to: '/base/placeholders',
+        to: 'base/placeholders',
       },
       {
         component: CNavItem,
         name: 'Popovers',
-        to: '/base/popovers',
+        to: 'base/popovers',
       },
       {
         component: CNavItem,
         name: 'Progress',
-        to: '/base/progress',
+        to: 'base/progress',
       },
       {
         component: CNavItem,
         name: 'Spinners',
-        to: '/base/spinners',
+        to: 'base/spinners',
       },
       {
         component: CNavItem,
         name: 'Tables',
-        to: '/base/tables',
+        to: 'base/tables',
       },
       {
         component: CNavItem,
         name: 'Tooltips',
-        to: '/base/tooltips',
+        to: 'base/tooltips',
       },
     ],
   },
   {
     component: CNavGroup,
     name: 'Buttons',
-    to: '/buttons',
+    to: 'buttons',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'Buttons',
-        to: '/buttons/buttons',
+        to: 'buttons/buttons',
       },
       {
         component: CNavItem,
         name: 'Buttons groups',
-        to: '/buttons/button-groups',
+        to: 'buttons/button-groups',
       },
       {
         component: CNavItem,
         name: 'Dropdowns',
-        to: '/buttons/dropdowns',
+        to: 'buttons/dropdowns',
       },
     ],
   },
@@ -155,49 +155,49 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Form Control',
-        to: '/forms/form-control',
+        to: 'forms/form-control',
       },
       {
         component: CNavItem,
         name: 'Select',
-        to: '/forms/select',
+        to: 'forms/select',
       },
       {
         component: CNavItem,
         name: 'Checks & Radios',
-        to: '/forms/checks-radios',
+        to: 'forms/checks-radios',
       },
       {
         component: CNavItem,
         name: 'Range',
-        to: '/forms/range',
+        to: 'forms/range',
       },
       {
         component: CNavItem,
         name: 'Input Group',
-        to: '/forms/input-group',
+        to: 'forms/input-group',
       },
       {
         component: CNavItem,
         name: 'Floating Labels',
-        to: '/forms/floating-labels',
+        to: 'forms/floating-labels',
       },
       {
         component: CNavItem,
         name: 'Layout',
-        to: '/forms/layout',
+        to: 'forms/layout',
       },
       {
         component: CNavItem,
         name: 'Validation',
-        to: '/forms/validation',
+        to: 'forms/validation',
       },
     ],
   },
   {
     component: CNavItem,
     name: 'Charts',
-    to: '/charts',
+    to: 'charts',
     icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
   },
   {
@@ -208,7 +208,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'CoreUI Free',
-        to: '/icons/coreui-icons',
+        to: 'icons/coreui-icons',
         badge: {
           color: 'success',
           text: 'NEW',
@@ -217,12 +217,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'CoreUI Flags',
-        to: '/icons/flags',
+        to: 'icons/flags',
       },
       {
         component: CNavItem,
         name: 'CoreUI Brands',
-        to: '/icons/brands',
+        to: 'icons/brands',
       },
     ],
   },
@@ -234,22 +234,22 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Alerts',
-        to: '/notifications/alerts',
+        to: 'notifications/alerts',
       },
       {
         component: CNavItem,
         name: 'Badges',
-        to: '/notifications/badges',
+        to: 'notifications/badges',
       },
       {
         component: CNavItem,
         name: 'Modal',
-        to: '/notifications/modals',
+        to: 'notifications/modals',
       },
       {
         component: CNavItem,
         name: 'Toasts',
-        to: '/notifications/toasts',
+        to: 'notifications/toasts',
       },
     ],
   },
@@ -275,12 +275,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Login',
-        to: '/login',
+        to: 'login',
       },
       {
         component: CNavItem,
         name: 'Register',
-        to: '/register',
+        to: 'register',
       },
       {
         component: CNavItem,

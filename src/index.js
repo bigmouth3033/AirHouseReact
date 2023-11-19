@@ -8,11 +8,6 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router";
 import { Suspense } from "react";
 import Loading from "./components/Loading";
-import Admin from "./pages/Admin";
-import { Provider } from "react-redux";
-import store from "store";
-import AdminLayout from "layouts/AdminLayout";
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -21,7 +16,6 @@ root.render(
         <RouterProvider router={router} />
       </Suspense>
   </ContextProvider>
-
 
 );
 
