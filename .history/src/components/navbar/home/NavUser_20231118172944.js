@@ -25,13 +25,11 @@ const StyledUserContainer = styled(StyledButtonContainer)`
   }
 
   &:hover {
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   }
 
   &:active {
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   }
 `;
 
@@ -66,18 +64,11 @@ function NavUser() {
   return (
     <StyledContainer>
       <StyledTextLink>Airbnb your home</StyledTextLink>
-      <StyledUserContainer
-        className="navbar-dropdown"
-        onClick={onClickDropDown}
-      >
+      <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
         <FontAwesomeIcon className="bar" icon={faBars} />
         <FontAwesomeIcon className="user" icon={faCircleUser} />
       </StyledUserContainer>
-      <UserDropDown
-        showDropDown={showDropDown}
-        blur={onBlurDropDown}
-        className="dropdown"
-      />
+      <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
     </StyledContainer>
   );
 }
