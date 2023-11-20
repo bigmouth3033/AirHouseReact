@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   CAvatar,
   CBadge,
@@ -8,7 +8,7 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-} from '@coreui/react'
+} from "@coreui/react";
 import {
   cilBell,
   cilCreditCard,
@@ -19,12 +19,26 @@ import {
   cilSettings,
   cilTask,
   cilUser,
-} from '@coreui/icons'
-import CIcon from '@coreui/icons-react'
+  cilPeople,
+} from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+import Avatar from "react-avatar";
 
-import avatar8 from 'assets/images/avatars/8.jpg'
+import avatar8 from "assets/images/avatars/8.jpg";
+import { useStateContext } from "contexts/ContextProvider";
+import { memo } from "react";
+import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
 
 const AppHeaderDropdown = () => {
+  const { user } = useStateContext();
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -65,6 +79,11 @@ const AppHeaderDropdown = () => {
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
+
+        <CDropdownItem href="#">
+          <CIcon icon={cilPeople} className="me-2" />
+          <StyledLink to="/admin/register">Register</StyledLink>
+        </CDropdownItem>
         <CDropdownItem href="#">
           <CIcon icon={cilSettings} className="me-2" />
           Settings
@@ -90,7 +109,7 @@ const AppHeaderDropdown = () => {
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
-  )
-}
+  );
+};
 
-export default AppHeaderDropdown
+export default AppHeaderDropdown;

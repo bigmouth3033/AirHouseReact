@@ -6,12 +6,11 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { faLocationPinLock } from "@fortawesome/free-solid-svg-icons";
 
 export default function DefaultLayout() {
-  const { token, setUser } = useStateContext();
+  const { token, setUser, loading, setLoading } = useStateContext();
 
   useEffect(() => {
     if (token) {
       const response = getUser();
-
       response
         .then((user) => {
           setUser(user);
@@ -21,16 +20,10 @@ export default function DefaultLayout() {
         });
     }
 
-    // const sessionArray = JSON.parse(localStorage.getItem("SESSION_ID_ARRAY"));
-
-    // if (!sessionArray) {
-    //   sessionStorage("SESSION_ID", 0);
-    //   localStorage.setItem("SESSION_ID_ARRAY", JSON.stringify([0]));
-    // } else {
-    //   let newSessionID = sessionArray[sessionArray.length - 1] + sessionStorage("SESSION_ID", newSessionID);
-    //   localStorage.setItem("SESSION_ID_ARRAY", JSON.stringify([...sessionArray, newSessionID]));
-    // }
-
+    if (loading) {
+      console.log(loading);
+      setLoading(false);
+    }
   }, []);
 
   return (

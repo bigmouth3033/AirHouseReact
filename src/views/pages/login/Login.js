@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   CButton,
   CCard,
@@ -12,16 +12,56 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilLockLocked, cilUser } from "@coreui/icons";
+
+import { useRef } from "react";
+import { onLogin } from "api/userApi";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useStateContext } from "contexts/ContextProvider";
+import { Navigate } from "react-router-dom";
+
+import "scss/style.scss";
 
 const Login = () => {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const { setUser, setToken } = useStateContext();
+
+  const adminQuery = useQuery({
+    queryKey: ["admin"],
+    queryFn: clickLogin,
+    enabled: false,
+    retry: 1,
+  });
+
+  if (adminQuery.isError) {
+    console.log(adminQuery.error);
+  }
+
+  if (adminQuery.isSuccess) {
+    setUser(adminQuery.data.user);
+    setToken(adminQuery.data.token);
+    return <Navigate to="/admin" />;
+  }
+
+  function clickLogin() {
+    const payload = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    console.log(payload);
+
+    return onLogin(payload);
+  }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md={8}>
+          <CCol md={4}>
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
@@ -32,47 +72,32 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput ref={emailRef} placeholder="Email" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
+                        ref={passwordRef}
                         type="password"
                         placeholder="Password"
                         autoComplete="current-password"
                       />
                     </CInputGroup>
                     <CRow>
-                      <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                      <CCol xs={8}>
+                        <CButton
+                          disabled={adminQuery.isLoading}
+                          onClick={() => adminQuery.refetch()}
+                          color="primary"
+                          className="px-4"
+                        >
                           Login
-                        </CButton>
-                      </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
                         </CButton>
                       </CCol>
                     </CRow>
                   </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
-                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>
@@ -80,7 +105,7 @@ const Login = () => {
         </CRow>
       </CContainer>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

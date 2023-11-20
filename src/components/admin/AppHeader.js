@@ -13,6 +13,10 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from "@coreui/icons";
+import { memo } from "react";
+
+import Avatar from "react-avatar";
+import { useStateContext } from "contexts/ContextProvider";
 
 import { AppBreadcrumb } from "./index";
 import { AppHeaderDropdown } from "./header/index";
@@ -21,6 +25,8 @@ import { logo } from "assets/brand/logo";
 const AppHeader = () => {
   const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebarShow);
+
+ 
 
   return (
     <CHeader position="sticky" className="mb-4">

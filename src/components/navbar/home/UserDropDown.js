@@ -92,9 +92,10 @@ function UserDropDown({ blur, showDropDown }) {
         blur();
       })
       .catch((err) => {
-        const error = err.response;
-        console.log(error.status);
-        console.log(error.data);
+        console.log("error");
+        // const error = err.response;
+        // console.log(error.status);
+        // console.log(error.data);
       });
   };
 

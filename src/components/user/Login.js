@@ -130,22 +130,6 @@ const SignupStep2 = ({ setShowLogin }) => {
   const { setUser, setToken } = useStateContext();
 
   const validateForm = (e) => {
-    // if (email.trim() === "") {
-    //   e.preventDefault();
-    //   setErrorText("Email is required.");
-    // } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    //   e.preventDefault();
-    //   setErrorText("Email should contain special characters or numbers.");
-    // } else if (password.trim() === "") {
-    //   e.preventDefault();
-    //   setErrorText("Password is required");
-    // } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/.test(password)) {
-    //   e.preventDefault();
-    //   setErrorText("Password should contain special characters or numbers.");
-    // } else {
-    //   setErrorText("");
-    // }
-
     e.preventDefault();
     const payload = {
       email: emailRef.current.value,

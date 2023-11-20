@@ -19,3 +19,8 @@ export const onLogin = async (data) => {
 export const onLogout = async () => {
   let response = await axiosClient.post("/logout");
 };
+
+export const getAdmin = async () => {
+  let response = await axiosClient.get("admin");
+  return response.data;
+};
