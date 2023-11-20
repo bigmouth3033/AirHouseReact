@@ -13,15 +13,16 @@ import { getUser } from "api/userApi";
 import { useNavigate } from "react-router-dom";
 import Loading from "components/Loading";
 
+
 import { useQuery } from "@tanstack/react-query";
 
 export default function AdminLayout() {
   const { token, user, setUser, setToken, loading, setLoading } = useStateContext();
 
   const userQuery = useQuery({
-    queryKey: ["user"],
+    queryKey: ["admin"],
     queryFn: getUser,
-    retry: 1
+    retry: 1,
   });
 
   if (userQuery.isLoading) {
@@ -37,6 +38,7 @@ export default function AdminLayout() {
       return <Navigate to="/admin_login" />;
     }
   }
+
 
   return (
     <Provider store={store}>

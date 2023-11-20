@@ -18,10 +18,11 @@ import { cilLockLocked, cilUser } from "@coreui/icons";
 
 import { useRef } from "react";
 import { onLogin } from "api/userApi";
-import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useStateContext } from "contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 import "scss/style.scss";
 
@@ -30,22 +31,7 @@ const Login = () => {
   const passwordRef = useRef();
   const { setUser, setToken } = useStateContext();
 
-  const adminQuery = useQuery({
-    queryKey: ["admin"],
-    queryFn: clickLogin,
-    enabled: false,
-    retry: 1,
-  });
-
-  if (adminQuery.isError) {
-    console.log(adminQuery.error);
-  }
-
-  if (adminQuery.isSuccess) {
-    setUser(adminQuery.data.user);
-    setToken(adminQuery.data.token);
-    return <Navigate to="/admin" />;
-  }
+  const navigate = useNavigate();
 
   function clickLogin() {
     const payload = {
@@ -55,7 +41,24 @@ const Login = () => {
 
     console.log(payload);
 
-    return onLogin(payload);
+    const response = onLogin(payload);
+
+    response
+      .then((data) => {
+        const user = data.user;
+        const token = data.token;
+
+        if (user.user_type == 0) {
+          setUser(data.user);
+          setToken(data.token);
+          navigate("/admin");
+        }
+      })
+      .catch((err) => {
+        const error = err.response;
+        console.log(error.status);
+        console.log(error.data);
+      });
   }
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -87,12 +90,7 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={8}>
-                        <CButton
-                          disabled={adminQuery.isLoading}
-                          onClick={() => adminQuery.refetch()}
-                          color="primary"
-                          className="px-4"
-                        >
+                        <CButton onClick={clickLogin} color="primary" className="px-4">
                           Login
                         </CButton>
                       </CCol>

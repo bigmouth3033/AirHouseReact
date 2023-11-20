@@ -75,7 +75,7 @@ function NavUser() {
           <Avatar size="30px" textSizeRatio={2} round={true} name={user.first_name} />
         ) : (
           <FontAwesomeIcon className="user" icon={faCircleUser} />
-        )}
+        )}  
       </StyledUserContainer>
       <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
     </StyledContainer>

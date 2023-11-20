@@ -24,3 +24,8 @@ export const getAdmin = async () => {
   let response = await axiosClient.get("admin");
   return response.data;
 };
+
+export const createAdmin = async (payload) => {
+  let response = await axiosClient.post("admin/signup", payload);
+  return response.data;
+};

@@ -30,15 +30,37 @@ import { memo } from "react";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { onLogout } from "api/userApi";
 
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-const StyledLink = styled(Link)`
+import Loading from "components/Loading";
+
+const StyledButton = styled.button`
   text-decoration: none;
-  color: black;
+  background-color: inherit;
+  border: none;
+  color: inherit;
 `;
+
+
 
 const AppHeaderDropdown = () => {
   const { user } = useStateContext();
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: onLogout,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["admin"]);
+    },
+  });
+
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -82,7 +104,7 @@ const AppHeaderDropdown = () => {
 
         <CDropdownItem href="#">
           <CIcon icon={cilPeople} className="me-2" />
-          <StyledLink to="/admin/register">Register</StyledLink>
+          <StyledButton onClick={() => navigate("/admin/register")}>Register</StyledButton>
         </CDropdownItem>
         <CDropdownItem href="#">
           <CIcon icon={cilSettings} className="me-2" />
@@ -103,9 +125,9 @@ const AppHeaderDropdown = () => {
           </CBadge>
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem href="#">
+        <CDropdownItem onClick={() => mutation.mutate()} href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
-          Lock Account
+          Logout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

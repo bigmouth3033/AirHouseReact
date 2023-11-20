@@ -9,6 +9,7 @@ import router from "./router";
 import { Suspense } from "react";
 import Loading from "./components/Loading";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ root.render(
       <Suspense fallback={<Loading />}>
         <RouterProvider router={router} />
       </Suspense>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </ContextProvider>
 );

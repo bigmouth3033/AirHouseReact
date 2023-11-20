@@ -6,7 +6,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { faLocationPinLock } from "@fortawesome/free-solid-svg-icons";
 
 export default function DefaultLayout() {
-  const { token, setUser, loading, setLoading } = useStateContext();
+  const { token, setUser} = useStateContext();
 
   useEffect(() => {
     if (token) {
@@ -18,11 +18,6 @@ export default function DefaultLayout() {
         .catch((error) => {
           console.log(error);
         });
-    }
-
-    if (loading) {
-      console.log(loading);
-      setLoading(false);
     }
   }, []);
 
