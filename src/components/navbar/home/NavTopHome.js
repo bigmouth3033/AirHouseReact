@@ -2,6 +2,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { useState, useRef, useEffect, useReducer } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useStateContext } from "../../../contexts/ContextProvider";
+import FilterButton from "./FIlterButton";
 
 import NavBarContainer from "../../../ui/NavBarContainer";
 import NavLogo from "./NavLogo";
@@ -110,15 +112,18 @@ export default function NavTopHome() {
     dispatch({ type: ACTIONS.CLICK_EX });
   }
 
+  const {pageWidth} = useStateContext();
+
   return (
     <>
       <NavBarContainer zIndex={5} variant={"home"}>
-        {window.innerWidth >= 800 ? <NavLogo /> : <></>}
+        {pageWidth >= 800 ? <NavLogo /> : <></>}
         <AnimatePresence>{state.isShow || <NavTopCenterHome />}</AnimatePresence>
         <AnimatePresence>
           {state.isShow && <AfterEffectNavCenterHome isStay={state.isStay} clickStay={clickStay} clickEx={clickEx} />}
         </AnimatePresence>
-        {window.innerWidth >= 800 ? <NavUser /> : <></>}
+        {pageWidth >= 800 ? <NavUser /> : <FilterButton/>}
+
       </NavBarContainer>
 
       <StyledScrollPopUp $position={state.isShow}>

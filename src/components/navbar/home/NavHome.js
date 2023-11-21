@@ -8,7 +8,7 @@ import NavBottom from "./NavBottom";
 const StyledContainer = styled.div`
   position: sticky;
   top: 0;
-  z-index: 99999;
+  z-index: 1;
   background-color: white;
 
   transition: all 200ms ease-in-out;

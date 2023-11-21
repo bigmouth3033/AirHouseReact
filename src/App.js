@@ -12,27 +12,25 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/800.css";
 import "@fontsource/montserrat/900.css";
 
-import Blog from "./components/blog/Blog";
-
 import Test from "./components/test/Test";
 import Home from "./pages/Home";
 import { useEffect, useState } from "react";
 import ProductCreation from "./pages/ProductCreation";
 
-function App() {
-  const [pageWidth, setPageWidth] = useState(window.innerWidth);
+// function App() {
+//   const [pageWidth, setPageWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      setPageWidth(window.innerWidth);
-    });
-  }, []);
+//   useEffect(() => {
+//     window.addEventListener("resize", () => {
+//       setPageWidth(window.innerWidth);
+//     });
+//   }, []);
 
   return (
     <>
-      <Blog />
+      <Home />
     </>
   );
 }
 
-export default App;
+// export default App;

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { css } from "styled-components";
 
 const StyledNav = styled.div`
+  font-family: "Poppins", sans-serif;
   position: relative;
   /* background-color: white; */
   z-index: 10;

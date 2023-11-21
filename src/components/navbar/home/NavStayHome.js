@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import StyledButtonContainer from "../../../ui/StyledButtonContainer";
 
 const StyledContainer = styled(motion.div)`
-  font-family: Montserrat;
+  font-family: "Poppins", sans-serif;
   border-radius: 50px;
   border: 0;
   background-color: white;

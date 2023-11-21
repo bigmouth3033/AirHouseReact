@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.button`
+  font-family: "Poppins", sans-serif;
   background-color: white;
   border:0;
 
