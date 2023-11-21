@@ -4,9 +4,8 @@ import Signup from "../../user/Signup";
 import Overlay from "../../../ui/Overlay";
 import { useState, useEffect, useRef } from "react";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { onLogout } from "../../../api/userApi";
-
 import Login from "../../user/Login";
+import { LogoutUserMutation } from "api/userApi";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
@@ -41,10 +40,7 @@ const StyledOverlay = styled(Overlay)`
 const StyledContainer = styled.div``;
 
 function UserDropDown({ blur, showDropDown }) {
-  const { user, setUser, setToken } = useStateContext();
-
   const [showSignUp, setShowSignUp] = useState(false);
-
   const [showLogin, setShowLogin] = useState(false);
 
   function onShowSignUpHandler() {
@@ -83,20 +79,12 @@ function UserDropDown({ blur, showDropDown }) {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
+  const logoutMutation = LogoutUserMutation();
+
+
   const onLogoutHandler = () => {
-    const response = onLogout();
-    response
-      .then(() => {
-        setUser({});
-        setToken(null);
-        blur();
-      })
-      .catch((err) => {
-        console.log("error");
-        // const error = err.response;
-        // console.log(error.status);
-        // console.log(error.data);
-      });
+    logoutMutation.mutate();
+    blur();
   };
 
   return (

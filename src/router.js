@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
 const Colors = lazy(() => import("./views/theme/colors/Colors"));
 const Typography = lazy(() => import("./views/theme/typography/Typography"));
 
+//template import
 // Base
 const Accordion = lazy(() => import("./views/base/accordion/Accordion"));
 const Breadcrumbs = lazy(() => import("./views/base/breadcrumbs/Breadcrumbs"));
@@ -60,6 +61,11 @@ const Widgets = lazy(() => import("./views/widgets/Widgets"));
 
 const AdminLogin = lazy(() => import("views/pages/login/Login"));
 const AdminRegister = lazy(() => import("views/pages/register/Register"));
+
+// admin custom import
+const Amenities = lazy(() => import("views/type/amenities/Amenities"));
+
+const BlogList = lazy(() => import("views/blog/BlogList"))
 
 const router = createBrowserRouter([
   {
@@ -141,6 +147,8 @@ const router = createBrowserRouter([
       { path: "/admin/notifications/modals", name: "Modals", element: <Modals /> },
       { path: "/admin/notifications/toasts", name: "Toasts", element: <Toasts /> },
       { path: "/admin/widgets", name: "Widgets", element: <Widgets /> },
+      { path: "/admin/type/amenities", name: "Amenities", element: <Amenities />, exact: true },
+      { path: "/admin/blog", name: "Amenities", element: <BlogList />, exact: true },
     ],
   },
 ]);

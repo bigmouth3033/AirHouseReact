@@ -6,10 +6,7 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useRef } from "react";
-
-import { createUser } from "../../api/userApi";
-import { useReducedMotion } from "framer-motion";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { CreateUserMutation } from "api/userApi";
 
 const StyledContainer = styled.div`
   max-width: 530px;
@@ -163,7 +160,7 @@ const StyledAa = styled.p`
   perspective: 200px;
 `;
 const Signup = ({ setShowSignUp }) => {
-  const { setToken, setUser } = useStateContext();
+  const createMutation = CreateUserMutation();
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -186,20 +183,7 @@ const Signup = ({ setShowSignUp }) => {
 
     console.log(payload);
 
-    const response = createUser(payload);
-
-    response
-      .then((data) => {
-        setUser(data.user);
-        setToken(data.token);
-        setShowSignUp(false);
-      })
-      .catch((err) => {
-        const error = err.response;
-
-        console.log(error.status);
-        console.log(error.data);
-      });
+    createMutation.mutate(payload);
   };
 
   return (

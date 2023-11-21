@@ -6,11 +6,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRef } from "react";
-
-import { onLogin } from "../../api/userApi";
-import { useStateContext } from "../../contexts/ContextProvider";
-
-// npm install react-hook-form date-fns  --force
+import { LoginUserMutation } from "../../api/userApi";
 
 const StyledContainer = styled.div`
   max-width: 500px;
@@ -120,17 +116,12 @@ const StyledError = styled.p`
   color: red;
 `;
 const SignupStep2 = ({ setShowLogin }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorText, setErrorText] = useState("");
-
   const emailRef = useRef();
   const passwordRef = useRef();
-
-  const { setUser, setToken } = useStateContext();
-
+  const loginMutation = LoginUserMutation();
   const validateForm = (e) => {
     e.preventDefault();
+
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
@@ -138,41 +129,22 @@ const SignupStep2 = ({ setShowLogin }) => {
 
     console.log(payload);
 
-    const response = onLogin(payload);
-
-    response
-      .then((data) => {
-        setUser(data.user);
-        setToken(data.token);
-        setShowLogin(false);
-      })
-      .catch((err) => {
-        const error = err.response;
-        console.log(error.status);
-        console.log(error.data);
-      });
+    loginMutation.mutate(payload);
+    setShowLogin(false);
   };
+
+  if (loginMutation.isError) {
+    console.log(loginMutation.error);
+  }
 
   return (
     <StyledContainer>
       <Styledh2>Login</Styledh2>
-      <StyledError>{errorText}</StyledError>
+      {/* <StyledError>{errorText}</StyledError> */}
       <StyledForm>
         <StyledFormContainer>
-          <StyledInput
-            ref={emailRef}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <StyledInput
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            ref={passwordRef}
-          />
+          <StyledInput ref={emailRef} type="email" placeholder="Email" />
+          <StyledInput type="password" placeholder="Password" ref={passwordRef} />
         </StyledFormContainer>
         <StyledButtonSubmit type="submit" onClick={validateForm}>
           Continute

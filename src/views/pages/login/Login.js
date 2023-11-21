@@ -15,22 +15,18 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
-
 import { useRef } from "react";
 import { onLogin } from "api/userApi";
-import { useMutation } from "@tanstack/react-query";
-import { useStateContext } from "contexts/ContextProvider";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import { LoginAdminMutation } from "api/userApi";
 
 import "scss/style.scss";
 
 const Login = () => {
+  const loginMutation = LoginAdminMutation();
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { setUser, setToken } = useStateContext();
-
   const navigate = useNavigate();
 
   function clickLogin() {
@@ -41,25 +37,9 @@ const Login = () => {
 
     console.log(payload);
 
-    const response = onLogin(payload);
-
-    response
-      .then((data) => {
-        const user = data.user;
-        const token = data.token;
-
-        if (user.user_type == 0) {
-          setUser(data.user);
-          setToken(data.token);
-          navigate("/admin");
-        }
-      })
-      .catch((err) => {
-        const error = err.response;
-        console.log(error.status);
-        console.log(error.data);
-      });
+    loginMutation.mutate(payload);
   }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>

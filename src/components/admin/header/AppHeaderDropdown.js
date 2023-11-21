@@ -33,9 +33,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { onLogout } from "api/userApi";
 
-import { useMutation } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
-
+import { LogoutUserMutation } from "api/userApi";
 import Loading from "components/Loading";
 
 const StyledButton = styled.button`
@@ -45,20 +43,10 @@ const StyledButton = styled.button`
   color: inherit;
 `;
 
-
-
 const AppHeaderDropdown = () => {
-  const { user } = useStateContext();
   const navigate = useNavigate();
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: onLogout,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["admin"]);
-    },
-  });
+  const logoutMutation = LogoutUserMutation();
 
 
   return (
@@ -125,7 +113,7 @@ const AppHeaderDropdown = () => {
           </CBadge>
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem onClick={() => mutation.mutate()} href="#">
+        <CDropdownItem onClick={() => logoutMutation.mutate()} href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CDropdownItem>

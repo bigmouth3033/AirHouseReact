@@ -1,25 +1,14 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getUser } from "../api/userApi";
-import { useStateContext } from "../contexts/ContextProvider";
-import { faLocationPinLock } from "@fortawesome/free-solid-svg-icons";
+import { UserQuery } from "api/userApi";
 
 export default function DefaultLayout() {
-  const { token, setUser} = useStateContext();
+  const userQuery = UserQuery();
 
-  useEffect(() => {
-    if (token) {
-      const response = getUser();
-      response
-        .then((user) => {
-          setUser(user);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, []);
+  if (userQuery.isSuccess) {
+    localStorage.setItem("ACCESS_TOKEN", userQuery.data.token);
+  }
 
   return (
     <div>

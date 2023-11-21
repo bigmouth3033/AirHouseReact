@@ -5,25 +5,13 @@ import { Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../store";
 import { Suspense } from "react";
-import "../scss/style.scss";
 import { Navigate } from "react-router-dom";
-import { useStateContext } from "contexts/ContextProvider";
-import { useEffect, useState } from "react";
-import { getUser } from "api/userApi";
-import { useNavigate } from "react-router-dom";
 import Loading from "components/Loading";
-
-
-import { useQuery } from "@tanstack/react-query";
+import { UserQuery } from "api/userApi";
+import "../scss/style.scss";
 
 export default function AdminLayout() {
-  const { token, user, setUser, setToken, loading, setLoading } = useStateContext();
-
-  const userQuery = useQuery({
-    queryKey: ["admin"],
-    queryFn: getUser,
-    retry: 1,
-  });
+  const userQuery = UserQuery();
 
   if (userQuery.isLoading) {
     return <Loading />;
@@ -34,11 +22,12 @@ export default function AdminLayout() {
   }
 
   if (userQuery.isSuccess) {
-    if (userQuery.data.user_type == 1) {
+    localStorage.setItem("ACCESS_TOKEN", userQuery.data.token);
+    if (userQuery.data.user.user_type == 1) {
+      localStorage.removeItem("ACCESS_TOKEN");
       return <Navigate to="/admin_login" />;
     }
   }
-
 
   return (
     <Provider store={store}>
