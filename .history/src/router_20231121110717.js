@@ -8,7 +8,7 @@ import Login from "./components/Users/Login";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <BecomeHost></BecomeHost>,
+    element: <Login></Login>,
   },
 ]);
 

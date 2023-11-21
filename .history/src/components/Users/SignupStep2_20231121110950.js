@@ -5,10 +5,9 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { getYear } from "date-fns";
+import { format } from "date-fns";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
-import { useRef } from "react";
 // npm install react-hook-form date-fns  --force
 const StyledError = styled.p`
   color: red;
@@ -128,68 +127,36 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const SignupDemo = () => {
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
-  const emailRef = useRef();
-  const birthdayRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmationRef = useRef();
-  const onSubmit = (ev) => {
-    ev.preventDefault();
-    const payload = {
-      fisrt_name: firstNameRef.current.value,
-      last_name: lastNameRef.current.value,
-      birthday: birthdayRef.current.value,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-      password_confirmation: passwordConfirmationRef.current.value,
-    };
-    console.log(payload);
-  };
+const SignupStep2 = () => {
   return (
     <StyledContainer>
       <Styledh2>Finish signing up</Styledh2>
-      <StyledForm onSubmit={onSubmit}>
-        <StyledFormContainer>
-          <StyledInput
-            ref={firstNameRef}
-            type="text"
-            placeholder="First name"
-          />
-          {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
-          <StyledInput ref={lastNameRef} type="text" placeholder="Last name" />
-          <StyledSpan>
-            Make sure it matches the name on your goverment ID.
-          </StyledSpan>
-          <StyledInput
-            ref={birthdayRef}
-            type="date"
-            id="birthday"
-            name="birthday"
-          />
+      <StyledForm>
+        <form>
+          <StyledFormContainer>
+            <StyledInput type="text" placeholder="First name" />
+            {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
+            <StyledInput type="text" placeholder="Last name" />
+            <StyledSpan>
+              Make sure it matches the name on your goverment ID.
+            </StyledSpan>
+            {/* <StyledInput type="date" placeholder="Birthday" /> */}
+            <StyledInput type="date" id="birthday" name="birthday" />
+            {/* <p style={{ color: "red" }}>{errorText}</p> */}
 
-          <StyledSpan>
-            To signup, you need to be at least 18. Your birthday won't be share
-            with other people who use AirHouse.
-          </StyledSpan>
-          <StyledInput ref={emailRef} type="email" placeholder="Email" />
-          <StyledSpan>
-            We'll email you trip confirmations and receipts.
-          </StyledSpan>
-          <StyledInput
-            ref={passwordRef}
-            type="password"
-            placeholder="Password"
-          />
-          <StyledInput
-            ref={passwordConfirmationRef}
-            type="password"
-            placeholder="Password Confirm"
-          />
-        </StyledFormContainer>
-        <StyledButtonSubmit type="submit">Continute</StyledButtonSubmit>
-
+            <StyledSpan>
+              To signup, you need to be at least 18. Your birthday won't be
+              share with other people who use AirHouse.
+            </StyledSpan>
+            <StyledInput type="email" placeholder="Email" />
+            <StyledSpan>
+              We'll email you trip confirmations and receipts.
+            </StyledSpan>
+            <StyledInput type="password" placeholder="Password" />
+            <StyledInput type="password" placeholder="Password Confirm" />
+          </StyledFormContainer>
+          <StyledButtonSubmit type="submit">Continute</StyledButtonSubmit>
+        </form>
         <StyledWith>Login with</StyledWith>
         <StyledIcon>
           <StyledA href="">
@@ -224,4 +191,4 @@ const SignupDemo = () => {
   );
 };
 
-export default SignupDemo;
+export default SignupStep2;

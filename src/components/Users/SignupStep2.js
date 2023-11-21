@@ -5,7 +5,7 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { getYear } from "date-fns";
+import { format } from "date-fns";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
 // npm install react-hook-form date-fns  --force
