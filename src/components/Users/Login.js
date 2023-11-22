@@ -4,9 +4,6 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useState } from "react";
-
-// npm install react-hook-form date-fns  --force
 
 const StyledContainer = styled.div`
   max-width: 500px;
@@ -117,57 +114,18 @@ const StyledAa = styled.p`
     to(rgba(0, 0, 0, 0.4))
   );
 `;
-const StyledError = styled.p`
-  color: red;
-`;
+
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorText, setErrorText] = useState("");
-  const validateForm = (e) => {
-    if (email.trim() === "") {
-      e.preventDefault();
-      setErrorText("Email is required.");
-    } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-      e.preventDefault();
-      setErrorText("Email should contain special characters or numbers.");
-    } else if (password.trim() === "") {
-      e.preventDefault();
-      setErrorText("Password is required");
-    } else if (
-      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/.test(password)
-    ) {
-      e.preventDefault();
-      setErrorText("Password should contain special characters or numbers.");
-    } else {
-      setErrorText("");
-      // Thực hiện các hành động gửi form tại đây
-      // /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/
-    }
-  };
   return (
     <StyledContainer>
       <Styledh2>Login</Styledh2>
-      <StyledError>{errorText}</StyledError>
       <StyledForm>
         <form>
           <StyledFormContainer>
-            <StyledInput
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <StyledInput
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <StyledInput type="email" placeholder="Email" />
+            <StyledInput type="password" placeholder="Password" />
           </StyledFormContainer>
-          <StyledButtonSubmit type="submit" onClick={validateForm}>
-            Continute
-          </StyledButtonSubmit>
+          <StyledButtonSubmit type="submit">Continute</StyledButtonSubmit>
         </form>
         <StyledWith>Login with</StyledWith>
         <StyledIcon>

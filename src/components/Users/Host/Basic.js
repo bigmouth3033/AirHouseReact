@@ -5,8 +5,7 @@ const StyledContainer = styled.div`
   height: 650px;
   display: flex;
   justify-content: space-between;
-  overflow: hidden;
-  color: #717171;
+  overflow: auto;
   @media (max-width: 992px) {
     position: relative;
   }
@@ -74,6 +73,9 @@ const StyelImg = styled.img`
 const StyledLable = styled.label`
   font-size: 18px;
 `;
+const StyledSpan = styled.span`
+  color: red;
+`;
 const StyledSelect = styled.select`
   width: 100%;
   height: 45px;
@@ -107,31 +109,7 @@ const StyledButton = styled.button`
     margin-bottom: 30px;
   }
 `;
-const StyledListing = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-`;
-const StyledBedroom = styled.div`
-  position: relative;
-  color: black;
-  margin-bottom: 70px;
-`;
-const StyledButtonAddBed = styled.button`
-  position: absolute;
-  right: 0;
-  padding: 6px 8px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-`;
-const StyledTitle = styled.div`
-  color: black;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 25px;
-`;
-const Descsription = () => {
+const BecomeHost = () => {
   return (
     <StyledContainer>
       <StyledSecion1>
@@ -146,51 +124,37 @@ const Descsription = () => {
       </StyledSecion1>
       <StyledSecion2>
         <StyledForm>
-          <StyledTitle>Rooms and Beds</StyledTitle>
-          <StyledLable htmlFor="">Bedrooms</StyledLable>
+          <StyledLable htmlFor="">Home type</StyledLable>
           <StyledSelect>
             <option value="option1">Choose option </option>
-            <option value="option1">1</option>
-            <option value="option2">2</option>
-            <option value="option3">3</option>
-            <option value="option3">4</option>
-            <option value="option3">5</option>
-            <option value="option3">6</option>
-            <option value="option3">7</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
           </StyledSelect>
-          <StyledBedroom>
-            <StyledTitle>Bedroom 1</StyledTitle>
-            <StyledButtonAddBed>Add Beds</StyledButtonAddBed>
-          </StyledBedroom>
-          <div>
-            <StyledTitle>Listings</StyledTitle>
-            <StyledListing>
-              <div>
-                <StyledLable htmlFor="">Property Type</StyledLable>
-                <StyledSelect>
-                  <option value="option1">Choose option </option>
-                  <option value="option1">1</option>
-                  <option value="option2">2</option>
-                </StyledSelect>
-              </div>
-              <div>
-                <StyledLable htmlFor="">Room Type</StyledLable>
-                <StyledSelect>
-                  <option value="option1">Choose option </option>
-                  <option value="option1">1</option>
-                  <option value="option2">2</option>
-                </StyledSelect>
-              </div>
-              <div>
-                <StyledLable htmlFor="">Accommodates</StyledLable>
-                <StyledSelect>
-                  <option value="option1">Choose option </option>
-                  <option value="option1">1</option>
-                  <option value="option2">2</option>
-                </StyledSelect>
-              </div>
-            </StyledListing>
-          </div>
+          <StyledLable htmlFor="">Room type</StyledLable>
+          <StyledSelect>
+            <option value="option1">Choose option </option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </StyledSelect>
+          <StyledLable htmlFor="">Accommodates</StyledLable>
+          <StyledSelect>
+            <option value="option1">Choose option </option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </StyledSelect>
+          <StyledLable htmlFor="">
+            City <StyledSpan>*</StyledSpan>
+          </StyledLable>
+          <StyledSelect>
+            <option value="option1">Choose option </option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </StyledSelect>
+
           <StyledButton type="submit">Continute</StyledButton>
         </StyledForm>
       </StyledSecion2>
@@ -198,4 +162,4 @@ const Descsription = () => {
   );
 };
 
-export default Descsription;
+export default BecomeHost;

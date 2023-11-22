@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { format } from "date-fns";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { Navigate } from "react-router-dom";
-// npm install react-hook-form date-fns  --force
-const StyledError = styled.p`
-  color: red;
-`;
+
 const StyledContainer = styled.div`
   max-width: 500px;
   margin: 0 auto;
@@ -135,14 +129,11 @@ const SignupStep2 = () => {
         <form>
           <StyledFormContainer>
             <StyledInput type="text" placeholder="First name" />
-            {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
             <StyledInput type="text" placeholder="Last name" />
             <StyledSpan>
               Make sure it matches the name on your goverment ID.
             </StyledSpan>
-            {/* <StyledInput type="date" placeholder="Birthday" /> */}
             <StyledInput type="date" id="birthday" name="birthday" />
-            {/* <p style={{ color: "red" }}>{errorText}</p> */}
 
             <StyledSpan>
               To signup, you need to be at least 18. Your birthday won't be
