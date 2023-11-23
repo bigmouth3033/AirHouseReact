@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import Pricing from "./components/Users/Host/Pricing";
+import Basic from "./components/Users/Host/Basic";
+import BecomeHost from "./components/Users/Host/Basic";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Pricing />,
+    element: <Basic />,
   },
 ]);
 
