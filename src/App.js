@@ -16,6 +16,8 @@ import Test from "./components/test/Test";
 import Home from "./pages/Home";
 import { useEffect, useState } from "react";
 import ProductCreation from "./pages/ProductCreation";
+import DialogBox from "./components/Nhan/Inbox/SideBar/DialogBox";
+
 
 function App() {
   const [pageWidth, setPageWidth] = useState(window.innerWidth);
@@ -28,7 +30,8 @@ function App() {
 
   return (
     <>
-      <Home />
+      <DialogBox/>
+
     </>
   );
 }
