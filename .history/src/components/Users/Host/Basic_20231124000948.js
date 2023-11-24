@@ -295,7 +295,15 @@ const Basic = () => {
                           <input ref={inRef5} type="number"></input>
                         </StyledShowDetail>
                       </StyledShow>
-                    ) : null}
+                    ) : (
+                      <div>
+                        <StyledLable>King: {data[index]}</StyledLable>
+                        <StyledLable>Queen: </StyledLable>
+                        <StyledLable>Double: </StyledLable>
+                        <StyledLable>Single: </StyledLable>
+                        <StyledLable>Sofa Bed: </StyledLable>
+                      </div>
+                    )}
                   </div>
                   <StyledAddBed onClick={() => handleViewBeforeSubmit(index)}>
                     {/* {console.log(valueBed[index])} */}

@@ -238,6 +238,7 @@ const Basic = () => {
   // Update handleViewBeforeSubmit to use the updateAllData function
   const handleViewBeforeSubmit = (index) => {
     handleClickAddBed(index);
+    data = updatedData;
   };
   // Tạo một mảng số từ 1 đến 10
   const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -295,7 +296,15 @@ const Basic = () => {
                           <input ref={inRef5} type="number"></input>
                         </StyledShowDetail>
                       </StyledShow>
-                    ) : null}
+                    ) : (
+                      <div>
+                        <StyledLable>King: </StyledLable>
+                        <StyledLable>Queen: </StyledLable>
+                        <StyledLable>Double: </StyledLable>
+                        <StyledLable>Single: </StyledLable>
+                        <StyledLable>Sofa Bed: </StyledLable>
+                      </div>
+                    )}
                   </div>
                   <StyledAddBed onClick={() => handleViewBeforeSubmit(index)}>
                     {/* {console.log(valueBed[index])} */}

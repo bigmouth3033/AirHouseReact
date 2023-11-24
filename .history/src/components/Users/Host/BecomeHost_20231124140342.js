@@ -85,7 +85,6 @@ const StyledSelect = styled.select`
   margin: 10px 0 35px 0;
   @media (max-width: 992px) {
     margin: 8px 0 20px 0;
-    height: 40px;
   }
 `;
 const StyledButton = styled.button`
@@ -129,7 +128,6 @@ const StyledInput = styled.input`
   margin: 10px 0 35px 0;
   @media (max-width: 992px) {
     margin: 8px 0 20px 0;
-    height: 40px;
   }
 `;
 const StyledGroupBuuton = styled.div`

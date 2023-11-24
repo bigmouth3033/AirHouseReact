@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from "react";
+import React, { createRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -235,10 +235,16 @@ const Basic = () => {
     });
   };
 
-  // Update handleViewBeforeSubmit to use the updateAllData function
   const handleViewBeforeSubmit = (index) => {
     handleClickAddBed(index);
+
+    inRef1.current && (inRef1.current.value = data[index]?.inRef1 || "");
+    inRef2.current && (inRef2.current.value = data[index]?.inRef2 || "");
+    inRef3.current && (inRef3.current.value = data[index]?.inRef3 || "");
+    inRef4.current && (inRef4.current.value = data[index]?.inRef4 || "");
+    inRef5.current && (inRef5.current.value = data[index]?.inRef5 || "");
   };
+
   // Tạo một mảng số từ 1 đến 10
   const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
 
