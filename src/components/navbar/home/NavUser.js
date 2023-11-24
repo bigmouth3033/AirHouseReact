@@ -3,8 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
+import Avatar from "react-avatar";
+import { useStateContext } from "../../../contexts/ContextProvider";
+import "./avatar.css";
 
 import StyledButtonContainer from "../../../ui/StyledButtonContainer";
+import { UserQuery } from "api/userApi";
 
 import UserDropDown from "./UserDropDown";
 
@@ -52,6 +56,7 @@ const StyledContainer = styled.div`
 
 function NavUser() {
   const [showDropDown, setShowDropDown] = useState(false);
+  const userQuery = UserQuery();
 
   function onClickDropDown() {
     setShowDropDown(!showDropDown);
@@ -66,7 +71,11 @@ function NavUser() {
       <StyledTextLink>Airbnb your home</StyledTextLink>
       <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
         <FontAwesomeIcon className="bar" icon={faBars} />
-        <FontAwesomeIcon className="user" icon={faCircleUser} />
+        {userQuery.isLoading || userQuery.isError ? (
+          <FontAwesomeIcon className="user" icon={faCircleUser} />
+        ) : (
+          <Avatar size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
+        )}
       </StyledUserContainer>
       <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
     </StyledContainer>

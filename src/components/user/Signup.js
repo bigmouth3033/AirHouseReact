@@ -5,6 +5,8 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { useRef } from "react";
+import { CreateUserMutation } from "api/userApi";
 
 const StyledContainer = styled.div`
   max-width: 530px;
@@ -18,7 +20,6 @@ const StyledContainer = styled.div`
   top: 100%;
   transform: translateX(-50%);
   background-color: white;
-  
 `;
 const Styledh2 = styled.h2`
   text-align: center;
@@ -44,6 +45,7 @@ const StyledFormContainer = styled.div`
   margin-bottom: 20px;
 `;
 const StyledInput = styled.input`
+  margin-bottom: 0.5rem;
   width: 460px;
   height: 50px;
   border-radius: 8px;
@@ -156,34 +158,62 @@ const StyledAa = styled.p`
   -webkit-transform: rotateX(210deg);
   transform: rotateX(210deg);
   perspective: 200px;
-  -webkit-mask-image: -webkit-gradient(
-    linear,
-    right top,
-    right bottom,
-    from(transparent),
-    color-stop(20%, transparent),
-    to(rgba(0, 0, 0, 0.4))
-  );
 `;
-const Signup = () => {
+const Signup = ({ setShowSignUp }) => {
+  const createMutation = CreateUserMutation();
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const passwordCofirmmationRef = useRef();
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const birthdayRef = useRef();
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+
+    const payload = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      password_confirmation: passwordCofirmmationRef.current.value,
+      first_name: firstNameRef.current.value,
+      last_name: lastNameRef.current.value,
+      birthday: birthdayRef.current.value,
+    };
+
+    console.log(payload);
+
+    createMutation.mutate(payload);
+  };
+
   return (
     <StyledContainer>
       <Styledh2>Log in or sign up</Styledh2>
       <StyledForm>
-        <form>
-          <StyledH2>Welcome to AirHouse</StyledH2>
-          <StyledFormContainer>
-            <StyledInput type="email" name="email" placeholder="Email" />
+        <StyledH2>Welcome to AirHouse</StyledH2>
+        <StyledFormContainer>
+          <StyledInput ref={emailRef} type="email" name="email" placeholder="Email" />
 
-            <StyledInput type="password" name="password" placeholder="Password" />
+          <StyledInput ref={passwordRef} type="password" name="password" placeholder="Password" />
 
-            <StyledInput type="password" name="PasswordConfirm" placeholder="Password confirm" />
-          </StyledFormContainer>
-          <StyledSubmitReset>
-            <StyledButtonSubmit type="submit">Sign up</StyledButtonSubmit>
-            <StyledButtonReset type="reset">Reset</StyledButtonReset>
-          </StyledSubmitReset>
-        </form>
+          <StyledInput
+            ref={passwordCofirmmationRef}
+            type="password"
+            name="PasswordConfirm"
+            placeholder="Password confirm"
+          />
+
+          <StyledInput ref={firstNameRef} type="text" name="first_name" placeholder="First Name" />
+          <StyledInput ref={lastNameRef} type="text" name="last_name" placeholder="Last Name" />
+          <StyledInput ref={birthdayRef} type="date" name="birthday" placeholder="birthday" />
+        </StyledFormContainer>
+        <StyledSubmitReset>
+          <StyledButtonSubmit onClick={onSubmit} type="submit">
+            Sign up
+          </StyledButtonSubmit>
+          <StyledButtonReset type="reset">Reset</StyledButtonReset>
+        </StyledSubmitReset>
+
         <StyledWith>Login with</StyledWith>
         <StyledIcon>
           <StyledA href="">
