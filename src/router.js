@@ -64,8 +64,9 @@ const AdminRegister = lazy(() => import("views/pages/register/Register"));
 
 // admin custom import
 const Amenities = lazy(() => import("views/type/amenities/Amenities"));
-
-const BlogList = lazy(() => import("views/blog/BlogList"))
+const BlogList = lazy(() => import("views/blog/BlogList"));
+const PropertyType = lazy(() => import("views/type/property_type/PropertyType"));
+const Category = lazy(() => import("views/type/category/Category"))
 
 const router = createBrowserRouter([
   {
@@ -149,8 +150,11 @@ const router = createBrowserRouter([
       { path: "/admin/widgets", name: "Widgets", element: <Widgets /> },
       { path: "/admin/type/amenities", name: "Amenities", element: <Amenities />, exact: true },
       { path: "/admin/blog", name: "Amenities", element: <BlogList />, exact: true },
+      { path: "/admin/type/property_type", name: "Property Type", element: <PropertyType />, exact: true },
+      { path: "/admin/type/category", name: "Category", element: <Category />, exact: true },
     ],
   },
 ]);
+
 
 export default router;

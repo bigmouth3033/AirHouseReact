@@ -3,31 +3,31 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import CreateAmenityPopUp from "./CreateAmenityPopUp";
 import { cilPlus } from "@coreui/icons";
 import { cilSettings } from "@coreui/icons";
 import { cilTrash } from "@coreui/icons";
 import { cilSearch } from "@coreui/icons";
 import { CSpinner } from "@coreui/react";
 import { useSearchParams } from "react-router-dom";
+import CIcon from "@coreui/icons-react";
+
+import CreateCategoryPopUp from "./CreateCategoryPopUp";
+import UpdateCategoryPopUp from "./UpdateCategoryPopUp";
 
 import { cilArrowThickFromLeft } from "@coreui/icons";
 import { cilArrowThickFromRight } from "@coreui/icons";
 import { cilArrowLeft } from "@coreui/icons";
 import { cilArrowRight } from "@coreui/icons";
 
-import CIcon from "@coreui/icons-react";
-
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { AmenitiesQuery } from "api/amenitiesApi";
-import { DeleteAmenitiesMutation } from "api/amenitiesApi";
-import UpdateAmenityPopUp from "./UpdateAmenityPopUp";
-import { AmenitiesQueryPage } from "api/amenitiesApi";
+import { DeleteCategoryMutation } from "api/categoryApi";
+import { CategoryQueryPage } from "api/categoryApi";
+
 import { useQueryClient } from "@tanstack/react-query";
 
-const StyledAmenities = styled.div``;
+const StyledCategory = styled.div``;
 
 const StyledContainer = styled.div`
   background-color: white;
@@ -158,20 +158,18 @@ const StyledPagination = styled.div`
 
 const StyledSearchContainer = styled.div``;
 
-export default function Amenities() {
+export default function Category() {
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
   const [showUpdatePopUp, setshowUpdatePopUp] = useState(false);
 
   const [chosenId, setChosenId] = useState(null);
-  const deleteMutation = DeleteAmenitiesMutation();
+  const deleteMutation = DeleteCategoryMutation();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // setSearchParams({ page: 1 });
-
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
   const [limit, setLimit] = useState(Number(searchParams.get("page")) || 10);
-  const currentPageQuery = AmenitiesQueryPage(currentPage);
+  const currentPageQuery = CategoryQueryPage(currentPage);
   const queryClient = useQueryClient();
 
   const totalItem = Number(currentPageQuery.data?.total || 0);
@@ -207,7 +205,7 @@ export default function Amenities() {
         { id: id },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["amenity", "page", currentPage] });
+            queryClient.invalidateQueries({ queryKey: ["category", "page", currentPage] });
           },
         }
       );
@@ -252,14 +250,14 @@ export default function Amenities() {
   };
 
   return (
-    <StyledAmenities>
+    <StyledCategory>
       <StyledHeader>
         <StyledCreateButton onClick={() => setShowCreatePopUp(true)}>
           <CIcon icon={cilPlus} customClassName="create-icon" />
-          Create New Amenity
+          Create New Category
         </StyledCreateButton>
-        {showCreatePopUp && <CreateAmenityPopUp currentPage={currentPage} setShowPopUp={setShowCreatePopUp} />}
-        {showUpdatePopUp && <UpdateAmenityPopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
+        {showCreatePopUp && <CreateCategoryPopUp currentPage={currentPage} setShowPopUp={setShowCreatePopUp} />}
+        {showUpdatePopUp && <UpdateCategoryPopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
       </StyledHeader>
       <StyledContainer>
         <StyledSearchContainer>
@@ -271,7 +269,7 @@ export default function Amenities() {
               <th>ID</th>
               <th>IMG</th>
               <th className="data-name">NAME</th>
-              <th></th>
+              <th>Description</th>
               <th></th>
               <th></th>
               <th>UPDATE</th>
@@ -291,12 +289,13 @@ export default function Amenities() {
               currentPageQuery.data.items.map((data) => {
                 return (
                   <tr key={data.id}>
-                    <td>A{data.id}</td>
+                    <td>C{data.id}</td>
                     <td>
                       <StyledImg src={data.icon_image} alt="where is " />
                     </td>
-                    <td className="data-name" colSpan="4">
-                      {data.name}
+                    <td className="data-name">{data.name}</td>
+                    <td className="data-name" colSpan={3}>
+                      {data.description.length > 30 ? data.description.slice(0, 30) + "..." : data.description}
                     </td>
                     <td>
                       <CIcon onClick={() => onUpdateEvent(data.id)} icon={cilSettings} customClassName="update-icon" />
@@ -340,6 +339,6 @@ export default function Amenities() {
           </button>
         </StyledPagination>
       </StyledContainer>
-    </StyledAmenities>
+    </StyledCategory>
   );
 }
