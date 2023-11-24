@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import Login from "../../user/Login";
 import { LogoutUserMutation } from "api/userApi";
+import { Link } from "react-router-dom";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
@@ -94,6 +95,7 @@ function UserDropDown({ blur, showDropDown }) {
           <button onClick={onShowSignUpHandler}>Signup</button>
           <button onClick={onShowLoginHandler}>Log in</button>
           <button onClick={onLogoutHandler}>Log out</button>
+          <Link to="/inbox">Inbox</Link>
           <button>Airbnb your home</button>
           <button onClick={() => alert("ngo dinh tan")}>Help Center</button>
         </StyledDropDownContainer>

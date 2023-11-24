@@ -68,6 +68,9 @@ const BlogList = lazy(() => import("views/blog/BlogList"));
 const PropertyType = lazy(() => import("views/type/property_type/PropertyType"));
 const Category = lazy(() => import("views/type/category/Category"))
 
+//nhan
+const Inbox  = lazy(() => import("components/inbox/Inbox"));
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -92,6 +95,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfileDetail />,
+        exact: true,
+      },
+      {
+        path: "/inbox",
+        element: <Inbox />,
         exact: true,
       },
     ],
