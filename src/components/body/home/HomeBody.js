@@ -2,7 +2,7 @@ import styled from "styled-components";
 import "./home-body.css";
 
 import BodyItem from "./BodyItem";
-import StyledHomePageContainer from "../../ui/StyledHomePageContainer";
+import StyledHomePageContainer from "../../../ui/StyledHomePageContainer";
 
 const StyledBody = styled.div``;
 
@@ -11,6 +11,7 @@ const StyledContainer = styled(StyledHomePageContainer)`
   grid-template-columns: repeat(6, 1fr);
   column-gap: 1rem;
   row-gap: 1rem;
+  font-family: "Poppins", sans-serif;
 
   @media (max-width: 1879px) {
     grid-template-columns: repeat(5, 1fr);

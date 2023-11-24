@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 
-import SignUp from "../../signup/SignUp";
+import Signup from "../../user/Signup";
 import Overlay from "../../../ui/Overlay";
 
 import { useState, useEffect, useRef } from "react";
@@ -29,12 +29,19 @@ const StyledDropDownContainer = styled(StyledBoxContainer)`
 `;
 
 const StyledSignUpOverlay = styled(Overlay)`
-  z-index: 1;
+  z-index: 2;
 `;
 
 const StyledContainer = styled.div``;
 
 function UserDropDown({ blur, showDropDown }) {
+  const [showSignUp, setShowSignUp] = useState(false);
+
+  function onShowSignUpHandler() {
+    setShowSignUp(true);
+    blur();
+  }
+
   function useOutsideAlerter(ref) {
     useEffect(() => {
       function handleClickOutside(event) {
@@ -45,21 +52,21 @@ function UserDropDown({ blur, showDropDown }) {
       }
 
       document.addEventListener("mousedown", handleClickOutside);
+
+      if (showSignUp === true) {
+        document.body.classList.add("no-scroll");
+      } else {
+        document.body.classList.remove("no-scroll");
+      }
+
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
-    }, [ref]);
+    }, [ref, showSignUp]);
   }
 
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
-
-  const [showSignUp, setShowSignUp] = useState(false);
-
-  function onShowSignUpHandler() {
-    setShowSignUp(true);
-    blur();
-  }
 
   return (
     <StyledContainer>
@@ -75,14 +82,13 @@ function UserDropDown({ blur, showDropDown }) {
       {showSignUp ? (
         <>
           <StyledSignUpOverlay onClick={() => setShowSignUp(false)} />
-          <SignUp />
+          <Signup />
         </>
       ) : (
         <></>
       )}
     </StyledContainer>
   );
-  
 }
 
 export default UserDropDown;

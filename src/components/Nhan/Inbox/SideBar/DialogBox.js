@@ -10,7 +10,7 @@ function DialogBox(){
     return(
         <Box>
             <div className="container">
-                Content
+                
         
 
 
