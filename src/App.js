@@ -26,11 +26,4 @@ import ProductCreation from "./pages/ProductCreation";
 //     });
 //   }, []);
 
-  return (
-    <>
-      <Home />
-    </>
-  );
-}
-
 // export default App;
