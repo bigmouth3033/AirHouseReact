@@ -4,9 +4,8 @@ import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import Avatar from "react-avatar";
-import { useStateContext } from "../../../contexts/ContextProvider";
 import "./avatar.css";
-
+import { Link } from "react-router-dom";
 import StyledButtonContainer from "../../../ui/StyledButtonContainer";
 import { UserQuery } from "api/userApi";
 
@@ -37,16 +36,20 @@ const StyledUserContainer = styled(StyledButtonContainer)`
   }
 `;
 
-const StyledTextLink = styled(StyledButtonContainer)`
+const StyledTextLink = styled(Link)`
   padding: 0.8rem 10px;
   box-shadow: none;
   font-weight: 600;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
 
   &:hover {
     box-shadow: none;
     background-color: rgb(247, 247, 247);
   }
 `;
+
 
 const StyledContainer = styled.div`
   display: flex;
@@ -57,6 +60,7 @@ const StyledContainer = styled.div`
 function NavUser() {
   const [showDropDown, setShowDropDown] = useState(false);
   const userQuery = UserQuery();
+  const [becomeHost, setBecomeHost] = useState(false);
 
   function onClickDropDown() {
     setShowDropDown(!showDropDown);
@@ -68,7 +72,11 @@ function NavUser() {
 
   return (
     <StyledContainer>
-      <StyledTextLink>Airbnb your home</StyledTextLink>
+      {userQuery.isError || userQuery.isLoading ? (
+        <StyledTextLink to="/aircover-for-hosts">Airbnb your home</StyledTextLink>
+      ) : (
+        <StyledTextLink to="/user/host-creation/become-host">Become a Host</StyledTextLink>
+      )}
       <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
         <FontAwesomeIcon className="bar" icon={faBars} />
         {userQuery.isLoading || userQuery.isError ? (
@@ -83,3 +91,4 @@ function NavUser() {
 }
 
 export default NavUser;
+

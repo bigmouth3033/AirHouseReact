@@ -64,10 +64,53 @@ const AdminRegister = lazy(() => import("views/pages/register/Register"));
 
 // admin custom import
 const Amenities = lazy(() => import("views/type/amenities/Amenities"));
+const BlogList = lazy(() => import("views/blog/BlogList"));
+const PropertyType = lazy(() => import("views/type/property_type/PropertyType"));
+const Category = lazy(() => import("views/type/category/Category"));
+const RoomType = lazy(() => import("views/type/room_type/RoomType"));
 
-const BlogList = lazy(() => import("views/blog/BlogList"))
+// guest
+
+const GuestLayout = lazy(() => import("layouts/GuestLayout"));
+const HostCreationIndex = lazy(() => import("components/host-creation/HostCreationIndex"));
+const BecomeHost = lazy(() => import("components/host-creation/BecomeHost"));
+const Basic = lazy(() => import("components/host-creation/Basic"));
+const Description = lazy(() => import("components/host-creation/Description"));
+const HostCreationContent = lazy(() => import("components/host-creation/HostCreationContent"));
+const Detail = lazy(() => import("components/host-creation/Details"));
+const Amenitiess = lazy(() => import("components/host-creation/Amenities"));
+const Photos = lazy(() => import("components/host-creation/Photos"));
+const Pricing = lazy(() => import("components/host-creation/Pricing"));
 
 const router = createBrowserRouter([
+  {
+    path: "/user",
+    element: <GuestLayout />,
+    exact: true,
+    children: [
+      {
+        path: "/user/host-creation",
+        element: <HostCreationIndex />,
+        exact: true,
+        children: [
+          { path: "become-host", element: <BecomeHost />, exact: true },
+          {
+            path: "content",
+            element: <HostCreationContent />,
+            exact: true,
+            children: [
+              { path: "basic", element: <Basic />, exact: true },
+              { path: "description", element: <Description />, exact: true },
+              { path: "details", element: <Detail />, exact: true },
+              { path: "amenities", element: <Amenitiess />, exact: true },
+              { path: "photo", element: <Photos />, exact: true },
+              { path: "pricing", element: <Pricing />, exact: true },
+            ],
+          },
+        ],
+      },
+    ],
+  },
   {
     path: "/",
     element: <DefaultLayout />,
@@ -149,6 +192,9 @@ const router = createBrowserRouter([
       { path: "/admin/widgets", name: "Widgets", element: <Widgets /> },
       { path: "/admin/type/amenities", name: "Amenities", element: <Amenities />, exact: true },
       { path: "/admin/blog", name: "Amenities", element: <BlogList />, exact: true },
+      { path: "/admin/type/property_type", name: "Property Type", element: <PropertyType />, exact: true },
+      { path: "/admin/type/category", name: "Category", element: <Category />, exact: true },
+      { path: "/admin/type/room_type", name: "Room Type", element: <RoomType />, exact: true },
     ],
   },
 ]);

@@ -3,31 +3,30 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import CreateAmenityPopUp from "./CreateAmenityPopUp";
 import { cilPlus } from "@coreui/icons";
 import { cilSettings } from "@coreui/icons";
 import { cilTrash } from "@coreui/icons";
 import { cilSearch } from "@coreui/icons";
 import { CSpinner } from "@coreui/react";
 import { useSearchParams } from "react-router-dom";
-
+import { useQueryClient } from "@tanstack/react-query";
 import { cilArrowThickFromLeft } from "@coreui/icons";
 import { cilArrowThickFromRight } from "@coreui/icons";
 import { cilArrowLeft } from "@coreui/icons";
 import { cilArrowRight } from "@coreui/icons";
-
 import CIcon from "@coreui/icons-react";
-
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { AmenitiesQuery } from "api/amenitiesApi";
-import { DeleteAmenitiesMutation } from "api/amenitiesApi";
-import UpdateAmenityPopUp from "./UpdateAmenityPopUp";
-import { AmenitiesQueryPage } from "api/amenitiesApi";
-import { useQueryClient } from "@tanstack/react-query";
+import { DeleteRoomTypeMutation } from "api/room-typeApi";
+import { RoomTypeQueryPage } from "api/room-typeApi";
 
-const StyledAmenities = styled.div``;
+import CreateRoomTypePopUp from "./CreateRoomTypePopUp";
+import UpdateRoomTypePopUp from "./UpdateRoomTypePopUp";
+
+
+
+const StyledRoomType = styled.div``;
 
 const StyledContainer = styled.div`
   background-color: white;
@@ -158,12 +157,12 @@ const StyledPagination = styled.div`
 
 const StyledSearchContainer = styled.div``;
 
-export default function Amenities() {
+export default function RoomType() {
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
   const [showUpdatePopUp, setshowUpdatePopUp] = useState(false);
 
   const [chosenId, setChosenId] = useState(null);
-  const deleteMutation = DeleteAmenitiesMutation();
+  const deleteMutation = DeleteRoomTypeMutation();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -171,7 +170,7 @@ export default function Amenities() {
 
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
   const [limit, setLimit] = useState(Number(searchParams.get("page")) || 10);
-  const currentPageQuery = AmenitiesQueryPage(currentPage);
+  const currentPageQuery = RoomTypeQueryPage(currentPage);
   const queryClient = useQueryClient();
 
   const totalItem = Number(currentPageQuery.data?.total || 0);
@@ -207,7 +206,7 @@ export default function Amenities() {
         { id: id },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["amenity", "page", currentPage] });
+            queryClient.invalidateQueries({ queryKey: ["roomtype", "page", currentPage] });
           },
         }
       );
@@ -252,14 +251,14 @@ export default function Amenities() {
   };
 
   return (
-    <StyledAmenities>
+    <StyledRoomType>
       <StyledHeader>
         <StyledCreateButton onClick={() => setShowCreatePopUp(true)}>
           <CIcon icon={cilPlus} customClassName="create-icon" />
-          Create New Amenity
+          Create New Room Type
         </StyledCreateButton>
-        {showCreatePopUp && <CreateAmenityPopUp currentPage={currentPage} setShowPopUp={setShowCreatePopUp} />}
-        {showUpdatePopUp && <UpdateAmenityPopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
+        {showCreatePopUp && <CreateRoomTypePopUp currentPage={currentPage} setShowPopUp={setShowCreatePopUp} />}
+        {showUpdatePopUp && <UpdateRoomTypePopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
       </StyledHeader>
       <StyledContainer>
         <StyledSearchContainer>
@@ -291,7 +290,7 @@ export default function Amenities() {
               currentPageQuery.data.items.map((data) => {
                 return (
                   <tr key={data.id}>
-                    <td>A{data.id}</td>
+                    <td>R{data.id}</td>
                     <td>
                       <StyledImg src={data.icon_image} alt="where is " />
                     </td>
@@ -340,6 +339,6 @@ export default function Amenities() {
           </button>
         </StyledPagination>
       </StyledContainer>
-    </StyledAmenities>
+    </StyledRoomType>
   );
 }
