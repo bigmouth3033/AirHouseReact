@@ -9,7 +9,7 @@ import router from "./router";
 import { Suspense } from "react";
 import Loading from "./components/Loading";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import HostCreationIndex from "components/host-creation/HostCreationIndex";
 
