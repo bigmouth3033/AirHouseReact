@@ -5,7 +5,6 @@ import Img from "assets/images/hosting-img/description.jpg";
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid black;
   min-height: 50rem;
   color: #717171;
 
@@ -43,7 +42,7 @@ const StyleText = styled.div`
   z-index: 99;
 
   h2 {
-    font-size: 40px;
+    font-size: 30px;
     margin-bottom: 20px;
   }
 
@@ -63,26 +62,24 @@ const StyleText = styled.div`
   }
 `;
 
-const StyelImg = styled.img`
-  display: inline-block;
-  width: 100%;
-  height: 600px;
-  object-fit: cover;
-  @media (max-width: 992px) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
 const StyledLable = styled.label`
-  font-size: 18px;
+  font-size: 16px;
 `;
+
 const StyledInput = styled.input`
   width: 100%;
   height: 45px;
   border: 1px solid #717171;
   padding: 0 20px;
   margin: 10px 0 35px 0;
+  border-radius: 5px;
+
+  &:focus,
+  &:hover {
+    border: 1px solid red;
+    outline: 1px solid red;
+  }
+
   @media (max-width: 992px) {
     margin: 8px 0 20px 0;
   }
@@ -143,15 +140,23 @@ const StyledSpan = styled.span`
 `;
 const StyledTitle = styled.div`
   color: black;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 25px;
 `;
 const StyledTextarea = styled.textarea`
   padding: 10px 20px;
-  margin: 40px 0;
+  margin: 10px 0;
   width: 100%;
   height: 200px;
+  border-radius: 5px;
+
+  &:focus,
+  &:hover {
+    border: 1px solid red;
+    outline: 1px solid red;
+  }
+
   @media (max-width: 992px) {
     height: 100px;
     margin: 28px 0;

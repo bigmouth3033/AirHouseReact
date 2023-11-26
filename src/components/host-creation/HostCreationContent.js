@@ -32,7 +32,7 @@ const StyledOption = styled.div`
 `;
 
 const StyledOptionChoice = styled(Link)`
-  padding: 20px 25px;
+  padding: 15px 25px;
   background-color: rgb(223, 219, 210);
   cursor: pointer;
   font-size: 14px;

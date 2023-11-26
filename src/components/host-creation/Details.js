@@ -5,7 +5,6 @@ import Img from "assets/images/hosting-img/room_bed.jpg";
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid black;
 
   min-height: 50rem;
   border-bottom: 1px solid black;
@@ -46,7 +45,7 @@ const StyleText = styled.div`
   z-index: 99;
 
   h2 {
-    font-size: 35px;
+    font-size: 30px;
     margin-bottom: 20px;
   }
 
@@ -67,7 +66,8 @@ const StyleText = styled.div`
 `;
 
 const StyledLable = styled.label`
-  font-size: 18px;
+  font-size: 16px;
+  color: #717171;
 `;
 const StyledButtonBack = styled.button`
   padding: 14px 32px;
@@ -123,7 +123,7 @@ const StyledButton = styled.div`
 
 const StyledTitle = styled.div`
   color: black;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 25px;
 `;
@@ -132,6 +132,14 @@ const StyledTextarea = styled.textarea`
   margin: 15px 0;
   width: 100%;
   height: 100px;
+  border-radius: 5px;
+
+  &:focus,
+  &:hover {
+    border: 1px solid red;
+    outline: 1px solid red;
+  }
+
   @media (max-width: 992px) {
     height: 100px;
     margin: 15px 0;

@@ -6,8 +6,6 @@ import Img from "assets/images/hosting-img/photos.jpg";
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
-  border: 1px solid black;
-
   min-height: 50rem;
   border-bottom: 1px solid black;
 
@@ -46,7 +44,7 @@ const StyleText = styled.div`
   z-index: 99;
 
   h2 {
-    font-size: 40px;
+    font-size: 30px;
     margin-bottom: 20px;
   }
 
@@ -135,8 +133,8 @@ const StyledButton = styled.div`
 
 const StyledTitle = styled.div`
   color: black;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   margin-bottom: 25px;
   background-color: #eeeeee;
   padding: 10px 20px;
@@ -198,7 +196,7 @@ const Photos = () => {
       <StyledSecion2>
         <StyledForm>
           <StyledBoderInput>
-            <StyledTitle>Immage</StyledTitle>
+            <StyledTitle>Image</StyledTitle>
             <StyledButtonInput>
               <input type="file"></input>
             </StyledButtonInput>

@@ -5,10 +5,8 @@ import Img from "assets/images/hosting-img/amenities.jpg";
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid black;
-
   min-height: 50rem;
-  border-bottom: 1px solid black;
+  
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -66,7 +64,7 @@ const StyleText = styled.div`
 `;
 
 const StyledLable = styled.label`
-  font-size: 18px;
+  font-size: 16px;
   padding-left: 10px;
 `;
 
@@ -125,7 +123,7 @@ const StyledButton = styled.div`
 
 const StyledTitle = styled.div`
   color: black;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 25px;
   @media (max-width: 992px) {

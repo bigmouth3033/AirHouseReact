@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
-  border: 1px solid black;
-
   min-height: 50rem;
   border-bottom: 1px solid black;
 
@@ -53,12 +51,12 @@ const StyleText = styled.div`
   z-index: 99;
 
   h2 {
-    font-size: 40px;
+    font-size: 30px;
     margin-bottom: 20px;
   }
 
   p {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   @media (max-width: 992px) {
@@ -75,7 +73,7 @@ const StyleText = styled.div`
 
 
 const StyledLable = styled.label`
-  font-size: 18px;
+  font-size: 16px;
   color: #717171;
   @media (max-width: 992px) {
     color: black;
@@ -89,6 +87,7 @@ const StyledSelect = styled.select`
   border: 1px solid #717171;
   padding: 0 20px;
   margin: 10px 0px 35px 0px;
+  cursor: pointer;
 
   &:focus,
   &:hover {
@@ -128,7 +127,7 @@ const StyledButton = styled.button`
 
 const StyledTitle = styled.div`
   color: black;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
   margin-bottom: 25px;
 `;
