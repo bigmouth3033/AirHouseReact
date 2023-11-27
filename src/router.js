@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
+import EditProflie from "components/Nhan/Profile/EditProfile/EditProflie";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -69,7 +70,8 @@ const PropertyType = lazy(() => import("views/type/property_type/PropertyType"))
 const Category = lazy(() => import("views/type/category/Category"))
 
 //nhan
-const Inbox  = lazy(() => import("components/inbox/Inbox"));
+const Inbox = lazy(() => import("components/inbox/Inbox"));
+const UserLayout = lazy(() => import("components/Nhan/Profile/UserLayout"));
 
 const router = createBrowserRouter([
   {
@@ -101,6 +103,18 @@ const router = createBrowserRouter([
         path: "/inbox",
         element: <Inbox />,
         exact: true,
+      },
+      {
+        path: "/user",
+        element: <UserLayout />,
+        exact: true,
+        children: [
+          {
+            path: "/user/profile",
+            element: <EditProflie />,
+            exact: true,
+          }
+        ]
       },
     ],
   },

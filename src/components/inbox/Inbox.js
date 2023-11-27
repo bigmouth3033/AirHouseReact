@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import Content from "./Content/Content";
-import SideBar from "./sidebar/Sidebar";
+
 
 const Box = styled.div`
 & .container{
@@ -13,8 +12,7 @@ function Inbox() {
     return (
         <Box>
             <div className="container">
-                <SideBar />
-                <Content />
+                
             </div>
         </Box>
     )
