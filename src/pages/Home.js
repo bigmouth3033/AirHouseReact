@@ -10,9 +10,7 @@ const StyledHomeContainer = styled.div``;
 function Home() {
   return (
     <>
-      <NavHome />
       <HomeBody />
-      <FooterBar variant={"home"} />
     </>
   );
 }

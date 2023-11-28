@@ -90,12 +90,12 @@ const StyledResizeNavTop = styled(StyledButtonContainer)`
   }
 `;
 
-export default function NavTopCenterHome({ clickStay, clickEx }) {
+export default function NavTopCenterHome({ click, clickStay, clickEx }) {
   const { pageWidth } = useStateContext();
 
   const exit = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0, transition: { duration: 0.01 } };
   const initial = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0 };
-  const animate = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 1, transition: { duration: 0.5 } };
+  const animate = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 1, transition: { duration: 0.1 } };
   const transition = {
     ease: "easeInOut",
   };
@@ -104,10 +104,10 @@ export default function NavTopCenterHome({ clickStay, clickEx }) {
     <>
       {pageWidth >= 800 ? (
         <StyledContainer exit={exit} initial={initial} animate={animate} transition={transition}>
-          <button className="item anywhere" onClick={clickStay}>
+          <button className="item anywhere" onClick={click}>
             Anywhere
           </button>
-          <button className="item anyweek" onClick={clickEx}>
+          <button className="item anyweek" onClick={click}>
             Any week
           </button>
           <button className="item addguest">

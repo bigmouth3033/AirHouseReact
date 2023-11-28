@@ -5,7 +5,8 @@ import { css } from "styled-components";
 const StyledNav = styled.div`
   font-family: "Poppins", sans-serif;
   position: relative;
-  /* background-color: white; */
+  background-color: white;
+  padding: 1rem 0;
   z-index: 10;
   ${(props) => {
     if (props.$zIndex === 5) {
@@ -30,7 +31,7 @@ const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+
   flex-wrap: wrap;
 
   ${(props) => {
@@ -68,9 +69,9 @@ const StyledContainer = styled.div`
   }}
 `;
 
-export default function NavBarContainer({ children, variant, gap, zIndex, borderBottom }) {
+export default function NavBarContainer({ children, variant, gap, zIndex, borderBottom, className }) {
   return (
-    <StyledNav $borderBottom={borderBottom} $zIndex={zIndex}>
+    <StyledNav className={className} $borderBottom={borderBottom} $zIndex={zIndex}>
       <StyledContainer $gap={gap} $variant={variant}>
         {children}
       </StyledContainer>

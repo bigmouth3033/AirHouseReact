@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 import Img from "assets/images/hosting-img/photos.jpg";
 
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
   min-height: 50rem;
-  border-bottom: 1px solid black;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -78,59 +77,6 @@ const StyledLable = styled.label`
   padding-left: 10px;
 `;
 
-const StyledButtonBack = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #e51d50;
-  border: 1px solid #e51d50;
-  background-color: white;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 30px;
-  }
-`;
-const StyledButtonNext = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  border: 1px solid #e51d50;
-  background-color: #e51d50;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    color: white;
-    background-color: #e51d50;
-  }
-`;
-const StyledButton = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 30px;
-`;
-
 const StyledTitle = styled.div`
   color: black;
   font-size: 16px;
@@ -161,10 +107,12 @@ const StyledButtonInput = styled.div`
   padding: 10px 10px;
   width: calc(100% - 100px);
   margin: 50px 50px 35px 50px;
+  
   input {
     width: 100%;
-    font-size: 19px;
+    font-size: 15px;
   }
+
   @media (max-width: 992px) {
     width: calc(100% - 60px);
     margin: 35px 20px;
@@ -173,6 +121,7 @@ const StyledButtonInput = styled.div`
     }
   }
 `;
+
 const StyledBoderInput = styled.div`
   width: 100%;
   height: 200px;
@@ -184,11 +133,29 @@ const StyledBoderInput = styled.div`
     height: 150px;
   }
 `;
+
+const StyledGroupButon = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  transition: all 0.1s;
+  &:hover {
+    background-color: rgb(200, 0, 0);
+  }
+`;
 const Photos = () => {
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
-        <StyledOverlay/>
+        <StyledOverlay />
         <StyleText>
           <h2>Add your photos & videos</h2>
         </StyleText>
@@ -198,19 +165,18 @@ const Photos = () => {
           <StyledBoderInput>
             <StyledTitle>Image</StyledTitle>
             <StyledButtonInput>
-              <input type="file"></input>
+              <input type="file" multiple />
             </StyledButtonInput>
           </StyledBoderInput>
           <StyledBoderInput>
             <StyledTitle>Video</StyledTitle>
-            <StyledLable>Url: </StyledLable>
             <StyledInput type="text" placeholder="Enter Youtube link here"></StyledInput>
           </StyledBoderInput>
 
-          <StyledButton>
-            <StyledButtonBack type="submit">Back</StyledButtonBack>
-            <StyledButtonNext type="submit">Next</StyledButtonNext>
-          </StyledButton>
+          <StyledGroupButon>
+            <StyledLink to="/user/host-creation/content/amenities">Back </StyledLink>
+            <StyledLink to="/user/host-creation/content/pricing">Next </StyledLink>
+          </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>
     </StyledContainer>

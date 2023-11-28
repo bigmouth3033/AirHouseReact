@@ -21,11 +21,15 @@ const Container = styled.div`
   height: 100px;
 `;
 
+const StyledNavBarContainer = styled(NavBarContainer)`
+  padding: 5px 0 0 0;
+`;
+
 export default function NavBottom() {
-  const {pageWidth} = useStateContext();
+  const { pageWidth } = useStateContext();
 
   return (
-    <NavBarContainer variant={"home"} gap={1}>
+    <StyledNavBarContainer variant={"home"} gap={1}>
       <NavCarouselHome />
       {pageWidth >= 800 ? (
         <>
@@ -41,7 +45,7 @@ export default function NavBottom() {
       ) : (
         <></>
       )}
-    </NavBarContainer>
+    </StyledNavBarContainer>
 
     // <Container/>
   );

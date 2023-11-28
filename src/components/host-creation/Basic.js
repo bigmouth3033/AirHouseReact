@@ -8,7 +8,6 @@ const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
   min-height: 50rem;
-  border-bottom: 1px solid black;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -70,7 +69,6 @@ const StyleText = styled.div`
     }
   }
 `;
-
 
 const StyledLable = styled.label`
   font-size: 16px;
@@ -184,13 +182,24 @@ const StyledShowDetail = styled.div`
   }
 `;
 
-const StyledGroupButton = styled.div`
-  margin: 0 20px;
+const StyledGroupButon = styled.div`
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
 `;
 
+const StyledLink = styled(Link)`
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  transition: all 0.1s;
+  &:hover{
+    background-color: rgb(200,0,0);
+  }
+`;
 const StyleInput = styled.input`
   width: 100%;
   height: 40px;
@@ -219,76 +228,6 @@ const StyledImgOverlay = styled.div`
 `;
 
 const Basic = () => {
-  const inRef1 = createRef();
-  const inRef2 = createRef();
-  const inRef3 = createRef();
-  const inRef4 = createRef();
-  const inRef5 = createRef();
-  const [selectedNumber, setSelectedNumber] = useState(1);
-  const [showBed, setShowBed] = useState(Array(selectedNumber).fill(false));
-  const [valueBed, setValueBed] = useState(Array(selectedNumber).fill(false));
-  const [data, setData] = useState({});
-  // Hàm xử lý sự kiện khi giá trị của select thay đổi
-  const handleSelectChange = (event) => {
-    const newSelectedNumber = parseInt(event.target.value, 10);
-    setSelectedNumber(newSelectedNumber);
-    setShowBed((prevShowBed) => {
-      // Đảm bảo mảng có đúng số phần tử như newSelectedNumber
-      const newArray = [...prevShowBed];
-      while (newArray.length < newSelectedNumber) {
-        newArray.push(false);
-      }
-      return newArray;
-    });
-    setValueBed((prevShowBed) => {
-      const newArray = [...prevShowBed];
-      while (newArray.length < newSelectedNumber) {
-        newArray.push(false);
-      }
-      return newArray;
-    });
-  };
-
-  const handleClickAddBed = (index) => {
-    setShowBed((prevShowBed) => {
-      const newArray = [...prevShowBed];
-      newArray[index] = !newArray[index];
-      return newArray;
-    });
-
-    setValueBed((prevValueBed) => {
-      const newArray = [...prevValueBed];
-      newArray[index] = !newArray[index];
-      return newArray;
-    });
-
-    setData((prevData) => {
-      const updatedData = { ...prevData };
-
-      const getValue = (ref) => (ref && ref.current ? ref.current.value : null);
-
-      updatedData[index] = {
-        inRef1: getValue(inRef1),
-        inRef2: getValue(inRef2),
-        inRef3: getValue(inRef3),
-        inRef4: getValue(inRef4),
-        inRef5: getValue(inRef5),
-      };
-
-      return updatedData;
-    });
-  };
-
-  const handleViewBeforeSubmit = (index) => {
-    handleClickAddBed(index);
-
-    inRef1.current && (inRef1.current.value = data[index]?.inRef1 || "");
-    inRef2.current && (inRef2.current.value = data[index]?.inRef2 || "");
-    inRef3.current && (inRef3.current.value = data[index]?.inRef3 || "");
-    inRef4.current && (inRef4.current.value = data[index]?.inRef4 || "");
-    inRef5.current && (inRef5.current.value = data[index]?.inRef5 || "");
-  };
-
   // Tạo một mảng số từ 1 đến 10
   const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
 
@@ -305,7 +244,7 @@ const Basic = () => {
         <StyledForm>
           <StyledTitle htmlFor="">Rooms and Beds </StyledTitle>
           <StyledLable htmlFor="">Bedrooms</StyledLable>
-          <StyledSelect onChange={handleSelectChange} value={selectedNumber}>
+          <StyledSelect>
             {numbers.map((number) => (
               <option key={number} value={number}>
                 {number}
@@ -322,17 +261,16 @@ const Basic = () => {
             ))}
           </StyledSelect>
           <StyledLable htmlFor="">Accommodates </StyledLable>
-          <StyledSelect onChange={handleSelectChange} value={selectedNumber}>
+          <StyledSelect>
             {numbers.map((number) => (
               <option key={number} value={number}>
                 {number}
               </option>
             ))}
           </StyledSelect>
-          <StyledGroupButton>
-            <div></div>
-            <StyledButton type="submit">Continute</StyledButton>
-          </StyledGroupButton>
+          <StyledGroupButon>
+            <StyledLink to="/user/host-creation/content/description">Continute </StyledLink>
+          </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>
     </StyledContainer>

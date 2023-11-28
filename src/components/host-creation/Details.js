@@ -1,14 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/room_bed.jpg";
+import { Link } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-
   min-height: 50rem;
-  border-bottom: 1px solid black;
-
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
@@ -45,12 +43,12 @@ const StyleText = styled.div`
   z-index: 99;
 
   h2 {
-    font-size: 30px;
+    font-size: 27px;
     margin-bottom: 20px;
   }
 
   p {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   @media (max-width: 992px) {
@@ -91,35 +89,6 @@ const StyledButtonBack = styled.button`
     margin-bottom: 30px;
   }
 `;
-const StyledButtonNext = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  border: 1px solid #e51d50;
-  background-color: #e51d50;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    color: white;
-    background-color: #e51d50;
-  }
-`;
-const StyledButton = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
 
 const StyledTitle = styled.div`
   color: black;
@@ -153,6 +122,24 @@ const StyledImgOverlay = styled.div`
   height: 100%;
 `;
 
+const StyledGroupButon = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  transition: all 0.1s;
+  &:hover {
+    background-color: rgb(200, 0, 0);
+  }
+`;
+
 const Details = () => {
   return (
     <StyledContainer>
@@ -179,10 +166,10 @@ const Details = () => {
           <StyledTextarea></StyledTextarea>
           <StyledLable htmlFor="">Getting Around</StyledLable>
           <StyledTextarea></StyledTextarea>
-          <StyledButton>
-            <StyledButtonBack type="submit">Back</StyledButtonBack>
-            <StyledButtonNext type="submit">Next</StyledButtonNext>
-          </StyledButton>
+          <StyledGroupButon>
+            <StyledLink to="/user/host-creation/content/description">Back </StyledLink>
+            <StyledLink to="/user/host-creation/content/location">Next </StyledLink>
+          </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>
     </StyledContainer>

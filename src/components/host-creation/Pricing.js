@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/photos.jpg";
+import { Link } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
-
   min-height: 50rem;
-  border-bottom: 1px solid black;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -74,63 +73,10 @@ const StyledOverlay = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-
 const StyledLable = styled.label`
   font-size: 15px;
   padding-left: 10px;
   color: black;
-`;
-const StyledButtonBack = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #e51d50;
-  border: 1px solid #e51d50;
-  background-color: white;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 30px;
-  }
-`;
-const StyledButtonNext = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  border: 1px solid #e51d50;
-  background-color: #e51d50;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    color: white;
-    background-color: #e51d50;
-  }
-`;
-const StyledButton = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 30px;
 `;
 
 const StyledTitle = styled.div`
@@ -151,10 +97,11 @@ const StyledButtonInput = styled.div`
   border: 1px solid #717171;
   height: 35px;
   width: calc(100% - 100px);
-  margin: 30px 50px 5px 50px;
+  margin: 10px 50px 10px 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   p {
     display: flex;
     justify-content: center;
@@ -164,24 +111,35 @@ const StyledButtonInput = styled.div`
     background-color: #dddddd;
     border: 1px solid #717171;
   }
+
   input {
     width: calc(100% - 25px);
     height: 34px;
   }
+
+  & input:focus,
+  & input:hover {
+    border: 1px solid red;
+    outline: 1px solid red;
+  }
+
   @media (max-width: 992px) {
     width: calc(100% - 60px);
     margin: 10px 20px;
   }
 `;
 const StyledBoderInput = styled.div`
-  width: 100%;
-  height: 220px;
   border: 1px solid #dddddd;
   border-radius: 5px;
   margin-bottom: 40px;
+  padding-bottom: 1rem;
+
+  & .label-input {
+    margin: 0px 0px 0px 40px;
+  }
+
   @media (max-width: 992px) {
     border: 1px solid #eeeeee;
-    height: 170px;
     margin-bottom: 25px;
   }
 `;
@@ -199,12 +157,31 @@ const StyledSpan = styled.span`
 `;
 const StyledP = styled.p`
   margin: 15px 50px 0 50px;
-  font-size: 18px;
+  font-size: 15px;
   @media (max-width: 992px) {
     margin: 5px 20px 0 20px;
     font-size: 15px;
   }
 `;
+
+const StyledGroupButon = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  transition: all 0.1s;
+  &:hover {
+    background-color: rgb(200, 0, 0);
+  }
+`;
+
 const Pricing = () => {
   return (
     <StyledContainer>
@@ -218,7 +195,7 @@ const Pricing = () => {
         <StyledForm>
           <StyledBoderInput>
             <StyledTitle>Base price</StyledTitle>
-            <StyledLable>
+            <StyledLable className="label-input">
               Daily/hourly Price <StyledSpan>*</StyledSpan>
             </StyledLable>
             <StyledButtonInput>
@@ -251,10 +228,10 @@ const Pricing = () => {
             </StyleGroupPricing>
           </StyledBoderInput>
 
-          <StyledButton>
-            <StyledButtonBack type="submit">Back</StyledButtonBack>
-            <StyledButtonNext type="submit">Next</StyledButtonNext>
-          </StyledButton>
+          <StyledGroupButon>
+            <StyledLink to="/user/host-creation/content/photo">Back </StyledLink>
+            <StyledLink to="/user/host-creation/content/booking">Next </StyledLink>
+          </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>
     </StyledContainer>

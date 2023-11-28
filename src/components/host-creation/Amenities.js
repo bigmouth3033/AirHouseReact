@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/amenities.jpg";
+import { Link } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 50rem;
-  
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -43,7 +43,7 @@ const StyleText = styled.div`
   z-index: 99;
 
   h2 {
-    font-size: 40px;
+    font-size: 30px;
     margin-bottom: 20px;
   }
 
@@ -66,59 +66,6 @@ const StyleText = styled.div`
 const StyledLable = styled.label`
   font-size: 16px;
   padding-left: 10px;
-`;
-
-const StyledButtonBack = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #e51d50;
-  border: 1px solid #e51d50;
-  background-color: white;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 30px;
-  }
-`;
-const StyledButtonNext = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  border: 1px solid #e51d50;
-  background-color: #e51d50;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    color: white;
-    background-color: #e51d50;
-  }
-`;
-const StyledButton = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 30px;
 `;
 
 const StyledTitle = styled.div`
@@ -157,6 +104,24 @@ const StyledImgOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
+`;
+
+const StyledGroupButon = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  transition: all 0.1s;
+  &:hover {
+    background-color: rgb(200, 0, 0);
+  }
 `;
 
 const Amenities = () => {
@@ -242,10 +207,10 @@ const Amenities = () => {
             </StyledItemAmenities>
           </StyledAmenities>
 
-          <StyledButton>
-            <StyledButtonBack type="submit">Back</StyledButtonBack>
-            <StyledButtonNext type="submit">Next</StyledButtonNext>
-          </StyledButton>
+          <StyledGroupButon>
+            <StyledLink to="/user/host-creation/content/location">Back </StyledLink>
+            <StyledLink to="/user/host-creation/content/photo">Next </StyledLink>
+          </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>
     </StyledContainer>

@@ -81,8 +81,18 @@ const Detail = lazy(() => import("components/host-creation/Details"));
 const Amenitiess = lazy(() => import("components/host-creation/Amenities"));
 const Photos = lazy(() => import("components/host-creation/Photos"));
 const Pricing = lazy(() => import("components/host-creation/Pricing"));
+const Location = lazy(() => import("components/host-creation/Location"));
+const Calendar = lazy(() => import("components/host-creation/Calendar"));
+
+// chat
+
+const Chat = lazy(() => import("components/chat/Chat"));
 
 const router = createBrowserRouter([
+  {
+    path: "/chat",
+    element: <Chat />,
+  },
   {
     path: "/user",
     element: <GuestLayout />,
@@ -105,6 +115,8 @@ const router = createBrowserRouter([
               { path: "amenities", element: <Amenitiess />, exact: true },
               { path: "photo", element: <Photos />, exact: true },
               { path: "pricing", element: <Pricing />, exact: true },
+              { path: "location", element: <Location />, exact: true },
+              { path: "calendar", element: <Calendar />, exact: true },
             ],
           },
         ],

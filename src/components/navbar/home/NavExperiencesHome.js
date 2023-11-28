@@ -15,7 +15,7 @@ const StyledContainer = styled(motion.div)`
   display: inline-block;
   cursor: pointer;
   padding: 0;
-  
+  margin-top: 0.2rem;
 
   width: 50rem;
   display: flex;
@@ -33,8 +33,6 @@ const StyledContainer = styled(motion.div)`
       `;
     }
   }}
-
-  
 
   & button {
     text-align: left;

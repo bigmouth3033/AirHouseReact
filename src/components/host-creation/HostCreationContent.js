@@ -4,6 +4,8 @@ import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { Suspense } from "react";
+import Loading from "components/Loading";
 
 const StyledOption = styled.div`
   display: flex;
@@ -91,11 +93,13 @@ export default function HostCreationContent() {
         <StyledOptionChoice $active={active[7]} onClick={() => onSetActive(7)} to="booking">
           Booking
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[8]} onClick={() => onSetActive(8)} to="calender">
+        <StyledOptionChoice $active={active[8]} onClick={() => onSetActive(8)} to="calendar">
           Calender
         </StyledOptionChoice>
       </StyledOption>
-      <Outlet />
+      <Suspense>
+        <Outlet />
+      </Suspense>
     </>
   );
 }

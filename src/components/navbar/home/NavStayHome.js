@@ -13,10 +13,10 @@ const StyledContainer = styled(motion.div)`
   background-color: white;
   display: inline-block;
   cursor: pointer;
-  padding: 0;
   width: 50rem;
   display: flex;
   margin-bottom: 1rem;
+  margin-top: 0.2rem;
 
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
