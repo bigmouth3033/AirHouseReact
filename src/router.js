@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
 import EditProflie from "components/Nhan/Profile/EditProfile/EditProflie";
 import ProfilePhoto from "components/Nhan/Profile/ProfilePhoto/ProfilePhoto";
+import ChatLayout from "components/Nhan/Chat/ChatLayout";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -101,8 +102,8 @@ const router = createBrowserRouter([
         exact: true,
       },
       {
-        path: "/inbox",
-        element: <Inbox />,
+        path: "/chat",
+        element: <ChatLayout />,
         exact: true,
       },
       {
