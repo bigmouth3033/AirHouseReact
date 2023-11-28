@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const Box = styled.div`
     & .ContentContainer{
-        padding: 20px;
+        
 
     }
 
@@ -14,7 +14,7 @@ const Box = styled.div`
     & .ContentContainer .FormControll{
         display: grid;
         grid-template-columns: 1fr 1fr;
-        padding: 30px;
+        
     }
 
 `

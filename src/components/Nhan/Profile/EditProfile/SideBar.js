@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 
@@ -17,15 +18,18 @@ const Box = styled.div`
 export default function () {
   return (
     <div>
-        <Box>
+      <Box>
         <ul className='SideBar'>
-            <li>Edit Profile</li>
-            <li>Profile Photos</li>
-            <li>Trust & Verification</li>
-            <li>Review About You</li>
-            <li>Review By You</li>
+          <li>
+            <Link to="/user/profile">Edit Profile</Link>
+            </li>
+          
+          <li><Link to="/user/profile/media">Profile Photos</Link></li>
+          <li>Trust & Verification</li>
+          <li>Review About You</li>
+          <li>Review By You</li>
         </ul>
-        </Box>
+      </Box>
     </div>
   )
 }

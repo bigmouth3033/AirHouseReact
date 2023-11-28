@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
 import EditProflie from "components/Nhan/Profile/EditProfile/EditProflie";
+import ProfilePhoto from "components/Nhan/Profile/ProfilePhoto/ProfilePhoto";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -112,6 +113,11 @@ const router = createBrowserRouter([
           {
             path: "/user/profile",
             element: <EditProflie />,
+            exact: true,
+          },
+          {
+            path: "/user/profile/media",
+            element: <ProfilePhoto />,
             exact: true,
           }
         ]
