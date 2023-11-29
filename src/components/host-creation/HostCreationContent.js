@@ -98,7 +98,7 @@ export default function HostCreationContent() {
         </StyledOptionChoice>
         <button onClick={() => console.log(state)}>click</button>
       </StyledOption>
-      <Suspense>
+      <Suspense fallback={<Loading />}>
         <Outlet context={[state, dispatch, ACTIONS]} />
       </Suspense>
     </>
