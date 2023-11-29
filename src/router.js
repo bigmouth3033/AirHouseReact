@@ -1,6 +1,20 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
 
+import GuestLayout from "layouts/GuestLayout";
+import HostCreationIndex from "components/host-creation/HostCreationIndex";
+import BecomeHost from "components/host-creation/BecomeHost";
+import Basic from "components/host-creation/Basic";
+import Description from "components/host-creation/Description";
+import HostCreationContent from "components/host-creation/HostCreationContent";
+import Details from "components/host-creation/Details";
+import Amenitiess from "components/host-creation/Amenities";
+import Photos from "components/host-creation/Photos";
+import Pricing from "components/host-creation/Pricing";
+import Location from "components/host-creation/Location";
+import Calendar from "components/host-creation/Calendar";
+import Booking from "components/host-creation/Booking";
+
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
 const AircoverForHosts = lazy(() => import("./components/body/AirCoverForHost/AircoverForHosts"));
@@ -71,18 +85,19 @@ const RoomType = lazy(() => import("views/type/room_type/RoomType"));
 
 // guest
 
-const GuestLayout = lazy(() => import("layouts/GuestLayout"));
-const HostCreationIndex = lazy(() => import("components/host-creation/HostCreationIndex"));
-const BecomeHost = lazy(() => import("components/host-creation/BecomeHost"));
-const Basic = lazy(() => import("components/host-creation/Basic"));
-const Description = lazy(() => import("components/host-creation/Description"));
-const HostCreationContent = lazy(() => import("components/host-creation/HostCreationContent"));
-const Detail = lazy(() => import("components/host-creation/Details"));
-const Amenitiess = lazy(() => import("components/host-creation/Amenities"));
-const Photos = lazy(() => import("components/host-creation/Photos"));
-const Pricing = lazy(() => import("components/host-creation/Pricing"));
-const Location = lazy(() => import("components/host-creation/Location"));
-const Calendar = lazy(() => import("components/host-creation/Calendar"));
+// const GuestLayout = lazy(() => import("layouts/GuestLayout"));
+// const HostCreationIndex = lazy(() => import("components/host-creation/HostCreationIndex"));
+// const BecomeHost = lazy(() => import("components/host-creation/BecomeHost"));
+// const Basic = lazy(() => import("components/host-creation/Basic"));
+// const Description = lazy(() => import("components/host-creation/Description"));
+// const HostCreationContent = lazy(() => import("components/host-creation/HostCreationContent"));
+// const Detail = lazy(() => import("components/host-creation/Details"));
+// const Amenitiess = lazy(() => import("components/host-creation/Amenities"));
+// const Photos = lazy(() => import("components/host-creation/Photos"));
+// const Pricing = lazy(() => import("components/host-creation/Pricing"));
+// const Location = lazy(() => import("components/host-creation/Location"));
+// const Calendar = lazy(() => import("components/host-creation/Calendar"));
+// const Booking = lazy(() => import("components/host-creation/Booking"));
 
 // chat
 
@@ -111,12 +126,13 @@ const router = createBrowserRouter([
             children: [
               { path: "basic", element: <Basic />, exact: true },
               { path: "description", element: <Description />, exact: true },
-              { path: "details", element: <Detail />, exact: true },
+              { path: "details", element: <Details />, exact: true },
               { path: "amenities", element: <Amenitiess />, exact: true },
               { path: "photo", element: <Photos />, exact: true },
               { path: "pricing", element: <Pricing />, exact: true },
               { path: "location", element: <Location />, exact: true },
               { path: "calendar", element: <Calendar />, exact: true },
+              { path: "booking", element: <Booking />, exact: true },
             ],
           },
         ],

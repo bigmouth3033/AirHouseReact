@@ -97,6 +97,9 @@ export const DeleteAmenitiesMutation = () => {
 
   const amenitiesMutation = useMutation({
     mutationFn: deleteAmenity,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["amenities"] });
+    },
   });
 
   return amenitiesMutation;

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/amenities.jpg";
 import { Link } from "react-router-dom";
+import { AmenitiesQuery } from "api/amenitiesApi";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -70,7 +71,7 @@ const StyledLable = styled.label`
 
 const StyledTitle = styled.div`
   color: black;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 25px;
   @media (max-width: 992px) {
@@ -81,6 +82,7 @@ const StyledTitle = styled.div`
 const StyledAmenities = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  row-gap: 10px;
   margin-bottom: 30px;
   @media (max-width: 992px) {
     grid-template-columns: repeat(2, 1fr);
@@ -125,6 +127,8 @@ const StyledLink = styled(Link)`
 `;
 
 const Amenities = () => {
+  const amenitiesQuery = AmenitiesQuery();
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -135,76 +139,64 @@ const Amenities = () => {
       </StyledSecion1>
       <StyledSecion2>
         <StyledForm>
-          <StyledTitle>Common Amenities</StyledTitle>
+          <StyledTitle>Essentials</StyledTitle>
           <StyledAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Essentials</StyledLable>
-            </StyledItemAmenities>
+            {amenitiesQuery.isSuccess &&
+              amenitiesQuery.data
+                .filter((amenity) => amenity.type == "essentials")
+                .map((amenity, index) => {
+                  return (
+                    <StyledItemAmenities key={index}>
+                      <StyledInput name="amenities" value={amenity.id} type="checkbox" />
+                      <StyledLable htmlFor="">{amenity.name}</StyledLable>
+                    </StyledItemAmenities>
+                  );
+                })}
           </StyledAmenities>
 
-          <StyledTitle>Safety Amenities</StyledTitle>
+          <StyledTitle>Features</StyledTitle>
           <StyledAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
-            <StyledItemAmenities>
-              <StyledInput type="checkbox" />
-              <StyledLable htmlFor="">Smoke Detector</StyledLable>
-            </StyledItemAmenities>
+            {amenitiesQuery.isSuccess &&
+              amenitiesQuery.data
+                .filter((amenity) => amenity.type == "features")
+                .map((amenity, index) => {
+                  return (
+                    <StyledItemAmenities key={index}>
+                      <StyledInput name="amenities" value={amenity.id} type="checkbox" />
+                      <StyledLable htmlFor="">{amenity.name}</StyledLable>
+                    </StyledItemAmenities>
+                  );
+                })}
+          </StyledAmenities>
+
+          <StyledTitle>Location</StyledTitle>
+          <StyledAmenities>
+            {amenitiesQuery.isSuccess &&
+              amenitiesQuery.data
+                .filter((amenity) => amenity.type == "location")
+                .map((amenity, index) => {
+                  return (
+                    <StyledItemAmenities key={index}>
+                      <StyledInput name="amenities" value={amenity.id} type="checkbox" />
+                      <StyledLable htmlFor="">{amenity.name}</StyledLable>
+                    </StyledItemAmenities>
+                  );
+                })}
+          </StyledAmenities>
+
+          <StyledTitle>Safety</StyledTitle>
+          <StyledAmenities>
+            {amenitiesQuery.isSuccess &&
+              amenitiesQuery.data
+                .filter((amenity) => amenity.type == "safety")
+                .map((amenity, index) => {
+                  return (
+                    <StyledItemAmenities key={index}>
+                      <StyledInput name="amenities" value={amenity.id} type="checkbox" />
+                      <StyledLable htmlFor="">{amenity.name}</StyledLable>
+                    </StyledItemAmenities>
+                  );
+                })}
           </StyledAmenities>
 
           <StyledGroupButon>

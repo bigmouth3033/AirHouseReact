@@ -94,11 +94,12 @@ export default function HostCreationContent() {
           Booking
         </StyledOptionChoice>
         <StyledOptionChoice $active={active[8]} onClick={() => onSetActive(8)} to="calendar">
-          Calender
+          Calendar
         </StyledOptionChoice>
+        <button onClick={() => console.log(state)}>click</button>
       </StyledOption>
       <Suspense>
-        <Outlet />
+        <Outlet context={[state, dispatch, ACTIONS]} />
       </Suspense>
     </>
   );

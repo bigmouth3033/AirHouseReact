@@ -44,6 +44,27 @@ function reducer(state, action) {
     case ACTIONS.CHANGE_DESCRIPTION:
       return { ...state, description: action.next };
 
+    case ACTIONS.CHANGE_ABOUT_PLACE:
+      return { ...state, aboutPlace: action.next };
+
+    case ACTIONS.CHANGE_PLACE_GREAT_FOR:
+      return { ...state, placeGreatFor: action.next };
+
+    case ACTIONS.CHANGE_GUEST_ACCESS:
+      return { ...state, guestAccess: action.next };
+
+    case ACTIONS.CHANGE_INTERACTION_GUEST:
+      return { ...state, interactionGuest: action.next };
+
+    case ACTIONS.CHANGE_THING_TO_NOTE:
+      return { ...state, thingToNote: action.next };
+
+    case ACTIONS.CHANGE_OVERVIEW:
+      return { ...state, overview: action.next };
+
+    case ACTIONS.CHANGE_GETTING_AROUND:
+      return { ...state, gettingAround: action.next };
+
     case ACTIONS.CHANGE_PROPERTY_TYPE:
       return { ...state, propertyTypeId: action.next };
 
@@ -94,6 +115,13 @@ function reducer(state, action) {
 const ACTIONS = {
   CHANGE_PROPERTY: "CHANGE_PROPERTY",
   CHANGE_DESCRIPTION: "CHANGE_DESCRIPTION",
+  CHANGE_ABOUT_PLACE: "CHANGE_ABOUT_PLACE",
+  CHANGE_PLACE_GREAT_FOR: "CHANGE_PLACE_GREAT_FOR",
+  CHANGE_GUEST_ACCESS: "CHANGE_GUEST_ACCESS",
+  CHANGE_INTERACTION_GUEST: "CHANGE_INTERACTION_GUEST",
+  CHANGE_THING_TO_NOTE: "CHANGE_THING_TO_NOTE",
+  CHANGE_OVERVIEW: "CHANGE_OVERVIEW",
+  CHANGE_GETTING_AROUND: "CHANGE_GETTING_AROUND",
   CHANGE_PROPERTY_TYPE: "CHANGE_PROPERTY_TYPE",
   CHANGE_ROOM_TYPE: "CHANGE_ROOM_TYPE",
   CHANGE_CATEGORY: "CHANGE_CATEGORY",
@@ -115,6 +143,13 @@ export default function HostCreationIndex() {
   const [state, dispatch] = useReducer(reducer, {
     propertyName: "",
     description: "",
+    aboutPlace: "",
+    placeGreatFor: "",
+    guestAccess: "",
+    interactionGuest: "",
+    thingToNote: "",
+    overview: "",
+    gettingAround: "",
     propertyTypeId: 0,
     roomTypeId: 0,
     categoryId: 0,

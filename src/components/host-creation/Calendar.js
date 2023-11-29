@@ -40,10 +40,9 @@ const StyledForm = styled.form`
   border-radius: 5px;
   margin-top: 15px;
   padding: 30px 40px 0 40px;
-  
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
 
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
@@ -80,6 +79,7 @@ const StyledGroupButon = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 3rem;
 `;
 
 const StyledLink = styled(Link)`
@@ -94,7 +94,6 @@ const StyledLink = styled(Link)`
   }
 `;
 
-
 const StyledImgOverlay = styled.div`
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
@@ -106,10 +105,55 @@ const StyledCalendar = styled(CalendarLb)`
   background-color: white;
 `;
 
+const StyledBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label{
+    font-size: 14px;
+  }
+`;
+
+const StyledInput = styled.input`
+  height: 40px;
+  border: 1px solid #717171;
+  padding: 0 20px;
+  border-radius: 5px;
+
+  &:focus,
+  &:hover {
+    border: 1px solid red;
+    outline: 1px solid red;
+  }
+
+  @media (max-width: 992px) {
+    margin: 8px 0 20px 0;
+  }
+`;
+
+const StyledSelect = styled.select`
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #717171;
+  padding: 0 20px;
+  cursor: pointer;
+
+  &:focus,
+  &:hover {
+    border: 1px solid red;
+    outline: 1px solid red;
+  }
+
+  @media (max-width: 992px) {
+    margin: 8px 0 20px 0;
+    height: 35px;
+  }
+`;
+
 const Calendar = () => {
   const [value, setValue] = useState(new Date());
-
-  const minDate = new Date();
 
   return (
     <StyledContainer>
@@ -121,7 +165,32 @@ const Calendar = () => {
       </StyledSecion1>
       <StyledSecion2>
         <StyledForm>
-          <StyledCalendar view={"month"}  minDate={minDate}  maxDetail={"month"} />
+          <StyledCalendar
+            allowPartialRange={true}
+            selectRange={true}
+            returnValue={"range"}
+            view={"month"}
+            minDate={new Date()}
+            maxDetail={"month"}
+            onChange={setValue}
+          />
+          <StyledBox>
+            <label>Minimum Stay</label>
+            <StyledInput type="number" min={1} />
+          </StyledBox>
+
+          <StyledBox>
+            <label>Maximum Stay</label>
+            <StyledInput type="number" />
+          </StyledBox>
+
+          <StyledBox>
+            <label>Status</label>
+            <StyledSelect>
+              <option>Available</option>
+              <option>Not Available</option>
+            </StyledSelect>
+          </StyledBox>
           <StyledGroupButon>
             <StyledLink to="/user/host-creation/content/details">Back </StyledLink>
             <StyledLink to="/user/host-creation/content/amenities">Next </StyledLink>

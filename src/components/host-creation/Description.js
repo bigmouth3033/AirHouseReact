@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/description.jpg";
 import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -86,7 +87,6 @@ const StyledInput = styled.input`
   }
 `;
 
-
 const StyledSpan = styled.span`
   color: red;
 `;
@@ -141,6 +141,8 @@ const StyledLink = styled(Link)`
 `;
 
 const Description = () => {
+  const [state, dispatch, ACTIONS] = useOutletContext();
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -155,11 +157,23 @@ const Description = () => {
           <StyledLable htmlFor="">
             Listing Name <StyledSpan>*</StyledSpan>
           </StyledLable>
-          <StyledInput type="text" placeholder="Entire home/apt in " />
+          <StyledInput
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_PROPERTY, next: ev.target.value });
+            }}
+            value={state.propertyName}
+            type="text"
+            placeholder="Entire home/apt in "
+          />
           <StyledLable htmlFor="">
             Summary <StyledSpan>*</StyledSpan>
           </StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_DESCRIPTION, next: ev.target.value });
+            }}
+            value={state.description}
+          ></StyledTextarea>
           <StyledGroupButon>
             <StyledLink to="/user/host-creation/content/basic">Back </StyledLink>
             <StyledLink to="/user/host-creation/content/details">Next </StyledLink>

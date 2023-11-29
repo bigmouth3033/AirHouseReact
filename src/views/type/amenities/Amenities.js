@@ -273,7 +273,7 @@ export default function Amenities() {
               <th className="data-name">NAME</th>
               <th></th>
               <th></th>
-              <th></th>
+              <th>TYPE</th>
               <th>UPDATE</th>
               <th>DELETE</th>
             </tr>
@@ -295,8 +295,11 @@ export default function Amenities() {
                     <td>
                       <StyledImg src={data.icon_image} alt="where is " />
                     </td>
-                    <td className="data-name" colSpan="4">
+                    <td className="data-name" colSpan="3">
                       {data.name}
+                    </td>
+                    <td>
+                      {data.type}
                     </td>
                     <td>
                       <CIcon onClick={() => onUpdateEvent(data.id)} icon={cilSettings} customClassName="update-icon" />

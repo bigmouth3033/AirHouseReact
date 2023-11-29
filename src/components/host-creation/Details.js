@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/room_bed.jpg";
 import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -141,6 +142,8 @@ const StyledLink = styled(Link)`
 `;
 
 const Details = () => {
+  const [state, dispatch, ACTIONS] = useOutletContext();
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -153,19 +156,54 @@ const Details = () => {
         <StyledForm>
           <StyledTitle>Details</StyledTitle>
           <StyledLable htmlFor="">About Place</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.aboutPlace}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_ABOUT_PLACE, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledLable htmlFor="">Place is great for</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.placeGreatFor}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_PLACE_GREAT_FOR, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledLable htmlFor="">Guest Access</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.guestAccess}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_GUEST_ACCESS, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledLable htmlFor="">Interaction with Guests</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.interactionGuest}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_INTERACTION_GUEST, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledLable htmlFor="">Other Things to Note</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.thingToNote}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_THING_TO_NOTE, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledLable htmlFor="">Overview</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.overview}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_OVERVIEW, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledLable htmlFor="">Getting Around</StyledLable>
-          <StyledTextarea></StyledTextarea>
+          <StyledTextarea
+            value={state.gettingAround}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_GETTING_AROUND, next: ev.target.value });
+            }}
+          ></StyledTextarea>
           <StyledGroupButon>
             <StyledLink to="/user/host-creation/content/description">Back </StyledLink>
             <StyledLink to="/user/host-creation/content/location">Next </StyledLink>

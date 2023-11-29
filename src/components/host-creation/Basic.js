@@ -3,6 +3,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/room_bed.jpg";
 import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+import { useEffect } from "react";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -99,87 +101,11 @@ const StyledSelect = styled.select`
   }
 `;
 
-const StyledButton = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #e51d50;
-  border: 1px solid #e51d50;
-  background-color: white;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 30px;
-  }
-`;
-
 const StyledTitle = styled.div`
   color: black;
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 25px;
-`;
-
-const StyledListing = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  @media (max-width: 992px) {
-    display: inline-block;
-  }
-`;
-
-const StyledContainerAddBed = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  @media (max-width: 992px) {
-    display: block;
-  }
-`;
-
-const StyledAddBed = styled.div`
-  background-color: #e51d50;
-  color: white;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  @media (max-width: 992px) {
-    /* width: 100%; */
-  }
-`;
-
-const StyledShow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: calc(100% -16px);
-  gap: 20px;
-  margin-left: 20px;
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
-
-const StyledShowDetail = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  input {
-    margin-left: 15px;
-    height: 30px;
-  }
 `;
 
 const StyledGroupButon = styled.div`
@@ -196,8 +122,8 @@ const StyledLink = styled(Link)`
   border-radius: 5px;
   color: white;
   transition: all 0.1s;
-  &:hover{
-    background-color: rgb(200,0,0);
+  &:hover {
+    background-color: rgb(200, 0, 0);
   }
 `;
 const StyleInput = styled.input`
@@ -230,6 +156,13 @@ const StyledImgOverlay = styled.div`
 const Basic = () => {
   // Tạo một mảng số từ 1 đến 10
   const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
+  const [state, dispatch, ACTIONS] = useOutletContext();
+
+  useEffect(() => {
+    dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: 1 });
+    dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: 1 });
+    dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: 1 });
+  }, []);
 
   return (
     <StyledContainer>
@@ -244,7 +177,11 @@ const Basic = () => {
         <StyledForm>
           <StyledTitle htmlFor="">Rooms and Beds </StyledTitle>
           <StyledLable htmlFor="">Bedrooms</StyledLable>
-          <StyledSelect>
+          <StyledSelect
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: ev.target.value });
+            }}
+          >
             {numbers.map((number) => (
               <option key={number} value={number}>
                 {number}
@@ -253,7 +190,11 @@ const Basic = () => {
           </StyledSelect>
 
           <StyledLable htmlFor="">Bathrooms</StyledLable>
-          <StyledSelect>
+          <StyledSelect
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: ev.target.value });
+            }}
+          >
             {numbers.map((number) => (
               <option key={number} value={number}>
                 {number}
@@ -261,7 +202,11 @@ const Basic = () => {
             ))}
           </StyledSelect>
           <StyledLable htmlFor="">Accommodates </StyledLable>
-          <StyledSelect>
+          <StyledSelect
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: ev.target.value });
+            }}
+          >
             {numbers.map((number) => (
               <option key={number} value={number}>
                 {number}

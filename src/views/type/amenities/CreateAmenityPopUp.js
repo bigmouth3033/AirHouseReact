@@ -27,13 +27,15 @@ const StyledInputField = styled.div`
   flex-direction: column;
   gap: 10px;
 
-  & input {
+  & input,
+  & select {
     height: 2.2rem;
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.3);
   }
 
-  & input:focus {
+  & input:focus,
+  & select:focus {
     outline: 1px solid rgba(30, 144, 255);
     border: 1px solid rgba(30, 144, 255);
   }
@@ -108,6 +110,7 @@ export default function CreateAmenityPopUp({ currentPage, setShowPopUp }) {
 
   const [imgSrc, setImgSrc] = useState(DefaultImg);
   const [amenitiesName, setAmenitiesName] = useState("");
+  const [type, setType] = useState("essentials");
   const [error, setError] = useState(null);
 
   const onUploadImg = (ev) => {
@@ -127,6 +130,7 @@ export default function CreateAmenityPopUp({ currentPage, setShowPopUp }) {
     const formData = new FormData();
     formData.append("icon_image", imgUploadRef.current.files[0]);
     formData.append("name", amenitiesName);
+    formData.append("type", type);
 
     createMutation.mutate(formData, {
       onSuccess: () => {
@@ -162,6 +166,15 @@ export default function CreateAmenityPopUp({ currentPage, setShowPopUp }) {
             placeholder="Amenity name"
             value={amenitiesName}
           />
+        </StyledInputField>
+        <StyledInputField>
+          <label>Type</label>
+          <select value={type} onChange={(ev) => setType(ev.target.value)}>
+            <option value={"essentials"}>Essentials</option>
+            <option value={"features"}>Features</option>
+            <option value={"location"}>Location</option>
+            <option value={"safety"}>Safety</option>
+          </select>
         </StyledInputField>
         <StyledImgField>
           <label>Icon</label>

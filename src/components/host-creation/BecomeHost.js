@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/1635921594_list_your_space.jpg";
 import { Link } from "react-router-dom";
@@ -67,7 +67,6 @@ const StyleText = styled.div`
   }
 `;
 
-
 const StyledLable = styled.label`
   font-size: 16px;
   @media (max-width: 992px) {
@@ -128,9 +127,13 @@ const BecomeHost = () => {
   const categoryQuery = CategoryQuery();
   const roomTypeQuery = RoomTypeQuery();
 
-  const onNextPage = (ev) => {
-    ev.preventDefault();
-  };
+  useEffect(() => {
+    console.log("test");
+    if (categoryQuery.isSuccess && roomTypeQuery.isSuccess) {
+      dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: categoryQuery.data[0].id });
+      dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: roomTypeQuery.data[0].id });
+    }
+  }, []);
 
   return (
     <StyledContainer>
@@ -145,13 +148,14 @@ const BecomeHost = () => {
         <StyledForm>
           <StyledLable htmlFor="">Category</StyledLable>
           <StyledSelect
+            value={state.categoryId}
             onChange={(ev) => {
               dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: ev.target.value });
             }}
           >
             {categoryQuery.isLoading && <option>Loading...</option>}
             {categoryQuery.isSuccess &&
-              categoryQuery.data.map((data) => {
+              categoryQuery.data.map((data, index) => {
                 return (
                   <option key={data.id} value={data.id}>
                     {data.name}
@@ -160,7 +164,12 @@ const BecomeHost = () => {
               })}
           </StyledSelect>
           <StyledLable htmlFor="">Room Type</StyledLable>
-          <StyledSelect>
+          <StyledSelect
+            value={state.roomTypeId}
+            onChange={(ev) => {
+              dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: ev.target.value });
+            }}
+          >
             {roomTypeQuery.isLoading && <option>Loading...</option>}
             {roomTypeQuery.isSuccess &&
               roomTypeQuery.data.map((data) => {
