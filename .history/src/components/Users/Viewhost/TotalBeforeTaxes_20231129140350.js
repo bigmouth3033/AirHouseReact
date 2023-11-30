@@ -1,0 +1,19 @@
+import React from "react";
+
+const TotalBeforeTaxes = () => {
+  return (
+    <div>
+      <form>
+        <div>
+          <h2>$175</h2>
+          <p>night</p>
+        </div>
+      </form>
+      <div>
+        <a href="#">Report</a>
+      </div>
+    </div>
+  );
+};
+
+export default TotalBeforeTaxes;
