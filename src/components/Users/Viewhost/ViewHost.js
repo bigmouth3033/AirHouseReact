@@ -5,7 +5,7 @@ import Images from "./Images";
 import Information from "./Information";
 import TotalBeforeTaxes from "./TotalBeforeTaxes";
 const StyledContainer = styled.div`
-  margin: 0 200px;
+  margin: 0 150px;
 `;
 const StyledInformation = styled.div`
   margin-top: 40px;
