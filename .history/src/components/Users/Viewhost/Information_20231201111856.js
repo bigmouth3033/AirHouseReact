@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
+import { DateRangeProvider } from "./DateRangeContext";
 const StyledContainer = styled.div`
   max-width: 654px;
 `;
@@ -95,7 +96,13 @@ const StyledShowAmenities = styled.div`
   }
 `;
 const Information = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState();
+  const [selectedDateRange, setSelectedDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   const handleDateChange = (item) => {
     setSelectedDateRange([item.selection]);

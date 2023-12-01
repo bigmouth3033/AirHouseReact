@@ -135,7 +135,6 @@ export const DateRangeProvider = ({ children }) => {
         setLocale,
         locales,
         disableBookedDates,
-        countDay,
       }}
     >
       {children}

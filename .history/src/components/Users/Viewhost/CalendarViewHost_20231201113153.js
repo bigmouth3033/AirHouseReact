@@ -9,7 +9,6 @@ const CalendarViewHost = () => {
   const {
     selectedDateRange,
     handleDateChange,
-    countDay,
     localeOptions,
     locale,
     setLocale,
@@ -52,7 +51,6 @@ const CalendarViewHost = () => {
         locale={locales[locale]}
         disabledDay={disableBookedDates}
       />
-      <div></div>
     </div>
   );
 };

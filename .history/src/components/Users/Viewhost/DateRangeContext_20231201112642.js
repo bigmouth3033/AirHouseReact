@@ -91,10 +91,7 @@ export const DateRangeProvider = ({ children }) => {
     return isDateBooked(date);
   };
 
-  // const handleDateChange = (item) => {
-  //   setSelectedDateRange(item.selection);
-  // };
-  const countDay = (item) => {
+  const handleDateChange = (item) => {
     const { startDate, endDate } = item.selection;
 
     // Tạo một mảng chứa tất cả các ngày trong khoảng
@@ -118,24 +115,22 @@ export const DateRangeProvider = ({ children }) => {
 
     // In ra console tất cả các ngày trong khoảng đã chọn
     console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
-    console.log("Số ngày được chọn:", allDatesInRange.length);
+    console.log("Số ngày được chọn :", allDatesInRange.length);
 
-    // Cập nhật state cho selectedDateRange
     setSelectedDateRange([item.selection]);
-
     return allDatesInRange;
   };
+
   return (
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        // handleDateChange,
+        handleDateChange,
         localeOptions,
         locale,
         setLocale,
         locales,
         disableBookedDates,
-        countDay,
       }}
     >
       {children}

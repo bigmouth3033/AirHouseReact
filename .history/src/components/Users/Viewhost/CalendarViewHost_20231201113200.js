@@ -52,7 +52,6 @@ const CalendarViewHost = () => {
         locale={locales[locale]}
         disabledDay={disableBookedDates}
       />
-      <div></div>
     </div>
   );
 };

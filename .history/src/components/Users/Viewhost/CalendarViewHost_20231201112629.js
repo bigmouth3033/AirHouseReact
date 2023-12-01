@@ -9,7 +9,6 @@ const CalendarViewHost = () => {
   const {
     selectedDateRange,
     handleDateChange,
-    countDay,
     localeOptions,
     locale,
     setLocale,
@@ -38,10 +37,7 @@ const CalendarViewHost = () => {
         </select>
       </div>
       <DateRangePicker
-        // onChange={(item) => handleDateChange(item)}
-        onChange={(item) => {
-          countDay(item);
-        }}
+        onChange={(item) => handleDateChange(item)}
         editableDateInputs={true}
         moveRangeOnFirstSelection={false}
         ranges={selectedDateRange}
@@ -52,7 +48,6 @@ const CalendarViewHost = () => {
         locale={locales[locale]}
         disabledDay={disableBookedDates}
       />
-      <div></div>
     </div>
   );
 };

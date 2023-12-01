@@ -9,7 +9,6 @@ const CalendarViewHost = () => {
   const {
     selectedDateRange,
     handleDateChange,
-    countDay,
     localeOptions,
     locale,
     setLocale,
@@ -17,6 +16,12 @@ const CalendarViewHost = () => {
     disableBookedDates,
   } = useDateRange();
   const today = new Date();
+  // Thêm state để lưu số ngày được chọn
+  const [selectedDaysCount, setSelectedDaysCount] = React.useState(0);
+
+  const updateSelectedDaysCount = (dates) => {
+    setSelectedDaysCount(dates.length);
+  };
 
   return (
     <div>
@@ -38,9 +43,9 @@ const CalendarViewHost = () => {
         </select>
       </div>
       <DateRangePicker
-        // onChange={(item) => handleDateChange(item)}
         onChange={(item) => {
-          countDay(item);
+          const selectedDates = handleDateChange(item);
+          updateSelectedDaysCount(selectedDates);
         }}
         editableDateInputs={true}
         moveRangeOnFirstSelection={false}
@@ -49,10 +54,17 @@ const CalendarViewHost = () => {
         direction="horizontal"
         minDate={today}
         maxDate={addDays(new Date(), 60)}
+        //    scroll={{ enabled: true }}
         locale={locales[locale]}
+        //    dateDisabled={() => {
+        //      const isDisabled = disableBookedDates();
+        //      console.log("Is Disabled in DateRangePicker?", isDisabled);
+        //      return isDisabled;
+        //    }}
         disabledDay={disableBookedDates}
       />
-      <div></div>
+      {/* Hiển thị số ngày được chọn */}
+      <div>Số ngày được chọn: {selectedDaysCount}</div>
     </div>
   );
 };

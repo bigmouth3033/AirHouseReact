@@ -118,13 +118,12 @@ export const DateRangeProvider = ({ children }) => {
 
     // In ra console tất cả các ngày trong khoảng đã chọn
     console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
-    console.log("Số ngày được chọn:", allDatesInRange.length);
+    console.log("Số ngày được chọn :", allDatesInRange.length);
 
-    // Cập nhật state cho selectedDateRange
     setSelectedDateRange([item.selection]);
-
     return allDatesInRange;
   };
+
   return (
     <DateRangeContext.Provider
       value={{
@@ -135,7 +134,6 @@ export const DateRangeProvider = ({ children }) => {
         setLocale,
         locales,
         disableBookedDates,
-        countDay,
       }}
     >
       {children}

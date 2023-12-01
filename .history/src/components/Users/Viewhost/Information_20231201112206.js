@@ -95,11 +95,6 @@ const StyledShowAmenities = styled.div`
   }
 `;
 const Information = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState();
-
-  const handleDateChange = (item) => {
-    setSelectedDateRange([item.selection]);
-  };
   return (
     <StyledContainer>
       <StyledSection>
@@ -253,10 +248,7 @@ const Information = () => {
       <StyledSection>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
-        <CalendarViewHost
-          selectedDateRange={selectedDateRange}
-          onDateChange={handleDateChange}
-        />
+        <CalendarViewHost />
       </StyledSection>
     </StyledContainer>
   );

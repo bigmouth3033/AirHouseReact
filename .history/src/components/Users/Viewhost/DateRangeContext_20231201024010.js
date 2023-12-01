@@ -6,6 +6,63 @@ import * as locales from "react-date-range/dist/locale";
 const DateRangeContext = createContext();
 
 export const DateRangeProvider = ({ children }) => {
+  const [selectedDateRange, setSelectedDateRange] = useState([
+    {
+      startDate: startOfDay(new Date()),
+      endDate: startOfDay(new Date()),
+      key: "selection",
+    },
+  ]);
+
+  const bookedDates = [
+    startOfDay(new Date("2023-12-1")),
+    startOfDay(new Date("2023-12-5")),
+    startOfDay(new Date("2023-12-10")),
+  ];
+
+  const isDateBooked = (date) => {
+    const isDisabled = bookedDates.some((bookedDate) =>
+      isSameDay(startOfDay(date), bookedDate)
+    );
+    return isDisabled;
+  };
+  const disableBookedDates = (date) => {
+    //     console.log("Is Disabled?", isDateBooked(date));
+    return isDateBooked(date);
+  };
+
+  const handleDateChange = (item) => {
+    const { startDate, endDate } = item.selection;
+
+    // Tạo một mảng chứa tất cả các ngày trong khoảng
+    const allDatesInRange = [];
+    let currentDate = startOfDay(new Date(startDate));
+
+    while (currentDate <= endDate) {
+      const check = () => {
+        for (let index = 0; index < bookedDates.length; index++) {
+          if (isSameDay(bookedDates[index], currentDate)) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      if (check()) {
+        allDatesInRange.push(new Date(currentDate));
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // In ra console tất cả các ngày trong khoảng đã chọn
+    console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
+    console.log("Số ngày được :", allDatesInRange.length);
+
+    setSelectedDateRange([item.selection]);
+    return allDatesInRange;
+  };
+
   // giờ quốc tế
   const nameMapper = {
     ar: "Arabic",
@@ -63,79 +120,18 @@ export const DateRangeProvider = ({ children }) => {
     }))
     .filter((item) => nameMapper[item.value]);
 
-  const [locale, setLocale] = React.useState("enUS");
+  const [locale, setLocale] = React.useState("vi");
 
-  //chọn ngày đi ngày đến
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    {
-      startDate: startOfDay(new Date()),
-      endDate: startOfDay(new Date()),
-      key: "selection",
-    },
-  ]);
-
-  const bookedDates = [
-    startOfDay(new Date("2023-12-1")),
-    startOfDay(new Date("2023-12-5")),
-    startOfDay(new Date("2023-12-10")),
-  ];
-
-  const isDateBooked = (date) => {
-    const isDisabled = bookedDates.some((bookedDate) =>
-      isSameDay(startOfDay(date), bookedDate)
-    );
-    return isDisabled;
-  };
-  const disableBookedDates = (date) => {
-    //     console.log("Is Disabled?", isDateBooked(date));
-    return isDateBooked(date);
-  };
-
-  // const handleDateChange = (item) => {
-  //   setSelectedDateRange(item.selection);
-  // };
-  const countDay = (item) => {
-    const { startDate, endDate } = item.selection;
-
-    // Tạo một mảng chứa tất cả các ngày trong khoảng
-    const allDatesInRange = [];
-    let currentDate = startOfDay(new Date(startDate));
-
-    while (currentDate <= endDate) {
-      const check = () => {
-        for (let index = 0; index < bookedDates.length; index++) {
-          if (isSameDay(bookedDates[index], currentDate)) {
-            return false;
-          }
-        }
-        return true;
-      };
-      if (check()) {
-        allDatesInRange.push(new Date(currentDate));
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    // In ra console tất cả các ngày trong khoảng đã chọn
-    console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
-    console.log("Số ngày được chọn:", allDatesInRange.length);
-
-    // Cập nhật state cho selectedDateRange
-    setSelectedDateRange([item.selection]);
-
-    return allDatesInRange;
-  };
   return (
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        // handleDateChange,
+        handleDateChange,
         localeOptions,
         locale,
         setLocale,
         locales,
         disableBookedDates,
-        countDay,
       }}
     >
       {children}

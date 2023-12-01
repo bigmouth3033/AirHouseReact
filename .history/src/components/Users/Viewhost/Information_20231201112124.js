@@ -255,7 +255,7 @@ const Information = () => {
         <StyledP>Add your travel dates for exact pricing</StyledP>
         <CalendarViewHost
           selectedDateRange={selectedDateRange}
-          onDateChange={handleDateChange}
+          // onDateChange={handleDateChange}
         />
       </StyledSection>
     </StyledContainer>
