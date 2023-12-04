@@ -150,11 +150,11 @@ export default function BlogList() {
           );
 
           if (response.status === 200) {
-            const imageUrl = response.data.url;
-            setImageURL(imageUrl); // Lưu URL hình ảnh vào state
+            imageURL = response.data.url;
+            setImageURL(imageURL); // Lưu URL hình ảnh vào state
             const quillEditor = qillRef.current.getEditor();
             const range = quillEditor.getSelection(true);
-            quillEditor.insertEmbed(range.index, "image", imageUrl); // Chèn hình ảnh vào vị trí con trỏ
+            quillEditor.insertEmbed(range.index, "image", imageURL); // Chèn hình ảnh vào vị trí con trỏ
           } else {
             console.error("Image upload failed");
           }
