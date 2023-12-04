@@ -1,85 +1,30 @@
-import React, { useState } from "react";
-
-import "react-quill/dist/quill.snow.css";
+import React, { useState, useRef, useCallback } from "react";
 import ReactQuill, { Quill } from "react-quill";
-import "quill-mention";
+import "react-quill/dist/quill.snow.css";
+import "./style.scss";
+import { useMemo } from "react";
 
-// const modules = {
-//   toolbar: [
-//     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-//     [{ font: [] }],
-//     ["bold", "italic", "underline", "strike", "blockquote"],
-//     [{ size: ["12px", "14px", "16px", "18px", "20px"] }],
-//     [{ list: "order" }, { list: "bullet" }, { indent: "-1" }, { indent: "1" }],
-//     ["link", "image", "video"],
-//   ],
-// };
-
-// export default function BlogList() {
-//   const [value, setValue] = useState("");
-//   return (
-//     <>
-//       <ReactQuill
-//         theme="snow"
-//         placeholder="Write today blog..."
-//         value={value}
-//         onChange={setValue}
-//         modules={modules}
-//         style={{ height: "40vh" }}
-//       />
-//       {/* <div>{value}</div> */}
-//       <div dangerouslySetInnerHTML={{ __html: value }} />
-//     </>
-//   );
-// }
+import axios from "axios";
 
 var Font = Quill.import("formats/font");
-// We do not add Aref Ruqaa since it is the default
-Font.whitelist = [
-  "arial",
-  "roboto",
-  "raleway",
-  "lato",
-  "rubik",
-  "Arial Narrow",
-  "Verdana",
-  "Tahoma",
-  "Century Gothic",
-  "Calibri",
-  "Garamond",
-  "Baskerville",
-  "Trebuchet MS",
-  "Futura",
-  "Droid Sans",
-  "Helvetica",
-  "Times New Roman",
-  "Georgia",
-  "Courier New",
-  "Open Sans",
-  "Montserrat",
-  "Source Sans Pro",
-  "Poppins",
-  "Playfair Display",
-];
+
+Font.whitelist = ["arial", "roboto", "raleway", "montserrat", "lato", "rubik"];
 Quill.register(Font, true);
 
 var Size = Quill.import("formats/size");
 Size.whitelist = [
-  "9",
-  "10",
-  "11",
-  "12",
-  "14",
-  "16",
-  "18",
-  "20",
-  "22",
-  "24",
-  "26",
-  "28",
-  "36",
-  "48",
-  "72",
+  "9px",
+  "10px",
+  "11px",
+  "12px",
+  "14px",
+  "16px",
+  "18px",
+  "20px",
+  "22px",
+  "24px",
+  "26px",
+  "28px",
 ];
 Quill.register(Size, true);
 
@@ -103,19 +48,33 @@ const atValues = [
 
 const CustomToolbar = () => (
   <div id="toolbar">
+    <select
+      className="ql-header"
+      defaultValue={""}
+      onChange={(e) => e.persist()}
+    >
+      <option value="1" />
+      <option value="2" />
+      <option value="3" />
+      <option value="4" />
+      <option value="5" />
+      <option value="6" />
+      <option defaultValue />
+    </select>
     <button className="ql-bold" />
     <button className="ql-underline" />
     <button className="ql-italic" />
+    <button className="ql-strike" />
     <select className="ql-font">
       {Font.whitelist.map((font, index) => (
-        <option value={font} selected={!index}>
+        <option key={index} value={font} defaultValue={!index}>
           {font[0].toUpperCase() + font.substr(1)}
         </option>
       ))}
     </select>
     <select className="ql-size">
       {Size.whitelist.map((size, index) => (
-        <option value={size} selected={size.includes("12")}>
+        <option key={index} value={size} defaultValue={size.includes("12")}>
           {size}
         </option>
       ))}
@@ -123,73 +82,123 @@ const CustomToolbar = () => (
     <button className="ql-align" value="" />
     <button className="ql-align" value="center" />
     <button className="ql-align" value="right" />
-    {/* <select className="ql-box">
-      <option selected>None</option>
-      <option value="solid">Solid</option>
-    </select> */}
     <button className="ql-indent" value="-1" />
     <button className="ql-indent" value="+1" />
+    <select className="ql-color">
+      <option value="red" />
+      <option value="green" />
+      <option value="blue" />
+      <option value="orange" />
+      <option value="violet" />
+      <option value="#d0d1d2" />
+      <option defaultValue />
+    </select>
     <button className="ql-link" />
     <button className="ql-image" />
     <button className="ql-video" />
+    <button className="ql-blockquote" />
+    <button className="ql-code-block" />
+    <button className="ql-list" value="ordered" />
+    <button className="ql-list" value="bullet" />
+    <button className="ql-direction" value="rtl" />
   </div>
 );
 
-Bloglist.modules = {
-  toolbar: {
-    container: "#toolbar",
-  },
-  mention: {
-    allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-    mentionDenotationChars: ["@", "#"],
-    source: function (searchTerm, renderList, mentionChar) {
-      if (searchTerm.length === 0) {
-        renderList(atValues, searchTerm);
-      } else {
-        const matches = [];
-        for (let i = 0; i < atValues.length; i++)
-          if (
-            ~atValues[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
-          )
-            matches.push(atValues[i]);
-        renderList(matches, searchTerm);
-      }
-    },
-  },
-};
-
-Bloglist.formats = [
+const formats = [
+  "header",
   "bold",
   "underline",
   "italic",
+  "strike",
   "font",
   "size",
   "align",
-  "list",
   "indent",
-  "box",
-  "mention",
-  "link",
+  "color",
+  "list",
   "image",
   "video",
+  "blockquote",
+  "code-block",
+  "bullet",
+  "link",
+  "direction",
 ];
 
-export default function Bloglist() {
+export default function BlogList() {
+  const qillRef = useRef();
   const [value, setValue] = useState("");
+  const [imageURL, setImageURL] = useState(""); // Thêm state để lưu URL hình ảnh
+
+  const imageHandler = useCallback(async () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      if (input !== null && input.files !== null) {
+        const file = input.files[0];
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+          const response = await axios.post(
+            "http://127.0.0.1:8000/uploadImage",
+            formData
+          );
+
+          if (response.status === 200) {
+            const imageUrl = response.data.url;
+            setImageURL(imageUrl); // Lưu URL hình ảnh vào state
+            const quillEditor = qillRef.current.getEditor();
+            const range = quillEditor.getSelection(true);
+            quillEditor.insertEmbed(range.index, "image", imageUrl); // Chèn hình ảnh vào vị trí con trỏ
+          } else {
+            console.error("Image upload failed");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      }
+    };
+  }, []);
+
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        handlers: { image: imageHandler },
+        container: "#toolbar",
+      },
+    }),
+    []
+  );
+
+  const handleChange = (content) => {
+    setValue(content);
+  };
 
   return (
     <div className="text-editor">
+      <div className="title-block">
+        <label htmlFor="">Input Blog Title</label>
+        <input type="text" name="title" id="title" />
+        <label htmlFor="" className="content">
+          Input Blog Content
+        </label>
+      </div>
+
       <CustomToolbar />
       <ReactQuill
+        ref={qillRef}
         theme="snow"
-        modules={Bloglist.modules}
-        formats={Bloglist.formats}
+        modules={modules}
+        formats={formats}
         value={value}
-        onChange={setValue}
-        placeholder="Create today blog \^0^/"
-        style={{ height: "15rem" }}
+        onChange={handleChange}
+        style={{ height: "350px" }}
       />
-      <div className="ql-editor" dangerouslySetInnerHTML={{ __html: value }} />
       <button
         onClick={() => {
           console.log(value);
@@ -197,6 +206,8 @@ export default function Bloglist() {
       >
         Submit
       </button>
+      <div dangerouslySetInnerHTML={{ __html: value }}></div>
+      {value}
     </div>
   );
 }
