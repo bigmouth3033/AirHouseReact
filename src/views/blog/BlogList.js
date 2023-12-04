@@ -5,6 +5,7 @@ import "./style.scss";
 import { useMemo } from "react";
 
 import axios from "axios";
+import axiosClient from "../../api/axiosClient";
 
 var Font = Quill.import("formats/font");
 
@@ -144,17 +145,14 @@ export default function BlogList() {
         formData.append("image", file);
 
         try {
-          const response = await axios.post(
-            "http://127.0.0.1:8000/uploadImage",
-            formData
-          );
+          const response = await axiosClient.post("/uploadImage", formData);
 
           if (response.status === 200) {
-            imageURL = response.data.url;
-            setImageURL(imageURL); // Lưu URL hình ảnh vào state
-            const quillEditor = qillRef.current.getEditor();
-            const range = quillEditor.getSelection(true);
-            quillEditor.insertEmbed(range.index, "image", imageURL); // Chèn hình ảnh vào vị trí con trỏ
+            let imageUrl = response.data.url;
+            setImageURL(imageUrl); // Lưu URL hình ảnh vào state
+            const quillEditor = qillRef.current.getEditor(); //lấy trình soạn thảo Quill thông qua tham chiếu qillRef bằng cách sử dụng phương thức getEditor()
+            const range = quillEditor.getSelection(true); //lấy vùng chọn hiện tại trong trình soạn thảo Quill. Tham số true đại diện cho lấy vùng chọn đơn (có con trỏ).
+            quillEditor.insertEmbed(range.index, "image", imageURL); // một phần tử "image" vào vị trí con trỏ hiện tại trong trình soạn thảo Quill
           } else {
             console.error("Image upload failed");
           }
