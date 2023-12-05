@@ -87,21 +87,45 @@ const Booking = lazy(() => import("components/host-creation/Booking"));
 
 // chat
 
+const Chat = lazy(() => import("components/chat/ChatLayout"));
+
+// profile
+
+const Profile = lazy(() => import("components/Profile/UserLayout"));
+const EditProfile = lazy(() => import("components/Profile/EditProfile/EditProflie"));
+const ProfilePhoto = lazy(() => import("components/Profile/ProfilePhoto/ProfilePhoto"));
+
 // properties_status
 const Status = lazy(() => import("views/status/Status"));
 
-const Chat = lazy(() => import("components/chat/Chat"));
-
 const router = createBrowserRouter([
-  {
-    path: "/chat",
-    element: <Chat />,
-  },
   {
     path: "/user",
     element: <GuestLayout />,
     exact: true,
     children: [
+      {
+        path: "chat",
+        element: <Chat />,
+        exact: true,
+      },
+      {
+        path: "/user",
+        elemet: <Profile />,
+        exact: true,
+        children: [
+          {
+            path: "profile",
+            element: <EditProfile />,
+            exact: true,
+          },
+          {
+            path: "profile/media",
+            element: <ProfilePhoto />,
+            exact: true,
+          },
+        ],
+      },
       {
         path: "/user/host-creation",
         element: <HostCreationIndex />,
