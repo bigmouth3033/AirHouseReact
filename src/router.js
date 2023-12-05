@@ -98,6 +98,9 @@ const ProfilePhoto = lazy(() => import("components/Profile/ProfilePhoto/ProfileP
 // properties_status
 const Status = lazy(() => import("views/status/Status"));
 
+// view property
+const ViewProperty = lazy(() => import("components/view-property/ViewProperty"));
+
 const router = createBrowserRouter([
   {
     path: "/user",
@@ -175,6 +178,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfileDetail />,
+        exact: true,
+      },
+      {
+        path: "/property",
+        element: <ViewProperty />,
         exact: true,
       },
     ],
