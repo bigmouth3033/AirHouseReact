@@ -2,16 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Img from "assets/images/hosting-img/photos.jpg";
+import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 3fr;
-  min-height: 50rem;
+  min-height: 55rem;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
 `;
+
 const StyledSecion1 = styled.section`
   min-height: 10rem;
   background-repeat: no-repeat;
@@ -27,6 +29,7 @@ const StyledSecion1 = styled.section`
     width: 100%;
   }
 `;
+
 const StyledSecion2 = styled.section``;
 const StyledForm = styled.form`
   border-radius: 5px;
@@ -37,6 +40,7 @@ const StyledForm = styled.form`
     padding: 30px 40px 0px 40px;
   }
 `;
+
 const StyleText = styled.div`
   line-height: 30px;
   color: white;
@@ -107,7 +111,7 @@ const StyledButtonInput = styled.div`
   padding: 10px 10px;
   width: calc(100% - 100px);
   margin: 50px 50px 35px 50px;
-  
+
   input {
     width: 100%;
     font-size: 15px;
@@ -140,18 +144,37 @@ const StyledGroupButon = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
+  border: none;
+  cursor: pointer;
   background-color: red;
   text-decoration: none;
   padding: 1rem;
   border-radius: 5px;
   color: white;
   transition: all 0.1s;
+
   &:hover {
     background-color: rgb(200, 0, 0);
   }
 `;
+
 const Photos = () => {
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(4);
+  };
+
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(6);
+    onSetAvailable(6);
+  };
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -165,17 +188,30 @@ const Photos = () => {
           <StyledBoderInput>
             <StyledTitle>Image</StyledTitle>
             <StyledButtonInput>
-              <input type="file" multiple />
+              <input
+                onChange={(ev) => {
+                  dispatch({ type: ACTIONS.CHANGE_IMAGES, next: ev.target.files });
+                }}
+                type="file"
+                multiple
+              />
             </StyledButtonInput>
           </StyledBoderInput>
           <StyledBoderInput>
             <StyledTitle>Video</StyledTitle>
-            <StyledInput type="text" placeholder="Enter Youtube link here"></StyledInput>
+            <StyledInput
+              value={state.video}
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_VIDEO, next: ev.target.value });
+              }}
+              
+              type="text"
+              placeholder="Enter Youtube link here"
+            ></StyledInput>
           </StyledBoderInput>
-
           <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/amenities">Back </StyledLink>
-            <StyledLink to="/user/host-creation/content/pricing">Next </StyledLink>
+            <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+            <StyledLink onClick={onClickNext}>Next </StyledLink>
           </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>

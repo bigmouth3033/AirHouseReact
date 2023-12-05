@@ -13,6 +13,7 @@ import {
   cilSpeedometer,
   cilStar,
   cilRoom,
+  cilHouse,
 } from "@coreui/icons";
 import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
@@ -74,6 +75,12 @@ const _nav = [
         to: "type/property_type",
       },
     ],
+  },
+  {
+    component: CNavItem,
+    name: "Properties Status",
+    to: "properties_status",
+    icon: <CIcon icon={cilHouse} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,

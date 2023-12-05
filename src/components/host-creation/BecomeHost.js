@@ -3,14 +3,16 @@ import styled from "styled-components";
 import Img from "assets/images/hosting-img/1635921594_list_your_space.jpg";
 import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
-
 import { CategoryQuery } from "api/categoryApi";
 import { RoomTypeQuery } from "api/room-typeApi";
+import { PropertyTypeQuery } from "api/property-typeApi";
+import { useNavigate } from "react-router-dom";
+import Loading from "components/Loading";
 
 const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 50rem;
+  grid-template-columns: 1.5fr 1fr;
+  min-height: 55rem;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -97,7 +99,7 @@ const StyledSelect = styled.select`
 
 const StyledImgOverlay = styled.div`
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
 `;
@@ -109,7 +111,9 @@ const StyledGroupButon = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
+  border: none;
+  cursor: pointer;
   background-color: red;
   text-decoration: none;
   padding: 1rem;
@@ -122,18 +126,25 @@ const StyledLink = styled(Link)`
 `;
 
 const BecomeHost = () => {
-  const [state, dispatch, ACTIONS] = useOutletContext();
-
+  const [state, dispatch, ACTIONS, onSetAvailable, onSetActive] = useOutletContext();
+  const navigate = useNavigate();
   const categoryQuery = CategoryQuery();
   const roomTypeQuery = RoomTypeQuery();
+  const propertyTypeQuery = PropertyTypeQuery();
 
   useEffect(() => {
-    console.log("test");
-    if (categoryQuery.isSuccess && roomTypeQuery.isSuccess) {
+    if (categoryQuery.isSuccess && roomTypeQuery.isSuccess && propertyTypeQuery.isSuccess) {
       dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: categoryQuery.data[0].id });
       dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: roomTypeQuery.data[0].id });
+      dispatch({ type: ACTIONS.CHANGE_PROPERTY_TYPE, next: propertyTypeQuery.data[0].id });
     }
-  }, []);
+  }, [categoryQuery.status, roomTypeQuery.status, propertyTypeQuery.status]);
+
+  const onClickContinue = (ev) => {
+    ev.preventDefault();
+    onSetAvailable(0);
+    onSetActive(0);
+  };
 
   return (
     <StyledContainer>
@@ -145,45 +156,63 @@ const BecomeHost = () => {
         </StyleText>
       </StyledSecion1>
       <StyledSecion2>
-        <StyledForm>
-          <StyledLable htmlFor="">Category</StyledLable>
-          <StyledSelect
-            value={state.categoryId}
-            onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: ev.target.value });
-            }}
-          >
-            {categoryQuery.isLoading && <option>Loading...</option>}
-            {categoryQuery.isSuccess &&
-              categoryQuery.data.map((data, index) => {
-                return (
-                  <option key={data.id} value={data.id}>
-                    {data.name}
-                  </option>
-                );
-              })}
-          </StyledSelect>
-          <StyledLable htmlFor="">Room Type</StyledLable>
-          <StyledSelect
-            value={state.roomTypeId}
-            onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: ev.target.value });
-            }}
-          >
-            {roomTypeQuery.isLoading && <option>Loading...</option>}
-            {roomTypeQuery.isSuccess &&
-              roomTypeQuery.data.map((data) => {
-                return (
-                  <option key={data.id} value={data.id}>
-                    {data.name}
-                  </option>
-                );
-              })}
-          </StyledSelect>
-          <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/basic">Continute </StyledLink>
-          </StyledGroupButon>
-        </StyledForm>
+        {roomTypeQuery.isLoading || roomTypeQuery.isLoading || propertyTypeQuery.isLoading ? (
+          <Loading />
+        ) : (
+          <StyledForm>
+            <StyledLable htmlFor="">Category</StyledLable>
+            <StyledSelect
+              value={state.categoryId}
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: ev.target.value });
+              }}
+            >
+              {categoryQuery.isSuccess &&
+                categoryQuery.data.map((data, index) => {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  );
+                })}
+            </StyledSelect>
+            <StyledLable htmlFor="">Room Type</StyledLable>
+            <StyledSelect
+              value={state.roomTypeId}
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: ev.target.value });
+              }}
+            >
+              {roomTypeQuery.isSuccess &&
+                roomTypeQuery.data.map((data) => {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  );
+                })}
+            </StyledSelect>
+            <StyledLable htmlFor="">Property Type</StyledLable>
+            <StyledSelect
+              value={state.propertyTypeId}
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_PROPERTY_TYPE, next: ev.target.value });
+              }}
+            >
+              {propertyTypeQuery.isSuccess &&
+                propertyTypeQuery.data.map((data) => {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  );
+                })}
+            </StyledSelect>
+            <StyledGroupButon>
+              <StyledLink onClick={onClickContinue}>Continute </StyledLink>
+            </StyledGroupButon>
+          </StyledForm>
+        )}
       </StyledSecion2>
     </StyledContainer>
   );

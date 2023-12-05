@@ -2,9 +2,11 @@ import React, { createRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/location.jpg";
-import { Link } from "react-router-dom";
 import { ProvinceQuery } from "api/locationApi";
 import { DistrictQuery } from "api/locationApi";
+import { useOutletContext } from "react-router-dom";
+import { useEffect } from "react";
+import Loading from "components/Loading";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -79,8 +81,10 @@ const StyledGroupButon = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
   background-color: red;
+  border: none;
+  cursor: pointer;
   text-decoration: none;
   padding: 1rem;
   border-radius: 5px;
@@ -88,25 +92,6 @@ const StyledLink = styled(Link)`
   transition: all 0.1s;
   &:hover {
     background-color: rgb(200, 0, 0);
-  }
-`;
-const StyleInput = styled.input`
-  width: 100%;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid #717171;
-  padding: 0 20px;
-  margin: 10px 0 35px 0;
-
-  &:focus,
-  &:hover {
-    border: 1px solid red;
-    outline: 1px solid red;
-  }
-
-  @media (max-width: 992px) {
-    margin: 8px 0 20px 0;
-    height: 40px;
   }
 `;
 
@@ -136,6 +121,10 @@ const StyledCityDistrict = styled.div`
 const StyledAddress = styled.div`
   display: flex;
   flex-direction: column;
+
+  & .required {
+    color: red;
+  }
 
   & label {
     font-size: 15px;
@@ -212,10 +201,43 @@ const StyledInputContainer = styled.div`
 `;
 
 const Location = () => {
+  const [count, setCount] = useState(0);
   const [selectedProvince, setSelectedProvince] = useState("1");
-
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
   const provinceQuery = ProvinceQuery();
   const districtQuery = DistrictQuery(selectedProvince);
+
+  const onChangeAddress = (ev) => {
+    dispatch({ type: ACTIONS.CHANGE_ADDRESS, next: ev.target.value });
+  };
+
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+
+    if (state.address == "") {
+      alert("adress must not be empty");
+      return;
+    }
+
+    onSetActive(4);
+    onSetAvailable(4);
+  };
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+    onSetActive(2);
+  };
+
+  useEffect(() => {
+    if (provinceQuery.isSuccess && count == 0) {
+      setCount(1);
+      dispatch({ type: ACTIONS.CHANGE_PROVINCES, next: provinceQuery.data[0].code });
+    }
+
+    if (districtQuery.isSuccess) {
+      dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: districtQuery.data[0].code });
+    }
+  }, [provinceQuery.status, districtQuery.status]);
 
   return (
     <StyledContainer>
@@ -223,54 +245,79 @@ const Location = () => {
         <StyledImgOverlay />
         <StyleText>
           <h2>Add your location</h2>
-         
         </StyleText>
       </StyledSecion1>
       <StyledSecion2>
-        <StyledForm>
-          <StyledBoderInput>
-            <StyledTitle>Location</StyledTitle>
-            <StyledInputContainer>
-              <StyledCityDistrict>
-                <div>
-                  <label>City</label>
-                  <StyledSelect onChange={(ev) => setSelectedProvince(ev.target.value)}>
-                    {provinceQuery.isSuccess &&
-                      provinceQuery.data.map((province, index) => {
-                        return (
-                          <option key={index} value={province.code}>
-                            {province.full_name}
-                          </option>
-                        );
-                      })}
-                  </StyledSelect>
-                </div>
-                <div>
-                  <label>District</label>
-                  <StyledSelect>
-                    {districtQuery.isSuccess &&
-                      districtQuery.data.map((district, index) => {
-                        return (
-                          <option key={index} value={district.code}>
-                            {district.full_name}
-                          </option>
-                        );
-                      })}
-                  </StyledSelect>
-                </div>
-              </StyledCityDistrict>
-              <StyledAddress>
-                <label>Address</label>
-                <StyledInput type="text" />
-              </StyledAddress>
-            </StyledInputContainer>
-          </StyledBoderInput>
+        {provinceQuery.isLoading ? (
+          <Loading />
+        ) : (
+          <StyledForm>
+            <StyledBoderInput>
+              <StyledTitle>Location</StyledTitle>
+              <StyledInputContainer>
+                <StyledCityDistrict>
+                  <div>
+                    <label>City</label>
+                    <StyledSelect
+                      value={state.provinces_id}
+                      onChange={(ev) => {
+                        dispatch({
+                          type: ACTIONS.CHANGE_PROVINCES,
+                          next: ev.target.value,
+                        });
+                        setSelectedProvince(ev.target.value);
+                      }}
+                    >
+                      {provinceQuery.isSuccess &&
+                        provinceQuery.data.map((province, index) => {
+                          return (
+                            <option key={index} value={province.code}>
+                              {province.full_name}
+                            </option>
+                          );
+                        })}
+                    </StyledSelect>
+                  </div>
+                  <div>
+                    <label>District</label>
+                    <StyledSelect
+                      onChange={(ev) => {
+                        dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: ev.target.value });
+                      }}
+                      value={state.district_id}
+                    >
+                      {districtQuery.isLoading && <option>Loading...</option>}
+                      {districtQuery.isSuccess &&
+                        districtQuery.data.map((district, index) => {
+                          return (
+                            <option key={index} value={district.code}>
+                              {district.full_name}
+                            </option>
+                          );
+                        })}
+                    </StyledSelect>
+                  </div>
+                </StyledCityDistrict>
+                <StyledAddress>
+                  <label className="required">Address *</label>
+                  <StyledInput
+                    value={state.address}
+                    onChange={(ev) => {
+                      dispatch({ type: ACTIONS.CHANGE_ADDRESS, next: ev.target.value });
+                    }}
+                    disabled={districtQuery.isLoading}
+                    type="text"
+                  />
+                </StyledAddress>
+              </StyledInputContainer>
+            </StyledBoderInput>
 
-          <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/details">Back </StyledLink>
-            <StyledLink to="/user/host-creation/content/amenities">Next </StyledLink>
-          </StyledGroupButon>
-        </StyledForm>
+            <StyledGroupButon>
+              <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+              <StyledLink onClick={onClickNext}>Next </StyledLink>
+            </StyledGroupButon>
+          </StyledForm>
+        )}
       </StyledSecion2>
     </StyledContainer>
   );

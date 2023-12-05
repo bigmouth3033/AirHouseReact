@@ -97,6 +97,7 @@ const StyledTitle = styled.div`
   margin-bottom: 25px;
 `;
 const StyledTextarea = styled.textarea`
+  resize: none;
   padding: 10px 20px;
   margin: 10px 0;
   width: 100%;
@@ -128,20 +129,45 @@ const StyledGroupButon = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
   background-color: red;
+  border: none;
+  cursor: pointer;
   text-decoration: none;
   padding: 1rem;
   border-radius: 5px;
   color: white;
   transition: all 0.1s;
+
   &:hover {
     background-color: rgb(200, 0, 0);
   }
 `;
 
 const Description = () => {
-  const [state, dispatch, ACTIONS] = useOutletContext();
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+
+    if (state.propertyName == "") {
+      alert("Please fill listing name");
+      return;
+    }
+
+    if (state.description == "") {
+      alert("Please fill summary");
+      return;
+    }
+
+    onSetActive(2);
+    onSetAvailable(2);
+  };
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+    onSetActive(0);
+  };
 
   return (
     <StyledContainer>
@@ -175,8 +201,8 @@ const Description = () => {
             value={state.description}
           ></StyledTextarea>
           <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/basic">Back </StyledLink>
-            <StyledLink to="/user/host-creation/content/details">Next </StyledLink>
+            <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+            <StyledLink onClick={onClickNext}>Next</StyledLink>
           </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>

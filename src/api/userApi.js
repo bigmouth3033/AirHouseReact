@@ -114,3 +114,19 @@ export const CreateAdminMutation = (payload) => {
 
   return userMutation;
 };
+
+const getUserById = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("/user/" + id);
+
+  return response.data;
+};
+
+export const UserIdQuery = (id) => {
+  const userQuery = useQuery({
+    queryKey: ["user", id],
+    queryFn: getUserById,
+  });
+
+  return userQuery;
+};

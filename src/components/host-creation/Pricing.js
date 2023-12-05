@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/photos.jpg";
 import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -170,7 +171,9 @@ const StyledGroupButon = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
+  border: none;
+  cursor: pointer;
   background-color: red;
   text-decoration: none;
   padding: 1rem;
@@ -183,6 +186,21 @@ const StyledLink = styled(Link)`
 `;
 
 const Pricing = () => {
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(7);
+    onSetAvailable(7);
+  };
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(5);
+  };
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -200,14 +218,19 @@ const Pricing = () => {
             </StyledLable>
             <StyledButtonInput>
               <p>$</p>
-              <input type="number" />
+              <input
+                onChange={(ev) => {
+                  dispatch({ type: ACTIONS.CHANGE_BASE_PRICE, next: Number(ev.target.value) });
+                }}
+                value={state.baseprice}
+                type="number"
+              />
             </StyledButtonInput>
             <StyledP>
               You can offer discounts for longer stays by setting
               <StyledSpan> weekly and monthly</StyledSpan> prices.
             </StyledP>
           </StyledBoderInput>
-          {/* chikhoi */}
           <StyledBoderInput>
             <StyledTitle>Additional Pricing Options</StyledTitle>
             <StyleGroupPricing>
@@ -229,8 +252,8 @@ const Pricing = () => {
           </StyledBoderInput>
 
           <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/photo">Back </StyledLink>
-            <StyledLink to="/user/host-creation/content/booking">Next </StyledLink>
+            <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+            <StyledLink onClick={onClickNext}>Next </StyledLink>
           </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>

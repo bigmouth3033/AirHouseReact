@@ -6,6 +6,7 @@ import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { Suspense } from "react";
 import Loading from "components/Loading";
+import { useNavigate } from "react-router-dom";
 
 const StyledOption = styled.div`
   display: flex;
@@ -33,13 +34,13 @@ const StyledOption = styled.div`
   }
 `;
 
-const StyledOptionChoice = styled(Link)`
-  padding: 15px 25px;
+const StyledOptionChoice = styled.button`
+  padding: 8px 25px;
+  border: 0;
   background-color: rgb(223, 219, 210);
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  text-decoration: none;
   color: black;
 
   &:hover {
@@ -51,55 +52,67 @@ const StyledOptionChoice = styled(Link)`
       return css`
         background-color: red;
         color: white;
+
+        &:hover {
+          color: white;
+        }
+      `;
+    }
+  }}
+
+  ${(props) => {
+    if (props.$disabled === true) {
+      return css`
+        cursor: auto;
+        background-color: white;
+        color: rgba(0, 0, 0, 0.4);
+
+        &:hover {
+          color: rgba(0, 0, 0, 0.4);
+        }
       `;
     }
   }}
 `;
 
 export default function HostCreationContent() {
-  const [state, dispatch, ACTIONS] = useOutletContext();
-  const [active, setActive] = useState([true, false, false, false, false, false, false, false, false]);
-
-  const onSetActive = (index) => {
-    const newArr = [false, false, false, false, false, false, false, false, false];
-    newArr[index] = true;
-    setActive(newArr);
-  };
+  const navigate = useNavigate();
+  const [state, dispatch, ACTIONS, onSetAvailable, onSetActive, active, available] = useOutletContext();
 
   return (
     <>
       <StyledOption>
-        <StyledOptionChoice $active={active[0]} onClick={() => onSetActive(0)} to="basic">
+        <StyledOptionChoice $disabled={!available[0]} disabled={!available[0]} $active={active[0]} onClick={() => onSetActive(0)}>
           Basic
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[1]} onClick={() => onSetActive(1)} to="description">
+        <StyledOptionChoice $disabled={!available[1]} disabled={!available[1]} $active={active[1]} onClick={() => onSetActive(1)}>
           Description
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[2]} onClick={() => onSetActive(2)} to="details">
+        <StyledOptionChoice $disabled={!available[2]} disabled={!available[2]} $active={active[2]} onClick={() => onSetActive(2)}>
           Details
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[3]} onClick={() => onSetActive(3)} to="location">
+        <StyledOptionChoice $disabled={!available[3]} disabled={!available[3]} $active={active[3]} onClick={() => onSetActive(3)}>
           Location
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[4]} onClick={() => onSetActive(4)} to="amenities">
+        <StyledOptionChoice $disabled={!available[4]} disabled={!available[4]} $active={active[4]} onClick={() => onSetActive(4)}>
           Amenities
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[5]} onClick={() => onSetActive(5)} to="photo">
+        <StyledOptionChoice $disabled={!available[5]} disabled={!available[5]} $active={active[5]} onClick={() => onSetActive(5)}>
           Photo
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[6]} onClick={() => onSetActive(6)} to="pricing">
+        <StyledOptionChoice $disabled={!available[6]} disabled={!available[6]} $active={active[6]} onClick={() => onSetActive(6)}>
           Pricing
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[7]} onClick={() => onSetActive(7)} to="booking">
+        <StyledOptionChoice $disabled={!available[7]} disabled={!available[7]} $active={active[7]} onClick={() => onSetActive(7)}>
           Booking
         </StyledOptionChoice>
-        <StyledOptionChoice $active={active[8]} onClick={() => onSetActive(8)} to="calendar">
+        <StyledOptionChoice $disabled={!available[8]} disabled={!available[8]} $active={active[8]} onClick={() => onSetActive(8)}>
           Calendar
         </StyledOptionChoice>
         <button onClick={() => console.log(state)}>click</button>
       </StyledOption>
       <Suspense fallback={<Loading />}>
-        <Outlet context={[state, dispatch, ACTIONS]} />
+        <Outlet context={[state, dispatch, ACTIONS, onSetActive, onSetAvailable]} />
       </Suspense>
     </>
   );

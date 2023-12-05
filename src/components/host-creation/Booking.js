@@ -1,11 +1,12 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import Img from "assets/images/hosting-img/booking.jpg";
+import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 3fr;
-  min-height: 50rem;
+  grid-template-columns: 1fr 1fr;
+  min-height: 55rem;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -71,50 +72,30 @@ const StyledOverlay = styled.div`
 `;
 
 const StyledButtonBack = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #e51d50;
-  border: 1px solid #e51d50;
-  background-color: white;
-
-  &:focus,
+  border: none;
+  cursor: pointer;
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  transition: all 0.1s;
   &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 30px;
+    background-color: rgb(200, 0, 0);
   }
 `;
 
 const StyledButtonNext = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background-color: red;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 5px;
   color: white;
-  border: 1px solid #e51d50;
-  background-color: #e51d50;
-
-  &:focus,
+  transition: all 0.1s;
   &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    color: white;
-    background-color: #e51d50;
+    background-color: rgb(200, 0, 0);
   }
 `;
 const StyledButton = styled.div`
@@ -151,8 +132,13 @@ const StyledSpan = styled.span`
   color: red;
 `;
 const StyledText = styled.p`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
+
+  & .span{
+    font-size: 14px;
+    font-weight: 400;
+  }
 
   @media (max-width: 992px) {
     /* font-size: 16px; */
@@ -215,6 +201,21 @@ const StyledSelectContainer = styled.div`
   gap: 5px;
 `;
 const Booking = () => {
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(8);
+    onSetAvailable(8);
+  };
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(6);
+  };
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -229,22 +230,32 @@ const Booking = () => {
             <StyledTitle>Booking</StyledTitle>
             <StyledContent>
               <StyledText>
-                Choose how your guests book <StyledSpan>*</StyledSpan>
+                <span className="span">Choose how your guests book</span> <StyledSpan>*</StyledSpan>
               </StyledText>
-              <StyledText>Get ready for guests by choosing your booking style.</StyledText>
+              <StyledText><span className="span">Get ready for guests by choosing your booking style.</span></StyledText>
               <StyledBooking>
                 <StyledSelectContainer>
                   <StyledText>Booking Per Day/Hour</StyledText>
-                  <StyledSelect>
-                    <option>Per day</option>
-                    <option>Per hours</option>
+                  <StyledSelect
+                    value={state.bookingPer}
+                    onChange={(ev) => {
+                      dispatch({ type: ACTIONS.CHANGE_BOOKING_TYPE, next: ev.target.value });
+                    }}
+                  >
+                    <option value={"day"}>Per day</option>
+                    <option value={"hours"}>Per hours</option>
                   </StyledSelect>
                 </StyledSelectContainer>
                 <StyledSelectContainer>
                   <StyledText>Booking Type</StyledText>
-                  <StyledSelect>
-                    <option>Review each request</option>
-                    <option>Guests book instantly</option>
+                  <StyledSelect
+                    value={state.bookingType}
+                    onChange={(ev) => {
+                      dispatch({ type: ACTIONS.CHANGE_BOOKING_TYPE, next: ev.target.value });
+                    }}
+                  >
+                    <option value={"review"}>Review each request</option>
+                    <option value={"instantly"}>Guests book instantly</option>
                   </StyledSelect>
                 </StyledSelectContainer>
               </StyledBooking>
@@ -254,75 +265,88 @@ const Booking = () => {
             <StyledTitle>Terms</StyledTitle>
             <StyledContent>
               <StyledText>
-                The requirements and conditions to book a reservation at your listing. <StyledSpan>*</StyledSpan>
+                <span className="span">The requirements and conditions to book a reservation at your listing.</span> <StyledSpan>*</StyledSpan>
               </StyledText>
               <StyledText>Cancellation Policy</StyledText>
-              <StyledBoderCancellationPolicyInput>
-                <option>Flexible: Full refund 1 day prior to arrival, except fees</option>
-                <option>Moderate: Full refund 5 days prior to arrival, except fees</option>
-                <option>Strict: 50% refund up until 1 week prior to arrival, except fees</option>
+              <StyledBoderCancellationPolicyInput
+                value={state.cancelation}
+                onChange={(ev) => {
+                  dispatch({ type: ACTIONS.CHANGE_CANCELATION, next: ev.target.value });
+                }}
+              >
+                <option value={"flexible"}>Flexible: Full refund 1 day prior to arrival, except fees</option>
+                <option value={"moderate"}>Moderate: Full refund 5 days prior to arrival, except fees</option>
+                <option value={"strict"}>Strict: 50% refund up until 1 week prior to arrival, except fees</option>
               </StyledBoderCancellationPolicyInput>
               <StyledBooking>
                 <StyledSelectContainer>
                   <StyledText>Check in after</StyledText>
-                  <StyledSelect>
-                    <option>None</option>
-                    <option>12:00 AM</option>
-                    <option>01:00 AM</option>
-                    <option>02:00 AM</option>
-                    <option>03:00 AM</option>
-                    <option>04:00 AM</option>
-                    <option>05:00 AM</option>
-                    <option>06:00 AM</option>
-                    <option>07:00 AM</option>
-                    <option>08:00 AM</option>
-                    <option>09:00 AM</option>
-                    <option>10:00 AM</option>
-                    <option>11:00 AM</option>
-                    <option>12:00 AM</option>
-                    <option>01:00 PM</option>
-                    <option>02:00 PM</option>
-                    <option>03:00 PM</option>
-                    <option>04:00 PM</option>
-                    <option>05:00 PM</option>
-                    <option>06:00 PM</option>
-                    <option>07:00 PM</option>
-                    <option>08:00 PM</option>
-                    <option>09:00 PM</option>
-                    <option>10:00 PM</option>
-                    <option>11:00 PM</option>
-                    <option>12:00 PM</option>
+                  <StyledSelect
+                    value={state.checkInAfter}
+                    onChange={(ev) => {
+                      dispatch({ type: ACTIONS.CHANGE_CHECKIN, next: ev.target.value });
+                    }}
+                  >
+                    <option value={"12AM"}>12:00 AM</option>
+                    <option value={"01AM"}>01:00 AM</option>
+                    <option value={"02AM"}>02:00 AM</option>
+                    <option value={"03AM"}>03:00 AM</option>
+                    <option value={"04AM"}>04:00 AM</option>
+                    <option value={"05AM"}>05:00 AM</option>
+                    <option value={"06AM"}>06:00 AM</option>
+                    <option value={"07AM"}>07:00 AM</option>
+                    <option value={"08AM"}>08:00 AM</option>
+                    <option value={"09AM"}>09:00 AM</option>
+                    <option value={"10AM"}>10:00 AM</option>
+                    <option value={"11AM"}>11:00 AM</option>
+                    <option value={"12AM"}>12:00 AM</option>
+                    <option value={"01PM"}>01:00 PM</option>
+                    <option value={"02PM"}>02:00 PM</option>
+                    <option value={"03PM"}>03:00 PM</option>
+                    <option value={"04PM"}>04:00 PM</option>
+                    <option value={"05PM"}>05:00 PM</option>
+                    <option value={"06PM"}>06:00 PM</option>
+                    <option value={"07PM"}>07:00 PM</option>
+                    <option value={"08PM"}>08:00 PM</option>
+                    <option value={"09PM"}>09:00 PM</option>
+                    <option value={"10PM"}>10:00 PM</option>
+                    <option value={"11PM"}>11:00 PM</option>
+                    <option value={"12PM"}>12:00 PM</option>
                   </StyledSelect>
                 </StyledSelectContainer>
                 <StyledSelectContainer>
                   <StyledText>Check out before</StyledText>
-                  <StyledSelect>
-                    <option>None</option>
-                    <option>12:00 AM</option>
-                    <option>01:00 AM</option>
-                    <option>02:00 AM</option>
-                    <option>03:00 AM</option>
-                    <option>04:00 AM</option>
-                    <option>05:00 AM</option>
-                    <option>06:00 AM</option>
-                    <option>07:00 AM</option>
-                    <option>08:00 AM</option>
-                    <option>09:00 AM</option>
-                    <option>10:00 AM</option>
-                    <option>11:00 AM</option>
-                    <option>12:00 AM</option>
-                    <option>01:00 PM</option>
-                    <option>02:00 PM</option>
-                    <option>03:00 PM</option>
-                    <option>04:00 PM</option>
-                    <option>05:00 PM</option>
-                    <option>06:00 PM</option>
-                    <option>07:00 PM</option>
-                    <option>08:00 PM</option>
-                    <option>09:00 PM</option>
-                    <option>10:00 PM</option>
-                    <option>11:00 PM</option>
-                    <option>12:00 PM</option>
+                  <StyledSelect
+                    value={state.checkOutBefore}
+                    onChange={(ev) => {
+                      dispatch({ type: ACTIONS.CHANGE_CHECKOUT, next: ev.target.value });
+                    }}
+                  >
+                    <option value={"12AM"}>12:00 AM</option>
+                    <option value={"01AM"}>01:00 AM</option>
+                    <option value={"02AM"}>02:00 AM</option>
+                    <option value={"03AM"}>03:00 AM</option>
+                    <option value={"04AM"}>04:00 AM</option>
+                    <option value={"05AM"}>05:00 AM</option>
+                    <option value={"06AM"}>06:00 AM</option>
+                    <option value={"07AM"}>07:00 AM</option>
+                    <option value={"08AM"}>08:00 AM</option>
+                    <option value={"09AM"}>09:00 AM</option>
+                    <option value={"10AM"}>10:00 AM</option>
+                    <option value={"11AM"}>11:00 AM</option>
+                    <option value={"12AM"}>12:00 AM</option>
+                    <option value={"01PM"}>01:00 PM</option>
+                    <option value={"02PM"}>02:00 PM</option>
+                    <option value={"03PM"}>03:00 PM</option>
+                    <option value={"04PM"}>04:00 PM</option>
+                    <option value={"05PM"}>05:00 PM</option>
+                    <option value={"06PM"}>06:00 PM</option>
+                    <option value={"07PM"}>07:00 PM</option>
+                    <option value={"08PM"}>08:00 PM</option>
+                    <option value={"09PM"}>09:00 PM</option>
+                    <option value={"10PM"}>10:00 PM</option>
+                    <option value={"11PM"}>11:00 PM</option>
+                    <option value={"12PM"}>12:00 PM</option>
                   </StyledSelect>
                 </StyledSelectContainer>
               </StyledBooking>
@@ -330,8 +354,8 @@ const Booking = () => {
           </StyledBoderInput>
 
           <StyledButton>
-            <StyledButtonBack type="submit">Back</StyledButtonBack>
-            <StyledButtonNext type="submit">Next</StyledButtonNext>
+            <StyledButtonBack onClick={onClickPrevious}>Back</StyledButtonBack>
+            <StyledButtonNext onClick={onClickNext}>Next</StyledButtonNext>
           </StyledButton>
         </StyledForm>
       </StyledSecion2>

@@ -5,6 +5,8 @@ import Img from "assets/images/hosting-img/calender.jpg";
 import { Link } from "react-router-dom";
 import { Calendar as CalendarLb } from "react-calendar";
 import "./calendar.css";
+import { useOutletContext } from "react-router-dom";
+import { CreatePropertyMutation } from "api/hostApi";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -82,7 +84,9 @@ const StyledGroupButon = styled.div`
   margin-bottom: 3rem;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
+  border: none;
+  cursor: pointer;
   background-color: red;
   text-decoration: none;
   padding: 1rem;
@@ -110,7 +114,7 @@ const StyledBox = styled.div`
   flex-direction: column;
   gap: 10px;
 
-  label{
+  label {
     font-size: 14px;
   }
 `;
@@ -153,7 +157,74 @@ const StyledSelect = styled.select`
 `;
 
 const Calendar = () => {
+  const propertyMutation = CreatePropertyMutation();
+
   const [value, setValue] = useState(new Date());
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+
+  const [calendar, setCalendar] = useState();
+
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
+  const onClickFinish = (ev) => {
+    ev.preventDefault();
+
+    if (state.minimumStay > state.maximumStay) {
+      alert("min stay cannot be larget than max stay");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", state.propertyName);
+    state.amenities.forEach((amenity) => formData.append("amenities[]", amenity));
+    formData.append("description", state.description);
+    formData.append("about_place", state.aboutPlace); //
+    formData.append("place_great_for", state.placeGreatFor); //
+    formData.append("guest_access", state.guestAccess); //
+    formData.append("interaction_guest", state.interactionGuest); //
+    formData.append("thing_to_note", state.thingToNote); //
+    formData.append("overview", state.overview); //
+    formData.append("getting_around", state.gettingAround); //
+    formData.append("property_type_id", state.propertyTypeId);
+    formData.append("room_type_id", state.roomTypeId);
+    formData.append("category_id", state.categoryId);
+    formData.append("provinces_id", state.provinces_id < 10 ? "0" + Number(state.provinces_id) : state.provinces_id);
+    formData.append("districts_id", state.district_id);
+    formData.append("address", state.address);
+    formData.append("bedroom_count", state.bedroomCount);
+    formData.append("bathroom_count", state.bathRoomCount);
+    formData.append("accomodates_count", state.accomodatesCount);
+    formData.append("start_date", formatDate(new Date(state.startDate)));
+    formData.append("end_date", formatDate(new Date(state.endDate)));
+    formData.append("base_price", state.baseprice); //
+    formData.append("booking_per", state.bookingPer); //
+    formData.append("booking_type", state.bookingType); //
+    formData.append("check_in_after", state.checkInAfter); //
+    formData.append("check_out_before", state.checkOutBefore); //
+    formData.append("cancelation", state.cancelation); //
+    formData.append("minimum_stay", state.minimumStay);
+    formData.append("maximum_stay", state.maximumStay);
+    formData.append("property_status", state.property_status == "true" ? 1 : 0); //
+    Array.from(state.images).forEach((image) => formData.append("images[]", image));
+    formData.append("video", state.video); //
+    propertyMutation.mutate(formData);
+  };
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(7);
+  };
 
   return (
     <StyledContainer>
@@ -166,34 +237,60 @@ const Calendar = () => {
       <StyledSecion2>
         <StyledForm>
           <StyledCalendar
+            value={[state.startDate, state.endDate]}
+            onChange={(value) => {
+              dispatch({ type: ACTIONS.CHANGE_START_DATE, next: value[0] });
+              dispatch({ type: ACTIONS.CHANGE_END_DATE, next: value[1] });
+            }}
             allowPartialRange={true}
             selectRange={true}
             returnValue={"range"}
             view={"month"}
             minDate={new Date()}
             maxDetail={"month"}
-            onChange={setValue}
           />
           <StyledBox>
             <label>Minimum Stay</label>
-            <StyledInput type="number" min={1} />
+            <StyledInput
+              value={state.minimumStay}
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_MINIMUM_STAY, next: ev.target.value });
+                if (state.minimumStay >= state.maximumStay) {
+                  dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: Number(state.minimumStay) + 1 });
+                }
+              }}
+              type="number"
+              min={1}
+            />
           </StyledBox>
 
           <StyledBox>
             <label>Maximum Stay</label>
-            <StyledInput type="number" />
+            <StyledInput
+              min={state.minimumStay}
+              value={state.maximumStay}
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: ev.target.value });
+              }}
+              type="number"
+            />
           </StyledBox>
 
           <StyledBox>
             <label>Status</label>
-            <StyledSelect>
-              <option>Available</option>
-              <option>Not Available</option>
+            <StyledSelect
+              onChange={(ev) => {
+                dispatch({ type: ACTIONS.CHANGE_STATUS, next: ev.target.value });
+              }}
+              value={state.property_status}
+            >
+              <option value={true}>Available</option>
+              <option value={false}>Not Available</option>
             </StyledSelect>
           </StyledBox>
           <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/details">Back </StyledLink>
-            <StyledLink to="/user/host-creation/content/amenities">Next </StyledLink>
+            <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+            <StyledLink onClick={onClickFinish}>Finish </StyledLink>
           </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>

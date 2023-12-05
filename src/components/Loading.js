@@ -12,7 +12,7 @@ const StyledContainer = styled.div`
 export default function Loading() {
   return (
     <StyledContainer>
-      <ReactLoading type={"spin"} color={"rgb(235,255,155)"} height={"5%"} width={"5%"} />
+      <ReactLoading type={"spin"} color={"rgb(255,0,0)"} height={"5%"} width={"5%"} />
     </StyledContainer>
   );
 }

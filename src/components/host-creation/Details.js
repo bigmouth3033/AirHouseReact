@@ -6,8 +6,8 @@ import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 50rem;
+  grid-template-columns: 2.5fr 3fr;
+  min-height: 55rem;
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
@@ -68,28 +68,6 @@ const StyledLable = styled.label`
   font-size: 16px;
   color: #717171;
 `;
-const StyledButtonBack = styled.button`
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #e51d50;
-  border: 1px solid #e51d50;
-  background-color: white;
-
-  &:focus,
-  &:hover {
-    color: white;
-    border: none;
-    background-color: #e51d50;
-  }
-  @media (max-width: 992px) {
-    padding: 10px 27px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 30px;
-  }
-`;
 
 const StyledTitle = styled.div`
   color: black;
@@ -98,6 +76,7 @@ const StyledTitle = styled.div`
   margin-bottom: 25px;
 `;
 const StyledTextarea = styled.textarea`
+  resize: none;
   padding: 10px 20px;
   margin: 15px 0;
   width: 100%;
@@ -129,8 +108,10 @@ const StyledGroupButon = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
   background-color: red;
+  cursor: pointer;
+  border: none;
   text-decoration: none;
   padding: 1rem;
   border-radius: 5px;
@@ -142,7 +123,21 @@ const StyledLink = styled(Link)`
 `;
 
 const Details = () => {
-  const [state, dispatch, ACTIONS] = useOutletContext();
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(1);
+
+  };
+
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+
+    onSetActive(3);
+    onSetAvailable(3);
+  };
 
   return (
     <StyledContainer>
@@ -205,8 +200,8 @@ const Details = () => {
             }}
           ></StyledTextarea>
           <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/description">Back </StyledLink>
-            <StyledLink to="/user/host-creation/content/location">Next </StyledLink>
+            <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+            <StyledLink onClick={onClickNext}>Next </StyledLink>
           </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>

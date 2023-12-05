@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 const readRoomTypeFn = async () => {
-  const response = await axiosClient.get("readCategory");
+  const response = await axiosClient.get("retrieveRoomType");
   return response.data;
 };
 

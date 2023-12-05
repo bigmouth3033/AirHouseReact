@@ -12,7 +12,7 @@ const StyledContainer = styled.div`
   border-radius: 10px;
   background-color: white;
 
-  position: absolute;
+  position: fixed;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10000;

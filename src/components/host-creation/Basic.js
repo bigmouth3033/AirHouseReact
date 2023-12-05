@@ -5,11 +5,12 @@ import Img from "assets/images/hosting-img/room_bed.jpg";
 import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 3fr;
-  min-height: 50rem;
+  grid-template-columns: 1.5fr 1fr;
+  min-height: 55rem;
 
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -110,13 +111,14 @@ const StyledTitle = styled.div`
 
 const StyledGroupButon = styled.div`
   display: flex;
-  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
   background-color: red;
+  border: 0;
+  cursor: pointer;
   text-decoration: none;
   padding: 1rem;
   border-radius: 5px;
@@ -124,25 +126,6 @@ const StyledLink = styled(Link)`
   transition: all 0.1s;
   &:hover {
     background-color: rgb(200, 0, 0);
-  }
-`;
-const StyleInput = styled.input`
-  width: 100%;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid #717171;
-  padding: 0 20px;
-  margin: 10px 0 35px 0;
-
-  &:focus,
-  &:hover {
-    border: 1px solid red;
-    outline: 1px solid red;
-  }
-
-  @media (max-width: 992px) {
-    margin: 8px 0 20px 0;
-    height: 40px;
   }
 `;
 
@@ -156,13 +139,27 @@ const StyledImgOverlay = styled.div`
 const Basic = () => {
   // Tạo một mảng số từ 1 đến 10
   const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
-  const [state, dispatch, ACTIONS] = useOutletContext();
+  const accomodatesNumbers = Array.from({ length: 16 }, (_, index) => index + 1);
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
 
   useEffect(() => {
     dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: 1 });
     dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: 1 });
     dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: 1 });
   }, []);
+
+  const navigate = useNavigate();
+  const onClickNext = (ev) => {
+    ev.preventDefault();
+    onSetActive(1);
+    onSetAvailable(1);
+  };
+
+  const onClickPrevious = (ev) => {
+    ev.preventDefault();
+
+    navigate("/user/host-creation/become-host");
+  };
 
   return (
     <StyledContainer>
@@ -178,6 +175,7 @@ const Basic = () => {
           <StyledTitle htmlFor="">Rooms and Beds </StyledTitle>
           <StyledLable htmlFor="">Bedrooms</StyledLable>
           <StyledSelect
+            value={state.bedroomCount}
             onChange={(ev) => {
               dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: ev.target.value });
             }}
@@ -191,6 +189,7 @@ const Basic = () => {
 
           <StyledLable htmlFor="">Bathrooms</StyledLable>
           <StyledSelect
+            value={state.bathRoomCount}
             onChange={(ev) => {
               dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: ev.target.value });
             }}
@@ -203,18 +202,20 @@ const Basic = () => {
           </StyledSelect>
           <StyledLable htmlFor="">Accommodates </StyledLable>
           <StyledSelect
+            value={state.accomodatesCount}
             onChange={(ev) => {
               dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: ev.target.value });
             }}
           >
-            {numbers.map((number) => (
+            {accomodatesNumbers.map((number) => (
               <option key={number} value={number}>
                 {number}
               </option>
             ))}
           </StyledSelect>
           <StyledGroupButon>
-            <StyledLink to="/user/host-creation/content/description">Continute </StyledLink>
+            <StyledLink onClick={onClickPrevious}>Previous </StyledLink>
+            <StyledLink onClick={onClickNext}>Continute</StyledLink>
           </StyledGroupButon>
         </StyledForm>
       </StyledSecion2>

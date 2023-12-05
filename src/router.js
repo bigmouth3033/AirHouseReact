@@ -87,6 +87,9 @@ const Booking = lazy(() => import("components/host-creation/Booking"));
 
 // chat
 
+// properties_status
+const Status = lazy(() => import("views/status/Status"));
+
 const Chat = lazy(() => import("components/chat/Chat"));
 
 const router = createBrowserRouter([
@@ -209,6 +212,7 @@ const router = createBrowserRouter([
       { path: "/admin/type/property_type", name: "Property Type", element: <PropertyType />, exact: true },
       { path: "/admin/type/category", name: "Category", element: <Category />, exact: true },
       { path: "/admin/type/room_type", name: "Room Type", element: <RoomType />, exact: true },
+      { path: "/admin/properties_status", name: "status", element: <Status /> },
     ],
   },
 ]);

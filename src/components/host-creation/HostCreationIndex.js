@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { lazy } from "react";
 import styled from "styled-components";
-import NavTopHome from "components/navbar/home/NavTopHome";
-import FooterHostCreation from "components/footer/host-creation/FooterHostCreation";
 import { Link, Route, Routes } from "react-router-dom";
 import { Router } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { useReducer } from "react";
-
-import Amenities from "./Amenities";
-import Basic from "./Basic";
-import Description from "./Description";
-import Details from "./Details";
-import Photos from "./Photos";
-import Pricing from "./Pricing";
-import BecomeHost from "./BecomeHost";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useBeforeunload } from "react-beforeunload";
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
@@ -41,6 +33,8 @@ function reducer(state, action) {
     case ACTIONS.CHANGE_PROPERTY:
       return { ...state, propertyName: action.next };
 
+    case ACTIONS.CHANGE_AMENITIES:
+      return { ...state, amenities: action.next };
     case ACTIONS.CHANGE_DESCRIPTION:
       return { ...state, description: action.next };
 
@@ -101,19 +95,44 @@ function reducer(state, action) {
     case ACTIONS.CHANGE_END_DATE:
       return { ...state, endDate: action.next };
 
-    case ACTIONS.CHANGE_PRICE:
-      return { ...state, price: action.next };
+    case ACTIONS.CHANGE_BASE_PRICE:
+      return { ...state, baseprice: action.next };
+
+    case ACTIONS.CHANGE_BOOKING_PER:
+      return { ...state, bookingPer: action.next };
+
+    case ACTIONS.CHANGE_BOOKING_TYPE:
+      return { ...state, bookingType: action.next };
+
+    case ACTIONS.CHANGE_CHECKIN:
+      return { ...state, checkInAfter: action.next };
+
+    case ACTIONS.CHANGE_CHECKOUT:
+      return { ...state, checkOutBefore: action.next };
+
+    case ACTIONS.CHANGE_CANCELATION:
+      return { ...state, cancelation: action.next };
+
+    case ACTIONS.CHANGE_STATUS:
+      return { ...state, property_status: action.next };
+
+    case ACTIONS.CHANGE_MAXIMUM_STAY:
+      return { ...state, maximumStay: action.next };
 
     case ACTIONS.CHANGE_MINIMUM_STAY:
-      return { ...state, minimunStay: action.next };
+      return { ...state, minimumStay: action.next };
 
     case ACTIONS.CHANGE_IMAGES:
       return { ...state, images: action.next };
+
+    case ACTIONS.CHANGE_VIDEO:
+      return { ...state, video: action.next };
   }
 }
 
 const ACTIONS = {
   CHANGE_PROPERTY: "CHANGE_PROPERTY",
+  CHANGE_AMENITIES: "CHANGE_AMENITIES",
   CHANGE_DESCRIPTION: "CHANGE_DESCRIPTION",
   CHANGE_ABOUT_PLACE: "CHANGE_ABOUT_PLACE",
   CHANGE_PLACE_GREAT_FOR: "CHANGE_PLACE_GREAT_FOR",
@@ -134,14 +153,23 @@ const ACTIONS = {
   CHANGE_ACCOMODATES_COUNT: "CHANGE_ACCOMODATES_COUNT",
   CHANGE_START_DATE: "CHANGE_START_DATE",
   CHANGE_END_DATE: "CHANGE_END_DATE",
-  CHANGE_PRICE: "CHANGE_PRICE",
+  CHANGE_BASE_PRICE: "CHANGE_BASE_PRICE",
+  CHANGE_BOOKING_PER: "CHANGE_BOOKING_PER",
+  CHANGE_BOOKING_TYPE: "CHANGE_BOOKING_TYPE",
+  CHANGE_CHECKIN: "CHANGE_CHECKIN",
+  CHANGE_CHECKOUT: "CHANGE_CHECKOUT",
+  CHANGE_CANCELATION: "CHANGE_CANCELATION",
+  CHANGE_STATUS: "CHANGE_STATUS",
+  CHANGE_MAXIMUM_STAY: "CHANGE_MAXIMUM_STAY",
   CHANGE_MINIMUM_STAY: "CHANGE_MINIMUM_STAY",
   CHANGE_IMAGES: "CHANGE_IMAGES",
+  CHANGE_VIDEO: "CHANGE_VIDEO",
 };
 
 export default function HostCreationIndex() {
   const [state, dispatch] = useReducer(reducer, {
     propertyName: "",
+    amenities: [],
     description: "",
     aboutPlace: "",
     placeGreatFor: "",
@@ -156,20 +184,61 @@ export default function HostCreationIndex() {
     provinces_id: 0,
     district_id: 0,
     address: "",
-    bedroomCount: 0,
-    bedCount: 0,
+    bedroomCount: 1,
     bathRoomCount: 0,
-    accomodatesCount: 0,
+    accomodatesCount: 1,
     startDate: "",
     endDate: "",
-    price: "",
-    minimunStay: 0,
+    baseprice: 0,
+    bookingPer: "day",
+    bookingType: "review",
+    checkInAfter: "12AM",
+    checkOutBefore: "12AM",
+    cancelation: "flexible",
+    minimumStay: 0,
+    maximumStay: 0,
+    property_status: false,
     images: null,
+    video: "",
   });
 
+  const navigate = useNavigate();
+  const initialArr = Array(9).fill(false);
+
+  const [active, setActive] = useState(initialArr);
+  const [available, setAvailable] = useState(initialArr);
+
+  const onSetActive = (index) => {
+    const newArr = Array(9).fill(false);
+    newArr[index] = true;
+
+    const url = ["basic", "description", "details", "location", "amenities", "photo", "pricing", "booking", "calendar"];
+    setActive(newArr);
+    window.scrollTo(0, 0);
+    navigate("content/" + url[index]);
+  };
+
+  const onSetAvailable = (index) => {
+    const newArr = [...available];
+    newArr[index] = true;
+    setAvailable(newArr);
+  };
+
+  useBeforeunload(() => "You’ll lose your data!");
+
+  let location = useLocation();
+
+  useEffect(() => {
+    if (JSON.stringify(initialArr) === JSON.stringify(available)) {
+      navigate("/user/host-creation/become-host");
+    }
+  }, []);
+
   return (
-    <StyledContainer>
-      <Outlet context={[state, dispatch, ACTIONS]} />
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        <Outlet context={[state, dispatch, ACTIONS, onSetAvailable, onSetActive, active, available]} />
+      </StyledContainer>
+    </>
   );
 }
