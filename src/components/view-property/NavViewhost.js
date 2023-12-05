@@ -1,7 +1,4 @@
-import {
-  faArrowUpFromBracket,
-  faHeartCirclePlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpFromBracket, faHeartCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import styled from "styled-components";
@@ -10,6 +7,7 @@ const StyledNav = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 24px 0 0 0;
+  margin: 1rem 0;
 `;
 const StyledShareSave = styled.div`
   display: grid;
@@ -21,15 +19,16 @@ const StyledContainerShareSave = styled.div`
   justify-content: center;
   align-items: center;
   column-gap: 10px;
+  font-size: 15px;
 `;
-const Styledtitle = styled.h1`
-  font-size: 26px;
+const StyledTitle = styled.h1`
+  font-size: 23px;
   line-height: 30px;
 `;
 const NavViewhost = () => {
   return (
     <StyledNav>
-      <Styledtitle>Title</Styledtitle>
+      <StyledTitle>Title</StyledTitle>
       <StyledShareSave>
         <StyledContainerShareSave>
           <p>

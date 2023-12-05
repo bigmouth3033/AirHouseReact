@@ -3,23 +3,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
+
 const StyledContainer = styled.div`
   max-width: 654px;
+  margin: auto;
 `;
 const StyledSection = styled.div`
   border-bottom: 1px solid #dddddd;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 1.5rem 0;
 `;
 const StyledDetailInfor = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 `;
 const StyledSpan = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 5px;
 `;
 const StyledReview = styled.div`
   display: flex;
@@ -45,6 +52,7 @@ const StyledHost = styled.div`
 const StyledDesign = styled.div`
   display: grid;
   grid-template-rows: repeat(3, 1fr);
+  row-gap: 2rem;
 `;
 const StyledP = styled.p`
   color: #717171;
@@ -94,6 +102,13 @@ const StyledShowAmenities = styled.div`
     background-color: #eeeeee;
   }
 `;
+
+const StyledTitle = styled.div`
+  display: flex;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 500;
+`;
 const Information = () => {
   const [selectedDateRange, setSelectedDateRange] = useState();
 
@@ -103,37 +118,34 @@ const Information = () => {
   return (
     <StyledContainer>
       <StyledSection>
-        <h2>Entire home in Ko Samui, Thailand</h2>
-        <StyledDetailInfor>
-          <StyledSpan>
-            <span> 6 guests </span> <span> . </span>
-          </StyledSpan>
-          <StyledSpan>
-            <span> 6 bedrooms</span> <span> . </span>
-          </StyledSpan>
-          <StyledSpan>
-            <span> 7 beds</span> <span> . </span>
-          </StyledSpan>
-          <StyledSpan>
-            <span>5 baths</span>
-          </StyledSpan>
-        </StyledDetailInfor>
-        <div>
+        <StyledTitle>
+          <span>Entire home in Ko Samui, Thailand</span>
           <StyledReview>
             <div>
               <FontAwesomeIcon icon={faStar} />
             </div>
             <p> 4.86</p>
           </StyledReview>
-        </div>
+        </StyledTitle>
+        <StyledDetailInfor>
+          <StyledSpan>
+            <span>6 guests </span> <span> . </span>
+          </StyledSpan>
+          <StyledSpan>
+            <span>6 bedrooms</span> <span> . </span>
+          </StyledSpan>
+          <StyledSpan>
+            <span>7 beds</span> <span> . </span>
+          </StyledSpan>
+          <StyledSpan>
+            <span>5 baths</span>
+          </StyledSpan>
+        </StyledDetailInfor>
       </StyledSection>
       <StyledSection>
         <StyledHost>
           <div>
-            <StyledImage
-              src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-              alt=""
-            />
+            <StyledImage src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
           </div>
           <div>
             <p>Hosted by Marc</p>
@@ -145,10 +157,7 @@ const Information = () => {
         <StyledDesign>
           <StyledGroupIcon>
             <div>
-              <StyledImageIcon
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledImageIcon src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <div>
               <div>Designed by</div>
@@ -157,10 +166,7 @@ const Information = () => {
           </StyledGroupIcon>
           <StyledGroupIcon>
             <div>
-              <StyledImageIcon
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledImageIcon src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <div>
               <div>Featured in</div>
@@ -169,10 +175,7 @@ const Information = () => {
           </StyledGroupIcon>
           <StyledGroupIcon>
             <div>
-              <StyledImageIcon
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledImageIcon src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <div>
               <div>Self check-in</div>
@@ -183,14 +186,10 @@ const Information = () => {
       </StyledSection>
       <StyledSection>
         <StyledAboutText>
-          Quarantining, social distancing and remote working is what this house
-          is perfect for. Please ask us about special covid rates. It is an
-          architectural villa on the south side of Koh Samui, private and in a
-          natural environment, it has sweeping ocean views and has a great salt
-          water lap pool. Half way up a hill, it gets natural breezes, whithout
-          mozzies even at dusk. It is minimally designed, but takes maximum
-          advantage of the nature. It is called the naked house because the
-          walls are left naked.....
+          Quarantining, social distancing and remote working is what this house is perfect for. Please ask us about special covid rates. It
+          is an architectural villa on the south side of Koh Samui, private and in a natural environment, it has sweeping ocean views and
+          has a great salt water lap pool. Half way up a hill, it gets natural breezes, whithout mozzies even at dusk. It is minimally
+          designed, but takes maximum advantage of the nature. It is called the naked house because the walls are left naked.....
         </StyledAboutText>
         <StyledShowMore>
           <a href="">Show more</a>
@@ -204,46 +203,31 @@ const Information = () => {
         <StyledGroupAmenities>
           <StyledGroupIcon>
             <div>
-              <StyledAmenities
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <StyledP>Kitchen</StyledP>
           </StyledGroupIcon>
           <StyledGroupIcon>
             <div>
-              <StyledAmenities
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <StyledP>Kitchen</StyledP>
           </StyledGroupIcon>
           <StyledGroupIcon>
             <div>
-              <StyledAmenities
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <StyledP>Kitchen</StyledP>
           </StyledGroupIcon>
           <StyledGroupIcon>
             <div>
-              <StyledAmenities
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <StyledP>Kitchen</StyledP>
           </StyledGroupIcon>
           <StyledGroupIcon>
             <div>
-              <StyledAmenities
-                src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720"
-                alt=""
-              />
+              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
             </div>
             <StyledP>Kitchen</StyledP>
           </StyledGroupIcon>
@@ -253,10 +237,7 @@ const Information = () => {
       <StyledSection>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
-        <CalendarViewHost
-          selectedDateRange={selectedDateRange}
-          onDateChange={handleDateChange}
-        />
+        <CalendarViewHost selectedDateRange={selectedDateRange} onDateChange={handleDateChange} />
       </StyledSection>
     </StyledContainer>
   );

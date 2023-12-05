@@ -7,26 +7,24 @@ import TotalBeforeTaxes from "./TotalBeforeTaxes";
 import { DateRangeProvider } from "./DateRangeContext";
 
 const StyledContainer = styled.div`
-  margin: 0 150px;
+  max-width: 1150px;
+  margin: auto;
 `;
 const StyledInformation = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 3fr 2fr  ;
   gap: 30px;
-  &:nth-child(2) {
-    position: sticky;
-  }
 `;
 const ViewProperty = () => {
   return (
     <DateRangeProvider>
       <StyledContainer>
-        <NavViewhost></NavViewhost>
-        <Images></Images>
+        <NavViewhost />
+        <Images />
         <StyledInformation>
-          <Information></Information>
-          <TotalBeforeTaxes></TotalBeforeTaxes>
+          <Information />
+          <TotalBeforeTaxes />
         </StyledInformation>
       </StyledContainer>
     </DateRangeProvider>
