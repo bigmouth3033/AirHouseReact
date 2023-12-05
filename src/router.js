@@ -249,6 +249,11 @@ const router = createBrowserRouter([
       { path: "/admin/properties_status", name: "status", element: <Status /> },
     ],
   },
+  {
+    path: "*",
+    name: "rrst",
+    element: <Chat />,
+  },
 ]);
 
 export default router;
