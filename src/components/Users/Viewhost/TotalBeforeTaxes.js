@@ -4,7 +4,8 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
-import { DateRangeProvider, useDateRange } from "./DateRangeContext";
+import { useDateRange } from "./DateRangeContext";
+import { format } from "date-fns";
 const StyledContainer = styled.div`
   position: relative;
   font-size: 15px;
@@ -45,9 +46,6 @@ const StyledCountGuest = styled.div`
   align-items: center;
   padding: 0 20px;
 `;
-const StyledBetween = styled.div`
-  border-left: 2px solid #dddddd;
-`;
 const StyledButton = styled.button`
   width: 100%;
   margin-top: 20px;
@@ -80,9 +78,8 @@ const StyledCalendar = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1;
 `;
-
 const TotalBeforeTaxes = () => {
-  const { selectedDateRange, handleDateChange } = useDateRange();
+  const { selectedDateRange, countDay } = useDateRange();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -105,42 +102,51 @@ const TotalBeforeTaxes = () => {
           <StyledCheck>
             <StyledCheckin onClick={handleClick}>
               <label>Checkin</label>
+              <div>{`${format(
+                selectedDateRange[0].startDate,
+                "yyyy-MM-dd"
+              )}`}</div>
               <FontAwesomeIcon icon={faChevronCircleDown} />
-              <div>{selectedDateRange.startDate}</div>
             </StyledCheckin>
-            <StyledBetween></StyledBetween>
+
             <StyledCheckin onClick={handleClick}>
               <label>Checkout</label>
+              <div>{`${format(
+                selectedDateRange[0].endDate,
+                "yyyy-MM-dd"
+              )}`}</div>
               <FontAwesomeIcon icon={faChevronCircleDown} />
-              <div></div>
-              {/* <StyledCalendar>{isOppen && <CalendarViewHost />}</StyledCalendar> */}
-              {isOpen && (
-                <div
-                  style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    background: "rgba(0, 0, 0, 0.5)",
-                    zIndex: 1,
-                  }}
-                  onClick={handleClose}
-                >
-                  <StyledCalendar onClick={handleCalendarClick}>
-                    {isOpen && (
-                      <CalendarViewHost
-                        selectedDateRange={selectedDateRange}
-                        onDateChange={handleDateChange}
-                      />
-                    )}
-                  </StyledCalendar>
-                </div>
-              )}
             </StyledCheckin>
+
+            {isOpen && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  background: "rgba(0, 0, 0, 0.5)",
+                  zIndex: 1,
+                }}
+                onClick={handleClose}
+              >
+                <StyledCalendar onClick={handleCalendarClick}>
+                  {isOpen && (
+                    <CalendarViewHost
+                      ranges={selectedDateRange}
+                      onChange={(item) => {
+                        countDay(item);
+                      }}
+                    />
+                  )}
+                </StyledCalendar>
+              </div>
+            )}
           </StyledCheck>
           <StyledCountGuest>
             <label htmlFor="">Guests</label>
+            <div>{countDay}</div>
             <FontAwesomeIcon icon={faChevronCircleDown} />
           </StyledCountGuest>
         </StyledBooking>
