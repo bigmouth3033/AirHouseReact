@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 // import component
 
@@ -64,7 +65,6 @@ const StyledContainer = styled(StyledButtonBoxContainer)`
   @media only screen and (max-width: 1000px) {
     & {
       position: static;
-      transform: translateX(0);
     }
   }
 `;
@@ -90,22 +90,24 @@ const StyledResizeNavTop = styled(StyledButtonContainer)`
   }
 `;
 
-const exit = { x: "-50%", opacity: 0, transition: { duration: 0.01 } };
-const initial = { x: "-50%", opacity: 0 };
-const animate = { x: "-50%", opacity: 1, transition: { duration: 0.5 } };
-const transition = {
-  ease: "easeInOut",
-};
+export default function NavTopCenterHome({ click, clickStay, clickEx }) {
+  const { pageWidth } = useStateContext();
 
-export default function NavTopCenterHome({ clickStay, clickEx }) {
+  const exit = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0, transition: { duration: 0.01 } };
+  const initial = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0 };
+  const animate = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 1, transition: { duration: 0.1 } };
+  const transition = {
+    ease: "easeInOut",
+  };
+
   return (
     <>
-      {window.innerWidth >= 800 ? (
+      {pageWidth >= 800 ? (
         <StyledContainer exit={exit} initial={initial} animate={animate} transition={transition}>
-          <button className="item anywhere" onClick={clickStay}>
+          <button className="item anywhere" onClick={click}>
             Anywhere
           </button>
-          <button className="item anyweek" onClick={clickEx}>
+          <button className="item anyweek" onClick={click}>
             Any week
           </button>
           <button className="item addguest">

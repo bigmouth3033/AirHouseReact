@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 
@@ -19,9 +20,12 @@ const StyledResizeFilterButton = styled.div`
 `;
 
 function FilterButton() {
+
+  const {pageWidth} = useStateContext();
+
   return (
     <>
-      {window.innerHeight >= 744 ? (
+      {pageWidth >= 800 ? (
         <StyledFilterButton>
           <FontAwesomeIcon icon={faSliders} />
           <p>Filters</p>

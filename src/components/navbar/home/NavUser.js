@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
-
+import Avatar from "react-avatar";
+import "./avatar.css";
+import { Link } from "react-router-dom";
 import StyledButtonContainer from "../../../ui/StyledButtonContainer";
+import { UserQuery } from "api/userApi";
 
 import UserDropDown from "./UserDropDown";
 
@@ -33,16 +36,20 @@ const StyledUserContainer = styled(StyledButtonContainer)`
   }
 `;
 
-const StyledTextLink = styled(StyledButtonContainer)`
+const StyledTextLink = styled(Link)`
   padding: 0.8rem 10px;
   box-shadow: none;
   font-weight: 600;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
 
   &:hover {
     box-shadow: none;
     background-color: rgb(247, 247, 247);
   }
 `;
+
 
 const StyledContainer = styled.div`
   display: flex;
@@ -52,6 +59,8 @@ const StyledContainer = styled.div`
 
 function NavUser() {
   const [showDropDown, setShowDropDown] = useState(false);
+  const userQuery = UserQuery();
+  const [becomeHost, setBecomeHost] = useState(false);
 
   function onClickDropDown() {
     setShowDropDown(!showDropDown);
@@ -63,10 +72,18 @@ function NavUser() {
 
   return (
     <StyledContainer>
-      <StyledTextLink>Airbnb your home</StyledTextLink>
+      {userQuery.isError || userQuery.isLoading ? (
+        <StyledTextLink to="/aircover-for-hosts">Airbnb your home</StyledTextLink>
+      ) : (
+        <StyledTextLink to="/user/host-creation/become-host">Become a Host</StyledTextLink>
+      )}
       <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
         <FontAwesomeIcon className="bar" icon={faBars} />
-        <FontAwesomeIcon className="user" icon={faCircleUser} />
+        {userQuery.isLoading || userQuery.isError ? (
+          <FontAwesomeIcon className="user" icon={faCircleUser} />
+        ) : (
+          <Avatar size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
+        )}
       </StyledUserContainer>
       <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
     </StyledContainer>
@@ -74,3 +91,4 @@ function NavUser() {
 }
 
 export default NavUser;
+

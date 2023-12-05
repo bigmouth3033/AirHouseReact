@@ -6,6 +6,7 @@ import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 import NavBarContainer from "../../../ui/NavBarContainer";
 import FilterButton from "./FIlterButton";
 import NavCarouselHome from "./NavCarouselHome";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 const StyledTaxButton = styled(StyledBoxContainer)`
   padding: 12px 1rem;
@@ -20,11 +21,17 @@ const Container = styled.div`
   height: 100px;
 `;
 
+const StyledNavBarContainer = styled(NavBarContainer)`
+  padding: 5px 0 0 0;
+`;
+
 export default function NavBottom() {
+  const { pageWidth } = useStateContext();
+
   return (
-    <NavBarContainer variant={"home"} gap={1}>
+    <StyledNavBarContainer variant={"home"} gap={1}>
       <NavCarouselHome />
-      {window.innerWidth >= 800 ? (
+      {pageWidth >= 800 ? (
         <>
           <FilterButton />
           <StyledTaxButton>
@@ -38,7 +45,7 @@ export default function NavBottom() {
       ) : (
         <></>
       )}
-    </NavBarContainer>
+    </StyledNavBarContainer>
 
     // <Container/>
   );

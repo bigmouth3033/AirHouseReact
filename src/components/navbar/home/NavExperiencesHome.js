@@ -8,13 +8,14 @@ import StyledButtonContainer from "../../../ui/StyledButtonContainer";
 import StyledButtonBoxContainer from "../../../ui/StyledButtonBoxContainer";
 
 const StyledContainer = styled(motion.div)`
+  font-family: "Poppins", sans-serif;
   border-radius: 50px;
   border: 0;
   background-color: white;
   display: inline-block;
   cursor: pointer;
   padding: 0;
-  font-family: Montserrat;
+  margin-top: 0.2rem;
 
   width: 50rem;
   display: flex;
@@ -32,8 +33,6 @@ const StyledContainer = styled(motion.div)`
       `;
     }
   }}
-
-  
 
   & button {
     text-align: left;

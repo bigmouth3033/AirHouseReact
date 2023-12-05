@@ -3,6 +3,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useState, useEffect } from "react";
 import "./carousel.css";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 // import image
 
@@ -170,8 +171,10 @@ const StyledCarousel = styled(Carousel)`
 `;
 
 const StyledContainer = styled.div`
+  font-family: "Poppins", sans-serif;
   display: grid;
   flex: 1;
+  font-size: 14px;
 `;
 
 function NavCarouselHome() {
@@ -189,18 +192,38 @@ function NavCarouselHome() {
     setShowBorder(newList);
   }
 
+  const { pageWidth } = useStateContext();
+
   return (
     <StyledContainer>
-      {window.innerWidth > 800 ? (
-        <StyledCarousel draggable={false} swipeable={false} arrows={true} containerClass="carousel-container" responsive={responsive}>
+      {pageWidth > 800 ? (
+        <StyledCarousel
+          draggable={false}
+          swipeable={false}
+          arrows={true}
+          containerClass="carousel-container"
+          responsive={responsive}
+        >
           {showBorder.map((item, index) => (
-            <SliderItem click={() => onClickShowBorder(index)} borderEffect={item.border} img={item.img} name={item.name} key={item.name} />
+            <SliderItem
+              click={() => onClickShowBorder(index)}
+              borderEffect={item.border}
+              img={item.img}
+              name={item.name}
+              key={item.name}
+            />
           ))}
         </StyledCarousel>
       ) : (
         <StyledCarousel arrows={false} centerMode={true} containerClass="carousel-container" responsive={responsive}>
           {showBorder.map((item, index) => (
-            <SliderItem click={() => onClickShowBorder(index)} borderEffect={item.border} img={item.img} name={item.name} key={item.name} />
+            <SliderItem
+              click={() => onClickShowBorder(index)}
+              borderEffect={item.border}
+              img={item.img}
+              name={item.name}
+              key={item.name}
+            />
           ))}
         </StyledCarousel>
       )}
