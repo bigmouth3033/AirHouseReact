@@ -1,31 +1,82 @@
-import React, { useEffect } from "react";
-import Pusher from "pusher-js";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import DialogBox from "./DialogBox";
+import styled from "styled-components";
+import Message from "./Message";
+import axiosClient from "api/axiosClient";
+import { UserQuery } from "api/userApi";
 
-export default function Chat() {
-  const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState("");
-  const allMessage = [];
+const StyledBox = styled.div`
+  & .containerChat {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100%;
+  }
+  & .sidebar {
+  }
+  &.content {
+  }
+`;
+
+export default function Chat(props) {
+  const userQuery = UserQuery();
+
+  const fromEmail = userQuery.data.user.email;
+  const [selectedUser, setSelectedUser] = useState(false);
+  const [allUser, setAllUser] = useState([]);
+  const [newUser, setNewUser] = useState("");
 
   useEffect(() => {
-    Pusher.logToConsole = true;
-
-    const pusher = new Pusher("6685cbfa31bc0534f065", {
-      cluster: "ap1",
-    });
-
-    const channel = pusher.subscribe("my-channel");
-    channel.bind("my-event", function (data) {
-      alert("arst");
-      allMessage.push(data);
-      setMessages(allMessage);
-    });
+    getAllUser({ fromEmail });
   }, []);
 
+  const handleUserClick = (item) => {
+    setSelectedUser(item);
+    // console.log(item);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // console.log(allUser)
+    const isIncluded = allUser.some((item) => item.to_email == newUser);
+    if (!isIncluded) {
+      let data = {
+        from_email: fromEmail,
+        to_email: newUser,
+        body: " ",
+      };
+      console.log(data);
+      setAllUser((pre) => [...pre, data]);
+    }
+  };
+
+  const getAllUser = async (payload) => {
+    let response = await axiosClient.get("getAllUser", {
+      params: { fromEmail: payload },
+    });
+
+    setAllUser(response.data);
+    return response.data;
+  };
+
   return (
-    <div>
-      {allMessage}
-      <button onClick={() => console.log(allMessage)}>click</button>
-    </div>
+    <StyledBox>
+      <form onSubmit={(e) => handleSubmit(e)}>
+        <input type="text" value={newUser} onChange={(e) => setNewUser(e.target.value)} />
+      </form>
+      <div className="containerChat">
+        <div className="sidebar">
+          <ul>
+            {allUser.map((item, index) => {
+              return (
+                <li key={index} onClick={() => handleUserClick(item)}>
+                  <DialogBox userInfor={item} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="content">{selectedUser && <Message info={selectedUser} />}</div>
+      </div>
+    </StyledBox>
   );
 }

@@ -87,7 +87,9 @@ const Booking = lazy(() => import("components/host-creation/Booking"));
 
 // chat
 
-const Chat = lazy(() => import("components/chat/ChatLayout"));
+const Chat = lazy(() => import("components/chat/Chat"));
+
+// const ChatComponent = lazy(() => import("components/chat/ChatLayout"));
 
 // profile
 
