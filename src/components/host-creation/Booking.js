@@ -135,7 +135,7 @@ const StyledText = styled.p`
   font-size: 15px;
   font-weight: 500;
 
-  & .span{
+  & .span {
     font-size: 14px;
     font-weight: 400;
   }
@@ -232,7 +232,9 @@ const Booking = () => {
               <StyledText>
                 <span className="span">Choose how your guests book</span> <StyledSpan>*</StyledSpan>
               </StyledText>
-              <StyledText><span className="span">Get ready for guests by choosing your booking style.</span></StyledText>
+              <StyledText>
+                <span className="span">Get ready for guests by choosing your booking style.</span>
+              </StyledText>
               <StyledBooking>
                 <StyledSelectContainer>
                   <StyledText>Booking Per Day/Hour</StyledText>
@@ -265,7 +267,8 @@ const Booking = () => {
             <StyledTitle>Terms</StyledTitle>
             <StyledContent>
               <StyledText>
-                <span className="span">The requirements and conditions to book a reservation at your listing.</span> <StyledSpan>*</StyledSpan>
+                <span className="span">The requirements and conditions to book a reservation at your listing.</span>{" "}
+                <StyledSpan>*</StyledSpan>
               </StyledText>
               <StyledText>Cancellation Policy</StyledText>
               <StyledBoderCancellationPolicyInput

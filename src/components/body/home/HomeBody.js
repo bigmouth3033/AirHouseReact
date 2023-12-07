@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import "./home-body.css";
-
 import BodyItem from "./BodyItem";
 import StyledHomePageContainer from "../../../ui/StyledHomePageContainer";
+import { PropertyIndexQuery } from "api/hostApi";
+import { useStateContext } from "contexts/ContextProvider";
+import Loading from "components/Loading";
 
 const StyledBody = styled.div``;
 
@@ -35,10 +37,19 @@ const StyledContainer = styled(StyledHomePageContainer)`
 `;
 
 function HomeBody() {
+  const { chosenProperty } = useStateContext();
+  const propertyQuery = PropertyIndexQuery(chosenProperty);
+
+  if (propertyQuery.isLoading) {
+    return <p>....</p>
+  }
+
   return (
     <StyledBody>
       <StyledContainer>
-        <BodyItem className="item" />
+        {propertyQuery.isSuccess && propertyQuery.data.map((item) => <BodyItem data={item} className="item" />)}
+
+        {/* <BodyItem className="item" />
         <BodyItem className="item" />
         <BodyItem className="item" />
         <BodyItem className="item" />
@@ -54,7 +65,7 @@ function HomeBody() {
         <BodyItem className="item" />
         <BodyItem className="item" />
         <BodyItem className="item" />
-        <BodyItem className="item" />
+        <BodyItem className="item" /> */}
       </StyledContainer>
     </StyledBody>
   );

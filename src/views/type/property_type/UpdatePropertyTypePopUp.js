@@ -121,7 +121,6 @@ export default function UpdatePropertyTypePopUp({ currentPage, chosenId, setShow
 
   const [imgSrc, setImgSrc] = useState(DefaultImg);
   const [propertyTypeName, setPropertyTypeName] = useState("Loading...");
-  const [error, setError] = useState(null);
 
   const onUploadImg = (ev) => {
     ev.preventDefault();
@@ -149,6 +148,14 @@ export default function UpdatePropertyTypePopUp({ currentPage, chosenId, setShow
   const onUpdateEvent = (ev) => {
     ev.preventDefault();
 
+    const imgExtension = ["jpg", "png", "svg", "jpeg", "webp"];
+    const imgArr = imgUploadRef.current.files[0].name.split(".");
+
+    if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
+      alert("only accept img with format of jpg, png, svg, jpeg, webp");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("id", propertyTypeQuery.data[0].id);
     formData.append("name", propertyTypeName);
@@ -164,7 +171,6 @@ export default function UpdatePropertyTypePopUp({ currentPage, chosenId, setShow
       },
       onError: (err) => {
         const response = err.response;
-        setError(response.data.errors);
         console.log(response.data.errors);
       },
     });
@@ -195,13 +201,6 @@ export default function UpdatePropertyTypePopUp({ currentPage, chosenId, setShow
             Image Upload
           </button>
         </StyledImgField>
-        {error && (
-          <div className="alert">
-            {Object.keys(error).map((key) => (
-              <div key={key}>{error[key]}</div>
-            ))}
-          </div>
-        )}
         <StyledButtonRow>
           <button onClick={onUpdateEvent} disabled={propertyTypeName == "" || imgSrc == DefaultImg} className="submit-button">
             Update

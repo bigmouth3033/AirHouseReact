@@ -47,6 +47,7 @@ const ButtonGroup = ({ next, previous, goToSlide, ...rest }) => {
 
 const StyledItemContainer = styled.div`
   display: grid;
+  max-height: 24rem;
 `;
 
 const StyledCarousel = styled(Carousel)`
@@ -77,6 +78,12 @@ const StyledCarousel = styled(Carousel)`
   &:hover .body-item-arrowright {
     display: inline;
   }
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const StyledInfoBox = styled.div`
@@ -84,12 +91,24 @@ const StyledInfoBox = styled.div`
   justify-content: space-between;
   margin-top: 0.7rem;
 
-  .first-box > p {
-    margin-bottom: 10px;
+  & .first-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  & .bed-info {
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  & .address {
+    font-size: 13px;
+    font-weight: 600;
   }
 `;
 
-function BodyItem() {
+function BodyItem({ data }) {
   return (
     <StyledItemContainer>
       <StyledCarousel
@@ -99,17 +118,20 @@ function BodyItem() {
         arrows={false}
         responsive={responsive}
       >
-        <p>A</p>
-        <p>B</p>
-        <p>C</p>
-        <p>D</p>
+        {data.images.map((img) => {
+          return <img src={img.image} />;
+        })}
       </StyledCarousel>
       <StyledInfoBox>
         <div className="first-box">
-          <p>Ninh Giang, Viet Nam</p>
-          <p>81 km away</p>
-          <p>Oct 6 - 11</p>
-          <p>$56 night</p>
+          <p>{data.name}</p>
+          <p className="bed-info">
+            {data.accomodates_count} guest {data.bedroom_count} Bedrooms {data.bathroom_count} Bathroom
+          </p>
+          <p className="address">
+            {data.province?.full_name},{data.district.full_name}
+          </p>
+          <p>{data.base_price}$</p>
         </div>
         <p className="second-box">5*</p>
       </StyledInfoBox>

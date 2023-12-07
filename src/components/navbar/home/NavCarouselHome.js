@@ -4,106 +4,9 @@ import "react-multi-carousel/lib/styles.css";
 import { useState, useEffect } from "react";
 import "./carousel.css";
 import { useStateContext } from "../../../contexts/ContextProvider";
-
-// import image
-
-import amazingPools from "../../../assets/nav-slider-img/amazing-pools.jpg";
-import amazingViews from "../../../assets/nav-slider-img/amazing-views.jpg";
-import beach from "../../../assets/nav-slider-img/beach.jpg";
-import boats from "../../../assets/nav-slider-img/boats.jpg";
-import farm from "../../../assets/nav-slider-img/farm.jpg";
-import golfing from "../../../assets/nav-slider-img/golfing.jpg";
-import iconicCities from "../../../assets/nav-slider-img/iconic-cities.jpg";
-import nationPark from "../../../assets/nav-slider-img/nation-park.jpg";
-import omg from "../../../assets/nav-slider-img/nation-park.jpg";
-import rooms from "../../../assets/nav-slider-img/rooms.jpg";
-import tinyhome from "../../../assets/nav-slider-img/tinyhome.jpg";
-import treehouses from "../../../assets/nav-slider-img/treehouses.jpg";
-import trending from "../../../assets/nav-slider-img/trending.jpg";
-
-const items = [
-  { img: amazingViews, name: "Amazing views", border: true },
-  { img: beach, name: "Beach", border: false },
-  { img: boats, name: "Boats", border: false },
-  { img: farm, name: "Farm", border: false },
-  { img: amazingPools, name: "Amazing pools", border: false },
-  { img: golfing, name: "Golfing", border: false },
-  { img: iconicCities, name: "Iconic cities", border: false },
-  { img: nationPark, name: "Nation park", border: false },
-  { img: omg, name: "OMG", border: false },
-  { img: rooms, name: "Rooms", border: false },
-  { img: tinyhome, name: "Tiny home", border: false },
-  { img: treehouses, name: "Tree houses", border: false },
-  { img: trending, name: "Trending", border: false },
-];
-
-const StyledItemContainer = styled.div`
-  border: 0;
-  background-color: white;
-  border-bottom: 2px solid white;
-  width: max-content;
-  padding-top: 10px;
-  gap: 10px;
-  cursor: pointer;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  > p {
-    padding-bottom: 10px;
-  }
-
-  > img {
-    width: 1.5rem;
-    display: block;
-  }
-
-  &:hover > p {
-    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
-  }
-
-  ${(props) => {
-    if (props.$border === false) {
-      return css`
-        & > p {
-          border-bottom: 2px solid rgba(255, 255, 255);
-        }
-
-        &:hover > p {
-          border-bottom: 2px solid rgba(0, 0, 0, 0.3);
-        }
-
-        filter: opacity(0.6);
-
-        &:hover {
-          filter: opacity(1);
-        }
-      `;
-    }
-
-    if (props.$border === true) {
-      return css`
-        & > p {
-          border-bottom: 2px solid rgba(0, 0, 0);
-        }
-
-        &:hover > p {
-          border-bottom: 2px solid rgba(0, 0, 0, 1);
-        }
-      `;
-    }
-  }};
-`;
-
-function SliderItem({ img, name, click, borderEffect }) {
-  return (
-    <StyledItemContainer onClick={click} $border={borderEffect}>
-      <img src={img} />
-      <p>{name}</p>
-    </StyledItemContainer>
-  );
-}
+import { CategoryQuery } from "api/categoryApi";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const responsive = {
   reponsive_1: {
@@ -164,12 +67,70 @@ const responsive = {
   },
 };
 
+const StyledItemContainer = styled.div`
+  border: 0;
+  background-color: white;
+  border-bottom: 2px solid white;
+  width: max-content;
+  padding-top: 10px;
+  gap: 10px;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > p {
+    padding-bottom: 10px;
+  }
+
+  & img {
+    width: 1.5rem;
+    display: block;
+  }
+
+  &:hover > p {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  }
+
+  ${(props) => {
+    if (props.$border === false) {
+      return css`
+        & > p {
+          border-bottom: 2px solid rgba(255, 255, 255);
+        }
+
+        &:hover > p {
+          border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+        }
+
+        filter: opacity(0.6);
+
+        &:hover {
+          filter: opacity(1);
+        }
+      `;
+    }
+
+    if (props.$border === true) {
+      return css`
+        & > p {
+          border-bottom: 2px solid rgba(0, 0, 0);
+        }
+
+        &:hover > p {
+          border-bottom: 2px solid rgba(0, 0, 0, 1);
+        }
+      `;
+    }
+  }};
+`;
+
 const StyledCarousel = styled(Carousel)`
   & ${StyledItemContainer} {
     margin: auto;
   }
 `;
-
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
   display: grid;
@@ -177,55 +138,134 @@ const StyledContainer = styled.div`
   font-size: 14px;
 `;
 
-function NavCarouselHome() {
-  const [showBorder, setShowBorder] = useState(items);
-
-  function onClickShowBorder(index) {
-    const newList = showBorder.slice();
-
-    for (let i = 0; i < newList.length; i++) {
-      showBorder[i].border = false;
-      if (i == index) {
-        showBorder[i].border = true;
-      }
-    }
-    setShowBorder(newList);
+const StyledImgContainer = styled.div`
+  & img {
+    transition: all 1s ease-in-out;
   }
 
-  const { pageWidth } = useStateContext();
+  & .img-skeleton {
+    height: 1.2rem;
+    border-radius: 50%;
+    width: 1.2rem;
+  }
+`;
+
+function SliderItem({ img, name, click, index, activeArr, id }) {
+  const [loaded, setLoaded] = useState(false);
+  const { setChosenProperty } = useStateContext();
+
+  return (
+    <StyledItemContainer
+      onClick={() => {
+        click();
+        setChosenProperty(id);
+      }}
+      $border={activeArr[index]}
+    >
+      <StyledImgContainer className="blur-div">
+        <img onLoad={() => setLoaded(true)} src={img} style={loaded ? { opacity: "1" } : { opacity: "0" }} />
+        {loaded || <Skeleton className="img-skeleton" />}
+      </StyledImgContainer>
+      <p>{name}</p>
+    </StyledItemContainer>
+  );
+}
+
+const StyledSkeletonItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+
+  & .top {
+    height: 2rem;
+    border-radius: 50%;
+    width: 2rem;
+  }
+
+  & .down {
+    height: 0.8rem;
+    width: 4.5rem;
+  }
+`;
+
+function SkeletonItem() {
+  return (
+    <StyledSkeletonItemContainer>
+      <Skeleton className="top" />
+      <Skeleton className="down" />
+    </StyledSkeletonItemContainer>
+  );
+}
+
+function NavCarouselHome() {
+  let categoryActiveArr = Array(15).fill(false);
+  categoryActiveArr[0] = true;
+  const categoryQuery = CategoryQuery();
+  const [active, setActive] = useState(categoryActiveArr);
+  const { pageWidth, setChosenProperty } = useStateContext();
+
+  useEffect(() => {
+    if (categoryQuery.isSuccess) {
+      setChosenProperty(categoryQuery.data[0].id);
+      categoryActiveArr = Array(categoryQuery.data.length).fill(false);
+      categoryActiveArr[0] = true;
+      setActive(categoryActiveArr);
+    }
+  }, [categoryQuery.status]);
+
+  function onClickSetActive(index) {
+    const newList = active.slice();
+
+    for (let i = 0; i < newList.length; i++) {
+      newList[i] = false;
+      if (i == index) {
+        newList[i] = true;
+      }
+    }
+    setActive(newList);
+  }
 
   return (
     <StyledContainer>
       {pageWidth > 800 ? (
-        <StyledCarousel
-          draggable={false}
-          swipeable={false}
-          arrows={true}
-          containerClass="carousel-container"
-          responsive={responsive}
-        >
-          {showBorder.map((item, index) => (
-            <SliderItem
-              click={() => onClickShowBorder(index)}
-              borderEffect={item.border}
-              img={item.img}
-              name={item.name}
-              key={item.name}
-            />
-          ))}
-        </StyledCarousel>
+        <>
+          {categoryQuery.isSuccess && (
+            <StyledCarousel swipeable={false} arrows={true} containerClass="carousel-container" responsive={responsive}>
+              {categoryQuery.isSuccess &&
+                categoryQuery.data.map((item, index) => (
+                  <SliderItem
+                    id={item.id}
+                    click={() => onClickSetActive(index)}
+                    img={item.icon_image}
+                    name={item.name}
+                    key={item.name}
+                    index={index}
+                    activeArr={active}
+                  />
+                ))}
+            </StyledCarousel>
+          )}
+        </>
       ) : (
-        <StyledCarousel arrows={false} centerMode={true} containerClass="carousel-container" responsive={responsive}>
-          {showBorder.map((item, index) => (
-            <SliderItem
-              click={() => onClickShowBorder(index)}
-              borderEffect={item.border}
-              img={item.img}
-              name={item.name}
-              key={item.name}
-            />
-          ))}
-        </StyledCarousel>
+        <>
+          {categoryQuery.isSuccess && (
+            <StyledCarousel arrows={false} centerMode={true} containerClass="carousel-container" responsive={responsive}>
+              {categoryQuery.isSuccess &&
+                categoryQuery.data.map((item, index) => (
+                  <SliderItem
+                    id={item.id}
+                    click={() => onClickSetActive(index)}
+                    img={item.icon_image}
+                    name={item.name}
+                    key={item.name}
+                    index={index}
+                    activeArr={active}
+                  />
+                ))}
+            </StyledCarousel>
+          )}
+        </>
       )}
     </StyledContainer>
   );

@@ -6,6 +6,11 @@ import styled from "styled-components";
 import NavTopHome from "components/navbar/home/NavTopHome";
 import FooterIndex from "components/footer/host-creation/FooterIndex";
 import Loading from "components/Loading";
+import { CategoryQuery } from "api/categoryApi";
+import { RoomTypeQuery } from "api/room-typeApi";
+import { AmenitiesQuery } from "api/amenitiesApi";
+import { PropertyTypeQuery } from "api/property-typeApi";
+import { ProvinceQuery } from "api/locationApi";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -36,8 +41,20 @@ const StyledContainer = styled.div`
 
 export default function GuestLayout() {
   const userQuery = UserQuery();
+  const categoryQuery = CategoryQuery();
+  const roomTypeQuery = RoomTypeQuery();
+  const amenitiesQuery = AmenitiesQuery();
+  const propertyQuery = PropertyTypeQuery();
+  const provinceQuery = ProvinceQuery();
 
-  if (userQuery.isLoading) {
+  if (
+    userQuery.isLoading ||
+    provinceQuery.isLoading ||
+    categoryQuery.isLoading ||
+    roomTypeQuery.isLoading ||
+    amenitiesQuery.isLoading ||
+    propertyQuery.isLoading
+  ) {
     return <Loading />;
   }
 

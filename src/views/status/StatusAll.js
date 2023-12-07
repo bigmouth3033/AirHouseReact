@@ -123,11 +123,28 @@ const formatDate = (dateStr) => {
   return date.toLocaleDateString("en-US");
 };
 
-export default function StatusAll() {
+export default function StatusAll({ status, filterState }) {
   const [clickPopUp, setClickPopUp] = useState(false);
   const [chosenId, setChosenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const currentPageQuery = PropertiesCurrentPageQuery(currentPage);
+  const currentPageQuery = PropertiesCurrentPageQuery(
+    status,
+    currentPage,
+    filterState.search,
+    filterState.category,
+    filterState.roomType,
+    filterState.propertyType,
+    filterState.accomodates,
+    filterState.bedroom,
+    filterState.bookingType,
+    filterState.status
+  );
+
+  if (currentPageQuery.isError) {
+    if (currentPage != 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
 
   const totalItem = Number(currentPageQuery.data?.total || 0);
   const totalPage = Math.ceil(totalItem / 20);
@@ -189,7 +206,7 @@ export default function StatusAll() {
   const onClickDetail = (id) => {
     setClickPopUp(true);
     setChosenId(id);
-  }
+  };
 
   return (
     <StyledContainer>
@@ -220,7 +237,7 @@ export default function StatusAll() {
           {currentPageQuery.isSuccess &&
             currentPageQuery.data.items.map((data, index) => {
               return (
-                <tr key={data.id}>
+                <tr key={index}>
                   <td>{data.id}</td>
                   <td className="status-name" colSpan="5">
                     <span className="td_container">
@@ -245,7 +262,7 @@ export default function StatusAll() {
             })}
         </tbody>
       </StyledTable>
-      {clickPopUp && <StatusPopUp chosenId={chosenId} setShowPopUp={setClickPopUp} />}
+      {clickPopUp && <StatusPopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setClickPopUp} />}
       <StyledPagination>
         <span>{totalItem} Total</span>
         <button onClick={onClickFirst} disabled={currentPage == 1}>

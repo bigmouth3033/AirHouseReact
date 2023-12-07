@@ -298,7 +298,7 @@ export default function Amenities() {
                     <td className="data-name" colSpan="3">
                       {data.name}
                     </td>
-                    <td>{data.type}</td>
+                    <td>{data.type[0].toUpperCase() + data.type.slice(1)}</td>
                     <td>
                       <CIcon onClick={() => onUpdateEvent(data.id)} icon={cilSettings} customClassName="update-icon" />
                     </td>
