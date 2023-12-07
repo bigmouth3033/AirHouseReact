@@ -3,9 +3,11 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./style.scss";
 import { useMemo } from "react";
+import { CreateBlogMutation, UploadImageMutation } from "api/blogApi";
 
 import axios from "axios";
 import axiosClient from "../../api/axiosClient";
+import { BlogCategoryQuery } from "../../api/blogCategoryApi";
 
 var Font = Quill.import("formats/font");
 
@@ -127,9 +129,12 @@ const formats = [
 ];
 
 export default function BlogList() {
+  const uploadMutation = UploadImageMutation();
+  const createBlogMutation = CreateBlogMutation();
+  const { data: createdBlog } = createBlogMutation;
+
   const qillRef = useRef();
   const [value, setValue] = useState("");
-  const [imageURL, setImageURL] = useState(""); // Thêm state để lưu URL hình ảnh
 
   const imageHandler = useCallback(async () => {
     const input = document.createElement("input");
@@ -137,31 +142,43 @@ export default function BlogList() {
     input.setAttribute("accept", "image/*");
     input.click();
 
-    input.onchange = async () => {
+    input.onchange = () => {
       if (input !== null && input.files !== null) {
         const file = input.files[0];
 
         const formData = new FormData();
         formData.append("image", file);
 
-        try {
-          const response = await axiosClient.post("/uploadImage", formData);
+        uploadMutation.mutate(formData, {
+          onSuccess: (data) => {
+            const quillEditor = qillRef.current.getEditor();
+            const range = quillEditor.getSelection(true);
+            quillEditor.insertEmbed(range.index, "image", data.url);
+          },
+        });
 
-          if (response.status === 200) {
-            let imageUrl = response.data.url;
-            setImageURL(imageUrl); // Lưu URL hình ảnh vào state
-            const quillEditor = qillRef.current.getEditor(); //lấy trình soạn thảo Quill thông qua tham chiếu qillRef bằng cách sử dụng phương thức getEditor()
-            const range = quillEditor.getSelection(true); //lấy vùng chọn hiện tại trong trình soạn thảo Quill. Tham số true đại diện cho lấy vùng chọn đơn (có con trỏ).
-            quillEditor.insertEmbed(range.index, "image", imageURL); // một phần tử "image" vào vị trí con trỏ hiện tại trong trình soạn thảo Quill
-          } else {
-            console.error("Image upload failed");
-          }
-        } catch (error) {
-          console.error("Error uploading image:", error);
-        }
+        // try {
+        //   const response = await axiosClient.post("/blog/uploadImage", formData);
+
+        //   if (response.status === 200) {
+        //     console.log(response.data.url);
+        //     const quillEditor = qillRef.current.getEditor(); //lấy trình soạn thảo Quill thông qua tham chiếu qillRef bằng cách sử dụng phương thức getEditor()
+        //     const range = quillEditor.getSelection(true); //lấy vùng chọn hiện tại trong trình soạn thảo Quill. Tham số true đại diện cho lấy vùng chọn đơn (có con trỏ).
+        //     quillEditor.insertEmbed(range.index, "image", response.data.url); // một phần tử "image" vào vị trí con trỏ hiện tại trong trình soạn thảo Quill
+        //   } else {
+        //     console.error("Image upload failed");
+        //   }
+        // } catch (error) {
+        //   console.error("Error uploading image:", error);
+        // }
       }
     };
   }, []);
+
+  //fetch date BlogCategory from database
+
+  const { data, isLoading } = BlogCategoryQuery();
+  // console.log(data, isLoading);
 
   const modules = useMemo(
     () => ({
@@ -182,6 +199,36 @@ export default function BlogList() {
       <div className="title-block">
         <label htmlFor="">Input Blog Title</label>
         <input type="text" name="title" id="title" />
+      </div>
+
+      <div className="blogCate-block">
+        <div className="title-block">
+          <label
+            htmlFor=""
+            style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+          >
+            Check Blog Category
+          </label>
+        </div>
+        {!isLoading && data && (
+          <ul>
+            {data.map((blogCategory) => (
+              <li key={blogCategory.id}>
+                <input
+                  type="checkbox"
+                  id={blogCategory.id}
+                  name="category"
+                  value={blogCategory.id}
+                  style={{ transform: "scale(1.3)", margin: "0.5rem" }}
+                />
+                <label htmlFor={blogCategory.name}>{blogCategory.name}</label>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="title-block">
         <label htmlFor="" className="content">
           Input Blog Content
         </label>
@@ -197,13 +244,39 @@ export default function BlogList() {
         onChange={handleChange}
         style={{ height: "350px" }}
       />
+      <br />
+      {createdBlog && (
+        <p style={{ color: "green" }}>
+          Blog {createdBlog.title} created successfully
+        </p>
+      )}
       <button
         onClick={() => {
-          console.log(value);
+          createBlogMutation.mutate(
+            {
+              title: document.getElementById("title").value, // Lấy giá trị từ input title
+              category: Array.from(
+                document.querySelectorAll('input[name="category"]:checked')
+              ).map((checkbox) => checkbox.value), // Lấy giá trị từ các checkbox category được chọn
+              content: value, // Lấy giá trị từ ReactQuill
+            },
+            {
+              onSuccess: () => {
+                document.getElementById("title").value = "";
+                document
+                  .querySelectorAll('input[name="category"]:checked')
+                  .forEach((checkbox) => {
+                    checkbox.checked = false;
+                  });
+                setValue("");
+              },
+            }
+          );
         }}
       >
         Submit
       </button>
+
       <div dangerouslySetInnerHTML={{ __html: value }}></div>
       {value}
     </div>
