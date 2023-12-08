@@ -8,12 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { PropertyQueryId } from "api/propertyApi";
 
 const CalendarViewHost = () => {
-  const {
-    selectedDateRange,
-    countDay,
-    disableBookedDates,
-    setSelectedDateRange,
-  } = useDateRange();
+  const { selectedDateRange, countDay, disableBookedDates } = useDateRange();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
 
   useEffect(() => {
@@ -42,17 +37,20 @@ const CalendarViewHost = () => {
 
   const handleUserPickRange = (item) => {
     const total = countDay(item);
+    // setMinDate(selectedDateRange[0].startDate);
+    // setRangePropertyDay(maximum_stay);
     if (total[0] >= minimun_stay && total[0] <= maximum_stay) {
     } else {
-      alert("Range: " + maximum_stay);
-      setSelectedDateRange([
+      alert("sfghlhrg");
+      selectedDateRange = [
         {
           startDate: startOfDay(new Date()),
           endDate: startOfDay(new Date()),
           key: "selection",
         },
-      ]);
+      ];
     }
+    console.log(total);
   };
 
   return (

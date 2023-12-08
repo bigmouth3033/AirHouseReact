@@ -63,7 +63,6 @@ export const DateRangeProvider = ({ children }) => {
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        setSelectedDateRange,
         disableBookedDates,
         countDay,
       }}

@@ -26,6 +26,7 @@ const StyledInformation = styled.div`
 `;
 const ViewProperty = () => {
   const [serachParam, setserachParam] = useSearchParams();
+  // console.log(serachParam.get("id"));
   const propertyQuery = PropertyQueryId(serachParam.get("id"));
   return (
     <DateRangeProvider>

@@ -44,7 +44,6 @@ const CalendarViewHost = () => {
     const total = countDay(item);
     if (total[0] >= minimun_stay && total[0] <= maximum_stay) {
     } else {
-      alert("Range: " + maximum_stay);
       setSelectedDateRange([
         {
           startDate: startOfDay(new Date()),
@@ -53,6 +52,7 @@ const CalendarViewHost = () => {
         },
       ]);
     }
+    console.log(total);
   };
 
   return (

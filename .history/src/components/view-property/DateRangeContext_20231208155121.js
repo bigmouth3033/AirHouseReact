@@ -1,6 +1,8 @@
 // DateRangeContext.js
 import React, { createContext, useState, useContext } from "react";
 import { isSameDay, startOfDay } from "date-fns";
+import { useSearchParams } from "react-router-dom";
+import { PropertyQueryId } from "api/propertyApi";
 
 const DateRangeContext = createContext();
 
@@ -50,20 +52,40 @@ export const DateRangeProvider = ({ children }) => {
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    // In ra console tất cả các ngày trong khoảng đã chọn
+    console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
+    console.log("Số ngày được chọn:", allDatesInRange.length);
 
+    // Cập nhật state cho selectedDateRange
     setSelectedDateRange([item.selection]);
-    return [
-      allDatesInRange.length,
-      allDatesInRange[0],
-      allDatesInRange[allDatesInRange.length - 1],
-    ];
+    return allDatesInRange.length;
+  };
+  const [searchParam, setSearchParam] = useSearchParams();
+  const propertyId = searchParam.get("id");
+  const propertyQuery = PropertyQueryId(propertyId);
+
+  const { start_date, end_date, minimun_stay, maximum_stay } =
+    propertyQuery.data;
+  //Bat bgay user chon
+  const [minDate, setMinDate] = useState(new Date());
+  const [rangePropertyDay, setRangePropertyDay] = useState(
+    start_date && end_date
+      ? (new Date(end_date) - new Date(start_date)) / (24 * 60 * 60 * 1000)
+      : 0
+  );
+
+  const hanldeUserPickRange = () => {
+    setMinDate(selectedDateRange[0].startDate);
+    setRangePropertyDay(maximum_stay);
+
+    console.log("mindate", minDate);
+    console.log();
   };
 
   return (
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        setSelectedDateRange,
         disableBookedDates,
         countDay,
       }}

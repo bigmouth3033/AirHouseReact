@@ -8,8 +8,8 @@ export const DateRangeProvider = ({ children }) => {
   //chọn ngày đi ngày đến
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
-      startDate: startOfDay(new Date()),
-      endDate: startOfDay(new Date()),
+      startDate: startOfDay(new Date("2023-12-09")),
+      endDate: startOfDay(new Date("2023-12-29")),
       key: "selection",
     },
   ]);
@@ -50,20 +50,19 @@ export const DateRangeProvider = ({ children }) => {
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    // In ra console tất cả các ngày trong khoảng đã chọn
+    console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
+    console.log("Số ngày được chọn:", allDatesInRange.length);
+    console.log("startDate:", selectedDateRange[0].startDate);
 
+    // Cập nhật state cho selectedDateRange
     setSelectedDateRange([item.selection]);
-    return [
-      allDatesInRange.length,
-      allDatesInRange[0],
-      allDatesInRange[allDatesInRange.length - 1],
-    ];
+    return allDatesInRange.length;
   };
-
   return (
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        setSelectedDateRange,
         disableBookedDates,
         countDay,
       }}

@@ -50,20 +50,18 @@ export const DateRangeProvider = ({ children }) => {
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    // In ra console tất cả các ngày trong khoảng đã chọn
+    console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
+    console.log("Số ngày được chọn:", allDatesInRange.length);
 
+    // Cập nhật state cho selectedDateRange
     setSelectedDateRange([item.selection]);
-    return [
-      allDatesInRange.length,
-      allDatesInRange[0],
-      allDatesInRange[allDatesInRange.length - 1],
-    ];
+    return allDatesInRange.length;
   };
-
   return (
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        setSelectedDateRange,
         disableBookedDates,
         countDay,
       }}
