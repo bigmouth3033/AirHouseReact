@@ -35,7 +35,7 @@ export const DateRangeProvider = ({ children }) => {
 
     // Tạo một mảng chứa tất cả các ngày trong khoảng
     const allDatesInRange = [];
-    const currentDate = startOfDay(new Date(startDate));
+    let currentDate = startOfDay(new Date(startDate));
 
     while (currentDate <= endDate) {
       const check = () => {
