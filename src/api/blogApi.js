@@ -22,8 +22,11 @@ const createBlog = async (payload) => {
   return response.data;
 };
 
-const readBlog = async () => {
-  const response = await axiosClient.get("readBlog");
+const readBlog = async (query) => {
+  const currentPage = query.queryKey[1];
+  const response = await axiosClient.get("readCurrentPage", {
+    params: { page: currentPage },
+  });
   return response.data;
 };
 
@@ -32,13 +35,30 @@ const updateBlog = async (payload) => {
   return response.data;
 };
 const deleteBlog = async (id) => {
-  const response = await axiosClient.post("deleteBlog", id);
+  console.log(id);
+  const response = await axiosClient.get("deleteBlog/" + id);
   return response.data;
 };
 
-export const CreateBlogMutation = () => {
-  const queryClient = useQueryClient();
+const filterById = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("filterByIdBlog", {
+    params: { id: id },
+  });
+  return response.data;
+};
 
+export const BlogQueryId = (id) => {
+  const blogQuery = useQuery({
+    queryKey: ["blog", id],
+    queryFn: filterById,
+  });
+
+  return blogQuery;
+};
+
+export const CreateBlogMutation = () => {
+  //   const queryClient = useQueryClient();
   const categoryMutation = useMutation({
     mutationFn: createBlog,
     onSuccess: () => {
@@ -69,16 +89,16 @@ export const DeleteBlogMutation = () => {
   const categoryMutation = useMutation({
     mutationFn: deleteBlog,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Blog"] });
+      //   queryClient.invalidateQueries({ queryKey: ["Blog"] });
     },
   });
 
   return categoryMutation;
 };
 
-export const BlogQuery = () => {
+export const ReadBlogPageQuery = (page) => {
   const BlogQuery = useQuery({
-    queryKey: ["Blog"],
+    queryKey: ["Blog", page],
     queryFn: readBlog,
   });
 

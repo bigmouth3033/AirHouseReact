@@ -2,12 +2,20 @@ import React, { useState, useRef, useCallback } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./style.scss";
-import { useMemo } from "react";
-import { CreateBlogMutation, UploadImageMutation } from "api/blogApi";
+import { useMemo, useEffect } from "react";
+import {
+  UploadImageMutation,
+  BlogQueryId,
+  UpdateBlogMutation,
+} from "api/blogApi";
 
 import axios from "axios";
 import axiosClient from "../../api/axiosClient";
 import { BlogCategoryQuery } from "../../api/blogCategoryApi";
+import { useSearchParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 var Font = Quill.import("formats/font");
 
@@ -128,10 +136,31 @@ const formats = [
   "direction",
 ];
 
-export default function CreateBlog() {
+export default function UpdateBlog() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const chosenId = Number(searchParams.get("id"));
+  console.log(chosenId);
+
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogContent, setBlogContent] = useState("");
+  const [error, setError] = useState(null);
+
+  const queryClient = useQueryClient();
+  const blogQuery = BlogQueryId(chosenId);
+  useEffect(() => {
+    if (blogQuery.isSuccess) {
+      // setImgSrc(blogQuery.data[0].icon_image);
+
+      setBlogTitle(blogQuery.data.title);
+      setBlogContent(blogQuery.data.content);
+    }
+  }, [blogQuery.status]);
+
+  const updateBlogMutation = UpdateBlogMutation();
+
   const uploadMutation = UploadImageMutation();
-  const createBlogMutation = CreateBlogMutation();
-  const { data: createdBlog } = createBlogMutation;
+
+  const { data: createdBlog } = updateBlogMutation;
 
   const qillRef = useRef();
   const [value, setValue] = useState("");
@@ -152,25 +181,10 @@ export default function CreateBlog() {
         uploadMutation.mutate(formData, {
           onSuccess: (data) => {
             const quillEditor = qillRef.current.getEditor();
-            const range = quillEditor.getSelection(true); //lấy vị trí hiện tại của con trỏ
+            const range = quillEditor.getSelection(true);
             quillEditor.insertEmbed(range.index, "image", data.url);
           },
         });
-
-        // try {
-        //   const response = await axiosClient.post("/blog/uploadImage", formData);
-
-        //   if (response.status === 200) {
-        //     console.log(response.data.url);
-        //     const quillEditor = qillRef.current.getEditor(); //lấy trình soạn thảo Quill thông qua tham chiếu qillRef bằng cách sử dụng phương thức getEditor()
-        //     const range = quillEditor.getSelection(true); //lấy vùng chọn hiện tại trong trình soạn thảo Quill. Tham số true đại diện cho lấy vùng chọn đơn (có con trỏ).
-        //     quillEditor.insertEmbed(range.index, "image", response.data.url); // một phần tử "image" vào vị trí con trỏ hiện tại trong trình soạn thảo Quill
-        //   } else {
-        //     console.error("Image upload failed");
-        //   }
-        // } catch (error) {
-        //   console.error("Error uploading image:", error);
-        // }
       }
     };
   }, []);
@@ -192,13 +206,23 @@ export default function CreateBlog() {
 
   const handleChange = (content) => {
     setValue(content);
+    setBlogContent(content);
   };
 
   return (
     <div className="text-editor">
       <div className="title-block">
+        <input type="text" id="id" value={chosenId} readOnly />
         <label htmlFor="">Input Blog Title</label>
-        <input type="text" name="title" id="title" />
+        <input
+          type="text"
+          name="title"
+          id="title"
+          onChange={(ev) => {
+            setBlogTitle(ev.target.value);
+          }}
+          value={blogTitle}
+        />
       </div>
 
       <div className="blogCate-block">
@@ -240,37 +264,34 @@ export default function CreateBlog() {
         theme="snow"
         modules={modules}
         formats={formats}
-        value={value}
+        value={blogContent}
         onChange={handleChange}
         style={{ height: "350px" }}
       />
       <br />
       {createdBlog && (
         <p style={{ color: "green" }}>
-          Blog {createdBlog.title} created successfully
+          Blog {createdBlog.title} updated successfully
         </p>
       )}
       <button
         onClick={() => {
-          createBlogMutation.mutate(
+          updateBlogMutation.mutate(
             {
+              id: document.getElementById("id").value,
               title: document.getElementById("title").value, // Lấy giá trị từ input title
               category: Array.from(
                 document.querySelectorAll('input[name="category"]:checked')
               ).map((checkbox) => checkbox.value), // Lấy giá trị từ các checkbox category được chọn
-              content: value, // Lấy giá trị từ ReactQuill
+              content: blogContent, // Lấy giá trị từ ReactQuill
             },
-            {
-              onSuccess: () => {
-                document.getElementById("title").value = "";
-                document
-                  .querySelectorAll('input[name="category"]:checked')
-                  .forEach((checkbox) => {
-                    checkbox.checked = false;
-                  });
-                setValue("");
-              },
-            }
+            console.log(
+              document.getElementById("title").value,
+              Array.from(
+                document.querySelectorAll('input[name="category"]:checked')
+              ).map((checkbox) => checkbox.value),
+              blogContent
+            )
           );
         }}
       >
@@ -281,4 +302,5 @@ export default function CreateBlog() {
       {value}
     </div>
   );
+  // });
 }

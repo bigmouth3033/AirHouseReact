@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
+import BlogList from "views/blog/BlogList";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -81,7 +82,8 @@ const AdminRegister = lazy(() => import("views/pages/register/Register"));
 // admin custom import
 const Amenities = lazy(() => import("views/type/amenities/Amenities"));
 const CreateBlog = lazy(() => import("views/blog/CreateBlog"));
-const Blog = lazy(() => import("views/blog/Blog"));
+const UpdateBlog = lazy(() => import("views/blog/UpdateBlog"));
+const Blog = lazy(() => import("views/blog/BlogList"));
 const PropertyType = lazy(() =>
   import("views/type/property_type/PropertyType")
 );
@@ -324,15 +326,21 @@ const router = createBrowserRouter([
         exact: true,
       },
       {
-        path: "/admin/blog/CreateBlog",
-        name: "Amenities",
+        path: "/admin/blog/create-blog",
+        name: "CreateBlog",
         element: <CreateBlog />,
         exact: true,
       },
       {
-        path: "/admin/blog/Blog",
-        name: "Amenities",
-        element: <Blog />,
+        path: "/admin/blog/update-blog",
+        name: "CreateBlog",
+        element: <UpdateBlog />,
+        exact: true,
+      },
+      {
+        path: "/admin/blog/blog-list",
+        name: "BlogList",
+        element: <BlogList />,
         exact: true,
       },
       {
