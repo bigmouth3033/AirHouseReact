@@ -487,7 +487,7 @@ function PropertyBody({ data, currentPage }) {
 
         <div>
           <label>Status</label>
-          <input readOnly value={data.property_status ? "Not Available" : "Available"} />
+          <input readOnly value={data.property_status ? "Available" : "Not available"} />
         </div>
       </StyledGrid>
       <StyledContentHeader>Decision</StyledContentHeader>

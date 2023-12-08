@@ -2,12 +2,14 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
 import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { useState } from "react";
 
 const responsive = {
   superLargeDesktop: {
@@ -29,27 +31,6 @@ const responsive = {
   },
 };
 
-const ButtonGroup = ({ next, previous, goToSlide, ...rest }) => {
-  const {
-    carouselState: { currentSlide },
-  } = rest;
-  return (
-    <div className="carousel-button-group-body">
-      <button className={currentSlide === 0 ? "disable" : "body-item-arrowleft"} onClick={() => previous()}>
-        <FontAwesomeIcon className="icon" icon={faChevronLeft} />
-      </button>
-      <button className={currentSlide === 3 ? "disable" : "body-item-arrowright"} onClick={() => next()}>
-        <FontAwesomeIcon className="icon" icon={faChevronRight} />
-      </button>
-    </div>
-  );
-};
-
-const StyledItemContainer = styled.div`
-  display: grid;
-  max-height: 24rem;
-`;
-
 const StyledCarousel = styled(Carousel)`
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
@@ -66,7 +47,7 @@ const StyledCarousel = styled(Carousel)`
   }
 
   & .icon {
-    font-size: 15px;
+    width: 7px;
   }
 
   & .body-item-arrowleft,
@@ -86,6 +67,28 @@ const StyledCarousel = styled(Carousel)`
   }
 `;
 
+const ButtonGroup = ({ max, next, previous, goToSlide, ...rest }) => {
+  const {
+    carouselState: { currentSlide },
+  } = rest;
+
+  return (
+    <div className="carousel-button-group-body">
+      <button className={currentSlide === 0 ? "disable" : "body-item-arrowleft"} onClick={() => previous()}>
+        <FontAwesomeIcon className="icon" icon={faChevronLeft} />
+      </button>
+      <button className={currentSlide === max - 1 ? "disable" : "body-item-arrowright"} onClick={() => next()}>
+        <FontAwesomeIcon className="icon" icon={faChevronRight} />
+      </button>
+    </div>
+  );
+};
+
+const StyledItemContainer = styled.div`
+  display: grid;
+  max-height: 24rem;
+`;
+
 const StyledInfoBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -95,6 +98,20 @@ const StyledInfoBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    & p:nth-of-type(1) {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    & p:nth-of-type(4) {
+      font-size: 14px;
+      font-weight: 500;
+
+      & span{
+        font-weight: 300;
+      }
+    }
   }
 
   & .bed-info {
@@ -106,20 +123,45 @@ const StyledInfoBox = styled.div`
     font-size: 13px;
     font-weight: 600;
   }
+
+  & .second-box {
+    font-size: 13px;
+  }
+`;
+
+const StyledImgSkeleton = styled(Skeleton)`
+  height: 100rem;
+  width: 100%;
+`;
+
+const StyledImgContainer = styled.div`
+  height: 100%;
+  transition: all 0.3s ease-in-out;
+
+  & img {
+    transition: all 0.3s ease-in-out;
+  }
 `;
 
 function BodyItem({ data }) {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <StyledItemContainer>
       <StyledCarousel
         dotListClass="custom-dot-list-style"
         showDots={true}
-        customButtonGroup={<ButtonGroup />}
+        customButtonGroup={<ButtonGroup max={data.images.length} />}
         arrows={false}
         responsive={responsive}
       >
-        {data.images.map((img) => {
-          return <img src={img.image} />;
+        {data.images.map((img, index) => {
+          return (
+            <StyledImgContainer>
+              {loaded || <StyledImgSkeleton />}
+              <img src={img.image} onLoad={() => setLoaded(true)} style={loaded ? { opacity: "1" } : { opacity: "0" }} />
+            </StyledImgContainer>
+          );
         })}
       </StyledCarousel>
       <StyledInfoBox>
@@ -131,12 +173,52 @@ function BodyItem({ data }) {
           <p className="address">
             {data.province?.full_name},{data.district.full_name}
           </p>
-          <p>{data.base_price}$</p>
+          <p>
+            {data.base_price}$ <span>night</span>
+          </p>
         </div>
-        <p className="second-box">5*</p>
+        <p className="second-box">
+          5 <FontAwesomeIcon icon={faStar} />
+        </p>
       </StyledInfoBox>
     </StyledItemContainer>
   );
 }
 
 export default BodyItem;
+
+const StyledItemSkeleton = styled(Skeleton)`
+  width: 5rem;
+  margin-top: 5px;
+  position: relative;
+`;
+
+const StyledSkeletonContainer = styled.div`
+  margin-top: 10px;
+  position: relative;
+  z-index: -1;
+`;
+
+export function BodyItemSkeleton() {
+  return (
+    <StyledItemContainer>
+      <StyledCarousel
+        dotListClass="custom-dot-list-style"
+        showDots={true}
+        customButtonGroup={<ButtonGroup max={1} />}
+        arrows={false}
+        responsive={responsive}
+      >
+        <StyledImgSkeleton />
+      </StyledCarousel>
+      <div>
+        <StyledSkeletonContainer>
+          <StyledItemSkeleton style={{ width: "90%" }} />
+          <StyledItemSkeleton style={{ width: "70%" }} />
+          <StyledItemSkeleton style={{ width: "40%" }} />
+          <StyledItemSkeleton style={{ width: "40%" }} />
+        </StyledSkeletonContainer>
+      </div>
+    </StyledItemContainer>
+  );
+}

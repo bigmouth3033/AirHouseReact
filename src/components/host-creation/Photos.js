@@ -1,8 +1,9 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import Img from "assets/images/hosting-img/photos.jpg";
 import { useOutletContext } from "react-router-dom";
+import { useRef } from "react";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -85,7 +86,6 @@ const StyledTitle = styled.div`
   color: black;
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 25px;
   background-color: #eeeeee;
   padding: 10px 20px;
 
@@ -107,28 +107,44 @@ const StyledInput = styled.input`
   }
 `;
 const StyledButtonInput = styled.div`
-  border: 1px solid #717171;
-  padding: 10px 10px;
-  width: calc(100% - 100px);
-  margin: 50px 50px 35px 50px;
+  display: grid;
+  padding: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 10rem;
+  gap: 10px;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  & div:nth-of-type(1) {
+    height: 100%;
+    grid-column: 1/3;
+    grid-row: 1 /3;
+  }
 
   input {
     width: 100%;
     font-size: 15px;
+    display: none;
   }
 
-  @media (max-width: 992px) {
-    width: calc(100% - 60px);
-    margin: 35px 20px;
-    input {
-      font-size: 14px;
+  ${(props) => {
+    if (props.$initial == true) {
+      return css`
+        grid-template-columns: 1fr;
+        & button {
+          min-height: 10rem;
+        }
+      `;
     }
-  }
+  }}
 `;
 
 const StyledBoderInput = styled.div`
   width: 100%;
-  height: 200px;
   border: 1px solid #dddddd;
   border-radius: 5px;
   margin-bottom: 40px;
@@ -159,8 +175,39 @@ const StyledLink = styled.button`
   }
 `;
 
+const StyledImageContainer = styled.div`
+  position: relative;
+`;
+
+const StyledUploadImageOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  & .remove {
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    margin: 1px;
+  }
+`;
+
+const StyledUploadButton = styled.button`
+  background-color: white;
+  border: 1px dashed black;
+  cursor: pointer;
+`;
+
 const Photos = () => {
   const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+  const inputRef = useRef();
 
   const onClickPrevious = (ev) => {
     ev.preventDefault();
@@ -171,8 +218,48 @@ const Photos = () => {
   const onClickNext = (ev) => {
     ev.preventDefault();
 
+    if (state.images.length < 5) {
+      alert("You must upload atleast 5 images");
+      return;
+    }
+
     onSetActive(6);
     onSetAvailable(6);
+  };
+
+  const handleImageChange = (ev) => {
+    const allowedFileTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+
+    if (ev.target.files.length > 0) {
+      const isValidFileType = Array.from(ev.target.files).every((file) => allowedFileTypes.includes(file.type));
+
+      if (!isValidFileType) {
+        alert("Invalid file type! Please select a valid image file.");
+        // Clear the file input if the file type is invalid
+        ev.target.value = null;
+        return;
+      }
+
+      dispatch({
+        type: ACTIONS.CHANGE_IMAGES,
+        next: [...state.images, ...ev.target.files],
+      });
+    }
+  };
+
+  const onClickUploadImg = (ev) => {
+    ev.preventDefault();
+    inputRef.current.click();
+  };
+
+  const onRemoveImg = (ev, file) => {
+    ev.preventDefault();
+    const newArr = state.images.filter((item) => item != file);
+
+    dispatch({
+      type: ACTIONS.CHANGE_IMAGES,
+      next: newArr,
+    });
   };
 
   return (
@@ -187,14 +274,22 @@ const Photos = () => {
         <StyledForm>
           <StyledBoderInput>
             <StyledTitle>Image</StyledTitle>
-            <StyledButtonInput>
-              <input
-                onChange={(ev) => {
-                  dispatch({ type: ACTIONS.CHANGE_IMAGES, next: ev.target.files });
-                }}
-                type="file"
-                multiple
-              />
+            <StyledButtonInput $initial={state.images?.length == 0 ? true : false}>
+              {state.images &&
+                Array.from(state.images).map((file, index) => {
+                  return (
+                    <StyledImageContainer>
+                      <StyledUploadImageOverlay>
+                        <button onClick={(ev) => onRemoveImg(ev, file)} className="remove">
+                          remove
+                        </button>
+                      </StyledUploadImageOverlay>
+                      <img src={URL.createObjectURL(file)} />
+                    </StyledImageContainer>
+                  );
+                })}
+              <StyledUploadButton onClick={onClickUploadImg}>Upload images</StyledUploadButton>
+              <input ref={inputRef} onChange={handleImageChange} type="file" multiple />
             </StyledButtonInput>
           </StyledBoderInput>
           <StyledBoderInput>
@@ -204,7 +299,6 @@ const Photos = () => {
               onChange={(ev) => {
                 dispatch({ type: ACTIONS.CHANGE_VIDEO, next: ev.target.value });
               }}
-              
               type="text"
               placeholder="Enter Youtube link here"
             ></StyledInput>

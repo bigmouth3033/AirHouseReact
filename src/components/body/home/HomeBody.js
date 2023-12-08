@@ -5,6 +5,7 @@ import StyledHomePageContainer from "../../../ui/StyledHomePageContainer";
 import { PropertyIndexQuery } from "api/hostApi";
 import { useStateContext } from "contexts/ContextProvider";
 import Loading from "components/Loading";
+import { BodyItemSkeleton } from "./BodyItem";
 
 const StyledBody = styled.div``;
 
@@ -41,31 +42,31 @@ function HomeBody() {
   const propertyQuery = PropertyIndexQuery(chosenProperty);
 
   if (propertyQuery.isLoading) {
-    return <p>....</p>
+    return (
+      <StyledContainer>
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+        <BodyItemSkeleton />
+      </StyledContainer>
+    );
   }
 
   return (
     <StyledBody>
       <StyledContainer>
         {propertyQuery.isSuccess && propertyQuery.data.map((item) => <BodyItem data={item} className="item" />)}
-
-        {/* <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" />
-        <BodyItem className="item" /> */}
       </StyledContainer>
     </StyledBody>
   );

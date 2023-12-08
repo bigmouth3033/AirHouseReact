@@ -4,9 +4,9 @@ import FooterHostCreation from "./FooterHostCreation";
 
 export default function FooterIndex() {
   return (
-    <div>
+    <>
       <FooterHostCreation />
       <FooterBarCreation />
-    </div>
+    </>
   );
 }

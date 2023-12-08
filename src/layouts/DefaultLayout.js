@@ -17,6 +17,14 @@ import Loading from "components/Loading";
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+`;
+
+const StyledBody = styled.div`
+  flex-grow: 1;
 `;
 
 export default function DefaultLayout() {
@@ -47,7 +55,9 @@ export default function DefaultLayout() {
   return (
     <StyledContainer>
       {location.pathname === "/" ? <NavHome /> : <NavTopHome />}
-      <Outlet />
+      <StyledBody>
+        <Outlet />
+      </StyledBody>
       {location.pathname === "/" ? <FooterBar variant={"home"} /> : <FooterIndex />}
     </StyledContainer>
   );

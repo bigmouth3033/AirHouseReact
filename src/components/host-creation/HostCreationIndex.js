@@ -198,7 +198,7 @@ export default function HostCreationIndex() {
     minimumStay: 0,
     maximumStay: 0,
     property_status: false,
-    images: null,
+    images: [],
     video: "",
   });
 
