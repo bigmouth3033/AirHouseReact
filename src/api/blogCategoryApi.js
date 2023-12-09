@@ -7,7 +7,15 @@ const createBlogCategoryFn = async (payload) => {
   return response.data;
 };
 
-const readBlogCategoryFn = async () => {
+//để show cái Category List
+const readBlogCategoryFn = async (query) => {
+  const currentPage = query.queryKey[1];
+  const response = await axiosClient.get("readCateCurrentPage", {
+    params: { page: currentPage },
+  });
+  return response.data;
+};
+const readCateValueFn = async () => {
   const response = await axiosClient.get("readBlogCategory");
   return response.data;
 };
@@ -93,11 +101,19 @@ export const DeleteBlogCategoryMutation = () => {
   return categoryMutation;
 };
 
-export const BlogCategoryQuery = () => {
+export const BlogCategoryQuery = (page) => {
   const blogCategoryQuery = useQuery({
-    queryKey: ["BlogCategory"],
+    queryKey: ["BlogCategory", page],
     queryFn: readBlogCategoryFn,
   });
 
   return blogCategoryQuery;
+};
+export const CategoryValueQuery = () => {
+  const categoryValueQuery = useQuery({
+    queryKey: ["BlogCategory"],
+    queryFn: readCateValueFn,
+  });
+
+  return categoryValueQuery;
 };

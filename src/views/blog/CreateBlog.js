@@ -7,7 +7,10 @@ import { CreateBlogMutation, UploadImageMutation } from "api/blogApi";
 
 import axios from "axios";
 import axiosClient from "../../api/axiosClient";
-import { BlogCategoryQuery } from "../../api/blogCategoryApi";
+import {
+  BlogCategoryQuery,
+  CategoryValueQuery,
+} from "../../api/blogCategoryApi";
 
 var Font = Quill.import("formats/font");
 
@@ -177,8 +180,8 @@ export default function CreateBlog() {
 
   //fetch date BlogCategory from database
 
-  const { data, isLoading } = BlogCategoryQuery();
-  // console.log(data, isLoading);
+  const { data, isLoading } = CategoryValueQuery();
+  console.log(data, isLoading);
 
   const modules = useMemo(
     () => ({

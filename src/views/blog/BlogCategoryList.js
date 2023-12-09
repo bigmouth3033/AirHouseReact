@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRef } from "react";
-import { useEffect } from "react";
-// import CreateAmenityPopUp from "./CreateAmenityPopUp";
+
 import { cilPlus } from "@coreui/icons";
 import { cilSettings } from "@coreui/icons";
 import { cilTrash } from "@coreui/icons";
@@ -25,9 +24,29 @@ import UpdateBlogPopUp from "./UpdateBlogPopUp";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReadBlogPageQuery, DeleteBlogMutation } from "../../api/blogApi";
 import UpdateBlog from "./UpdateBlog";
+import { BlogCategoryQuery } from "../../api/blogCategoryApi";
+import CreateCategoryPopUp from "views/type/category/CreateCategoryPopUp";
 
 const StyledAmenities = styled.div``;
+const StyledCreateButton = styled.button`
+  background-color: blue;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px;
+  margin: 0 0 1.5rem 0;
+  font-size: 18px;
 
+  &:active {
+  }
+
+  & .create-icon {
+    width: 25px;
+    border: 1px solid white;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+`;
 const StyledContainer = styled.div`
   background-color: white;
   padding: 1rem 2rem;
@@ -137,8 +156,10 @@ const StyledPagination = styled.div`
 
 const StyledSearchContainer = styled.div``;
 
-export default function BlogList() {
+export default function BlogCategoryList() {
   const navigate = useNavigate();
+
+  const [showCreatePopUp, setShowCreatePopUp] = useState(false);
 
   const [chosenId, setChosenId] = useState(null);
   const deleteMutation = DeleteBlogMutation();
@@ -149,12 +170,12 @@ export default function BlogList() {
     Number(searchParams.get("page")) || 1
   );
 
-  const currentPageQuery = ReadBlogPageQuery(currentPage);
+  const currentPageQuery = BlogCategoryQuery(currentPage);
   const queryClient = useQueryClient();
 
   const totalItem = Number(currentPageQuery.data?.total || 0);
   const totalPage = Math.ceil(totalItem / 10);
-  console.log(currentPageQuery.data);
+
   const paginate = () => {
     const paginate = [];
 
@@ -235,20 +256,16 @@ export default function BlogList() {
     <StyledAmenities>
       <StyledContainer>
         <StyledSearchContainer>
-          <Link
-            style={{
-              textDecoration: "none",
-              color: "white",
-              backgroundColor: "navy",
-              border: "1px gray solid",
-              padding: "0.5rem",
-              borderRadius: "0.8rem",
-            }}
-            to="/admin/blog/create-blog"
-          >
-            Create New Blog
-          </Link>
-          <br />
+          <StyledCreateButton onClick={() => setShowCreatePopUp(true)}>
+            <CIcon icon={cilPlus} customClassName="create-icon" />
+            Create New Category
+          </StyledCreateButton>
+          {showCreatePopUp && (
+            <CreateCategoryPopUp
+              currentPage={currentPage}
+              setShowPopUp={setShowCreatePopUp}
+            />
+          )}
           <br />
           <StyledSearchInput type="search" placeholder="Search" />
         </StyledSearchContainer>
@@ -274,7 +291,8 @@ export default function BlogList() {
                 return (
                   <tr key={data.id}>
                     <td>{data.id}</td>
-                    <td>{data.title}</td>
+                    <td>{data.name}</td>
+
                     <td>
                       <CIcon
                         onClick={() => onUpdateEvent(data.id)}

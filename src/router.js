@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
-import BlogList from "views/blog/BlogList";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -83,7 +82,10 @@ const AdminRegister = lazy(() => import("views/pages/register/Register"));
 const Amenities = lazy(() => import("views/type/amenities/Amenities"));
 const CreateBlog = lazy(() => import("views/blog/CreateBlog"));
 const UpdateBlog = lazy(() => import("views/blog/UpdateBlog"));
-const Blog = lazy(() => import("views/blog/BlogList"));
+const BlogList = lazy(() => import("views/blog/BlogList"));
+const BlogCategoryList = lazy(() => import("views/blog/BlogCategoryList"));
+// const CreateCategoryPopUp = lazy(() => import("views/blog/CreateCategoryPopUp"));
+
 const PropertyType = lazy(() =>
   import("views/type/property_type/PropertyType")
 );
@@ -343,6 +345,18 @@ const router = createBrowserRouter([
         element: <BlogList />,
         exact: true,
       },
+      {
+        path: "/admin/blog/blog-category-list",
+        name: "BlogCategoryList",
+        element: <BlogCategoryList />,
+        exact: true,
+      },
+      // {
+      //   path: "/admin/blog/create-blog-category",
+      //   name: "BlogCategoryList",
+      //   element: <CreateCategoryPopUp />,
+      //   exact: true,
+      // },
       {
         path: "/admin/type/property_type",
         name: "Property Type",

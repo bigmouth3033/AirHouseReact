@@ -11,7 +11,10 @@ import {
 
 import axios from "axios";
 import axiosClient from "../../api/axiosClient";
-import { BlogCategoryQuery } from "../../api/blogCategoryApi";
+import {
+  BlogCategoryQuery,
+  CategoryValueQuery,
+} from "../../api/blogCategoryApi";
 import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
@@ -191,7 +194,7 @@ export default function UpdateBlog() {
 
   //fetch date BlogCategory from database
 
-  const { data, isLoading } = BlogCategoryQuery();
+  const { data, isLoading } = CategoryValueQuery();
   // console.log(data, isLoading);
 
   const modules = useMemo(
