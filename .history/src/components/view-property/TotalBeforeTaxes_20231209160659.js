@@ -5,7 +5,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
 import { useDateRange } from "./DateRangeContext";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { PropertyQueryId } from "api/propertyApi";
 import { useSearchParams } from "react-router-dom";
 const StyledContainer = styled.div`
@@ -91,7 +91,6 @@ const StyledCalendar = styled.div`
   z-index: 1;
 `;
 const TotalBeforeTaxes = ({ data }) => {
-  const { selectedDateRange, countDay } = useDateRange();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -103,6 +102,15 @@ const TotalBeforeTaxes = ({ data }) => {
     // Ngăn chặn lan tỏa sự kiện từ StyledCalendar đến StyledCheckin
     e.stopPropagation();
   };
+  const [selectedDates, setSelectedDates] = useState({
+    startDate: new Date(),
+    endDate: addDays(new Date(), 1),
+  });
+
+  const handleDateSelect = (dates) => {
+    setSelectedDates(dates);
+  };
+
   return (
     <StyledContainer>
       <div>
@@ -144,14 +152,19 @@ const TotalBeforeTaxes = ({ data }) => {
                     onClick={handleClose}
                   >
                     <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
+                      {isOpen && (
+                        <CalendarViewHost
+                          data={data}
+                          onDateSelect={handleDateSelect}
+                        />
+                      )}
                     </StyledCalendar>
                   </div>
                 )}
               </StyledCheck>
               <StyledCountGuest>
                 <label htmlFor="">Guests</label>
-                <div>{countDay}</div>
+                {/* <div>{countDay}</div> */}
                 <FontAwesomeIcon icon={faChevronCircleDown} />
               </StyledCountGuest>
             </StyledBooking>

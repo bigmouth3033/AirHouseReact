@@ -99,6 +99,11 @@ const StyledAmentinies = styled.div`
   margin-bottom: 10px;
 `;
 const Information = ({ data }) => {
+  const [selectedDateRange, setSelectedDateRange] = useState();
+
+  const handleDateChange = (item) => {
+    setSelectedDateRange([item.selection]);
+  };
   return (
     <StyledContainer>
       <StyledSection>
@@ -182,7 +187,11 @@ const Information = ({ data }) => {
       <StyledSection>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
-        <CalendarViewHost data={data} />
+        <CalendarViewHost
+          data={data}
+          selectedDateRange={selectedDateRange}
+          onDateChange={handleDateChange}
+        />
       </StyledSection>
     </StyledContainer>
   );

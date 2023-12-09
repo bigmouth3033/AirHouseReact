@@ -1,7 +1,9 @@
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PropertyQueryId } from "api/propertyApi";
 import React from "react";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import PopUpContainer from "ui/PopUpContainer";
 
@@ -77,8 +79,10 @@ const Styledbutton = styled.button`
   border: none;
   border-radius: 50%;
 `;
-const Images = ({ data }) => {
-  // const countImages = data.images.length;
+const Images = () => {
+  const [serachParam, setserachParam] = useSearchParams();
+  const propertyQuery = PropertyQueryId(serachParam.get("id"));
+  const countImages = propertyQuery.data.images.length;
   const [clickImage, setclickImage] = useState(false);
 
   return (
@@ -92,7 +96,7 @@ const Images = ({ data }) => {
               </Styledbutton>
             </div>
             <div className="containerImage">
-              {data.images.map((imageUrl, index) => {
+              {propertyQuery.data.images.map((imageUrl, index) => {
                 return (
                   <div className="imagePopup">
                     <img src={imageUrl} alt="" />
@@ -105,7 +109,7 @@ const Images = ({ data }) => {
         </StyledPopup>
       )}
       <StyledImageGroup>
-        {data.images.map((imageUrl, index) => {
+        {propertyQuery.data.images.map((imageUrl, index) => {
           if (index < 5)
             return (
               <StyledImageContainer

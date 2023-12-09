@@ -1,7 +1,4 @@
-import {
-  faArrowUpFromBracket,
-  faHeartCirclePlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpFromBracket, faHeartCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import styled from "styled-components";
@@ -28,10 +25,10 @@ const StyledTitle = styled.h1`
   font-size: 23px;
   line-height: 30px;
 `;
-const NavViewhost = ({ data }) => {
+const NavViewhost = () => {
   return (
     <StyledNav>
-      <StyledTitle>{data.name}</StyledTitle>
+      <StyledTitle>Title</StyledTitle>
       <StyledShareSave>
         <StyledContainerShareSave>
           <p>

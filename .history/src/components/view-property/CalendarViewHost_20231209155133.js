@@ -40,16 +40,13 @@ const CalendarViewHost = ({ data }) => {
   //Handle when client pick range
   const handleUserPickRange = (item) => {
     const total = countDay(item);
-    if (
-      total[0] === 1 ||
-      (total[0] >= minimun_stay && total[0] <= maximum_stay)
-    ) {
+    if (total[0] >= minimun_stay && total[0] <= maximum_stay) {
     } else {
-      alert("Range from " + minimun_stay + " to " + maximum_stay);
+      alert("Range: " + maximum_stay);
       setSelectedDateRange([
         {
           startDate: startOfDay(new Date()),
-          endDate: startOfDay(addDays(new Date(), data.maximum_stay)),
+          endDate: startOfDay(new Date()),
           key: "selection",
         },
       ]);

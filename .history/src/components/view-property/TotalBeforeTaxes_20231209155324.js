@@ -103,6 +103,9 @@ const TotalBeforeTaxes = ({ data }) => {
     // Ngăn chặn lan tỏa sự kiện từ StyledCalendar đến StyledCheckin
     e.stopPropagation();
   };
+  const [serachParam, setserachParam] = useSearchParams();
+  // console.log(serachParam.get("id"));
+  const propertyQuery = PropertyQueryId(serachParam.get("id"));
   return (
     <StyledContainer>
       <div>
@@ -144,7 +147,14 @@ const TotalBeforeTaxes = ({ data }) => {
                     onClick={handleClose}
                   >
                     <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
+                      {isOpen && (
+                        <CalendarViewHost
+                          ranges={selectedDateRange}
+                          onChange={(item) => {
+                            countDay(item);
+                          }}
+                        />
+                      )}
                     </StyledCalendar>
                   </div>
                 )}

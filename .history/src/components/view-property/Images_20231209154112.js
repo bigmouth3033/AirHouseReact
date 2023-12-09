@@ -1,7 +1,9 @@
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PropertyQueryId } from "api/propertyApi";
 import React from "react";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import PopUpContainer from "ui/PopUpContainer";
 
@@ -77,8 +79,8 @@ const Styledbutton = styled.button`
   border: none;
   border-radius: 50%;
 `;
-const Images = ({ data }) => {
-  // const countImages = data.images.length;
+const Images = (data) => {
+  const countImages = data.images.length;
   const [clickImage, setclickImage] = useState(false);
 
   return (

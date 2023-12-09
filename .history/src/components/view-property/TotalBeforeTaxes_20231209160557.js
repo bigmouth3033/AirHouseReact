@@ -91,7 +91,6 @@ const StyledCalendar = styled.div`
   z-index: 1;
 `;
 const TotalBeforeTaxes = ({ data }) => {
-  const { selectedDateRange, countDay } = useDateRange();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -103,6 +102,15 @@ const TotalBeforeTaxes = ({ data }) => {
     // Ngăn chặn lan tỏa sự kiện từ StyledCalendar đến StyledCheckin
     e.stopPropagation();
   };
+  const [selectedDates, setSelectedDates] = useState({
+    startDate: new Date(),
+    endDate: addDays(new Date(), 1),
+  });
+
+  const handleDateSelect = (dates) => {
+    setSelectedDates(dates);
+  };
+
   return (
     <StyledContainer>
       <div>
@@ -144,7 +152,14 @@ const TotalBeforeTaxes = ({ data }) => {
                     onClick={handleClose}
                   >
                     <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
+                      {isOpen && (
+                        <CalendarViewHost
+                        // ranges={selectedDateRange}
+                        // onChange={(item) => {
+                        //   countDay(item);
+                        // }}
+                        />
+                      )}
                     </StyledCalendar>
                   </div>
                 )}

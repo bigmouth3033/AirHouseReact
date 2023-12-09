@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { addDays, startOfDay } from "date-fns";
+import { addDays, format, startOfDay } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { DateRange } from "react-date-range";
+import { DateRange, DateRangePicker } from "react-date-range";
 import { useDateRange } from "./DateRangeContext";
+import { useSearchParams } from "react-router-dom";
+import { PropertyQueryId } from "api/propertyApi";
 
-const CalendarViewHost = ({ data }) => {
+const CalendarViewHost = () => {
   const {
     selectedDateRange,
     setSelectedDateRange,
@@ -26,7 +28,12 @@ const CalendarViewHost = ({ data }) => {
     };
   }, []);
 
-  const { start_date, end_date, minimun_stay, maximum_stay } = data;
+  const [searchParam, setSearchParam] = useSearchParams();
+  const propertyId = searchParam.get("id");
+  const propertyQuery = PropertyQueryId(propertyId);
+
+  const { start_date, end_date, minimun_stay, maximum_stay } =
+    propertyQuery.data;
 
   // Show date range list for client choice
   const rangePropertyDayFn = () => {
@@ -40,21 +47,22 @@ const CalendarViewHost = ({ data }) => {
   //Handle when client pick range
   const handleUserPickRange = (item) => {
     const total = countDay(item);
-    if (
-      total[0] === 1 ||
-      (total[0] >= minimun_stay && total[0] <= maximum_stay)
-    ) {
+    if (total[0] >= minimun_stay && total[0] <= maximum_stay) {
     } else {
-      alert("Range from " + minimun_stay + " to " + maximum_stay);
+      alert("Range: " + maximum_stay);
       setSelectedDateRange([
         {
           startDate: startOfDay(new Date()),
-          endDate: startOfDay(addDays(new Date(), data.maximum_stay)),
+          endDate: startOfDay(new Date()),
           key: "selection",
         },
       ]);
     }
   };
+  //min DisabledDate
+  const minDisabledDate = new Date(
+    Math.min(...disableBookedDates.map((date) => date.getTime()))
+  );
 
   return (
     <DateRange

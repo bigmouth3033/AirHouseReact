@@ -31,7 +31,7 @@ const StyledTitle = styled.h1`
 const NavViewhost = ({ data }) => {
   return (
     <StyledNav>
-      <StyledTitle>{data.name}</StyledTitle>
+      <StyledTitle>Title</StyledTitle>
       <StyledShareSave>
         <StyledContainerShareSave>
           <p>

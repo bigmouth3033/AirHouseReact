@@ -34,7 +34,7 @@ const ViewProperty = () => {
       ) : (
         <div>
           {propertyQuery.isSuccess ? (
-            <DateRangeProvider data={propertyQuery.data}>
+            <DateRangeProvider>
               <StyledContainer>
                 <NavViewhost data={propertyQuery.data} />
                 <Images data={propertyQuery.data} />

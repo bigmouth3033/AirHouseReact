@@ -90,7 +90,7 @@ const StyledCalendar = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1;
 `;
-const TotalBeforeTaxes = ({ data }) => {
+const TotalBeforeTaxes = () => {
   const { selectedDateRange, countDay } = useDateRange();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
@@ -103,13 +103,16 @@ const TotalBeforeTaxes = ({ data }) => {
     // Ngăn chặn lan tỏa sự kiện từ StyledCalendar đến StyledCheckin
     e.stopPropagation();
   };
+  const [serachParam, setserachParam] = useSearchParams();
+  // console.log(serachParam.get("id"));
+  const propertyQuery = PropertyQueryId(serachParam.get("id"));
   return (
     <StyledContainer>
       <div>
         <div>
           <form>
             <div>
-              <StyledSpan>${data.base_price}</StyledSpan>
+              <StyledSpan>${propertyQuery.data.base_price}</StyledSpan>
               <span>night</span>
             </div>
             <StyledBooking>
@@ -144,7 +147,14 @@ const TotalBeforeTaxes = ({ data }) => {
                     onClick={handleClose}
                   >
                     <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
+                      {isOpen && (
+                        <CalendarViewHost
+                          ranges={selectedDateRange}
+                          onChange={(item) => {
+                            countDay(item);
+                          }}
+                        />
+                      )}
                     </StyledCalendar>
                   </div>
                 )}

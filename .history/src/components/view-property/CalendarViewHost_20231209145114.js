@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { addDays, startOfDay } from "date-fns";
+import { addDays, format, isSameDay, startOfDay } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { DateRange } from "react-date-range";
+import { DateRange, DateRangePicker } from "react-date-range";
 import { useDateRange } from "./DateRangeContext";
+import { useSearchParams } from "react-router-dom";
+import { PropertyQueryId } from "api/propertyApi";
 
-const CalendarViewHost = ({ data }) => {
+const CalendarViewHost = () => {
   const {
     selectedDateRange,
-    setSelectedDateRange,
     countDay,
     disableBookedDates,
+    setSelectedDateRange,
+    bookedDates,
   } = useDateRange();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
 
@@ -26,30 +29,41 @@ const CalendarViewHost = ({ data }) => {
     };
   }, []);
 
-  const { start_date, end_date, minimun_stay, maximum_stay } = data;
+  const [searchParam, setSearchParam] = useSearchParams();
+  const propertyId = searchParam.get("id");
+  const propertyQuery = PropertyQueryId(propertyId);
 
-  // Show date range list for client choice
-  const rangePropertyDayFn = () => {
+  const { start_date, end_date, minimun_stay, maximum_stay } =
+    propertyQuery.data;
+
+  // Bat ngay user chon
+  const rangePropertyDayFun = () => {
     if (new Date(start_date) < new Date()) {
       return (new Date(end_date) - new Date()) / (24 * 60 * 60 * 1000) + 1;
+    } else {
+      return (
+        (new Date(end_date) - new Date(start_date)) / (24 * 60 * 60 * 1000) + 1
+      );
     }
-    return (
-      (new Date(end_date) - new Date(start_date)) / (24 * 60 * 60 * 1000) + 1
-    );
   };
-  //Handle when client pick range
+
   const handleUserPickRange = (item) => {
     const total = countDay(item);
-    if (
-      total[0] === 1 ||
-      (total[0] >= minimun_stay && total[0] <= maximum_stay)
-    ) {
+    if (total[0] >= minimun_stay && total[0] <= maximum_stay) {
+      const maximumDate = addDays(new Date(start_date), maximum_stay);
+      const minDateInBookeDate = new Date(Math.min.apply(null, bookedDates));
+
+      if (minDateInBookeDate > maximumDate) {
+        return maximumDate;
+      } else {
+        return minDateInBookeDate;
+      }
     } else {
-      alert("Range from " + minimun_stay + " to " + maximum_stay);
+      alert("Range: " + maximum_stay);
       setSelectedDateRange([
         {
           startDate: startOfDay(new Date()),
-          endDate: startOfDay(addDays(new Date(), data.maximum_stay)),
+          endDate: startOfDay(new Date()),
           key: "selection",
         },
       ]);
@@ -67,7 +81,7 @@ const CalendarViewHost = ({ data }) => {
       months={isMobile ? 1 : 2}
       direction="horizontal"
       minDate={new Date()}
-      maxDate={addDays(new Date(), rangePropertyDayFn())}
+      maxDate={addDays(new Date(), rangePropertyDayFun())}
       disabledDay={disableBookedDates}
     />
   );

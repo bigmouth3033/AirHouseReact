@@ -28,28 +28,26 @@ const ViewProperty = () => {
   const [serachParam, setserachParam] = useSearchParams();
   const propertyQuery = PropertyQueryId(serachParam.get("id"));
   return (
-    <div>
+    <DateRangeProvider>
       {propertyQuery.isLoading ? (
         <Loading />
       ) : (
         <div>
           {propertyQuery.isSuccess ? (
-            <DateRangeProvider data={propertyQuery.data}>
-              <StyledContainer>
-                <NavViewhost data={propertyQuery.data} />
-                <Images data={propertyQuery.data} />
-                <StyledInformation>
-                  <Information data={propertyQuery.data} />
-                  <TotalBeforeTaxes data={propertyQuery.data} />
-                </StyledInformation>
-              </StyledContainer>
-            </DateRangeProvider>
+            <StyledContainer>
+              <NavViewhost data={propertyQuery.data} />
+              <Images data={propertyQuery.data} />
+              <StyledInformation>
+                <Information data={propertyQuery.data} />
+                <TotalBeforeTaxes data={propertyQuery.data} />
+              </StyledInformation>
+            </StyledContainer>
           ) : (
             <PropertyNotFound />
           )}
         </div>
       )}
-    </div>
+    </DateRangeProvider>
   );
 };
 

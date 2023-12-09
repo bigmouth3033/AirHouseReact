@@ -1,22 +1,22 @@
 // DateRangeContext.js
 import React, { createContext, useState, useContext } from "react";
-import { addDays, isSameDay, startOfDay } from "date-fns";
+import { isSameDay, startOfDay } from "date-fns";
 
 const DateRangeContext = createContext();
 
-export const DateRangeProvider = ({ children, data }) => {
+export const DateRangeProvider = ({ children }) => {
   //chọn ngày đi ngày đến
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: startOfDay(new Date()),
-      endDate: startOfDay(addDays(new Date(), data.maximum_stay)),
+      endDate: startOfDay(new Date()),
       key: "selection",
     },
   ]);
 
   const bookedDates = [
-    startOfDay(new Date("2023-12-12")),
-    startOfDay(new Date("2023-12-22")),
+    startOfDay(new Date("2023-12-1")),
+    startOfDay(new Date("2023-12-5")),
     startOfDay(new Date("2023-12-10")),
   ];
   //kiem tra ngay tra ve va disableBooked
@@ -66,7 +66,6 @@ export const DateRangeProvider = ({ children, data }) => {
         setSelectedDateRange,
         disableBookedDates,
         countDay,
-        bookedDates,
       }}
     >
       {children}

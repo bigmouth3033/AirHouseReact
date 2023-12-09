@@ -8,6 +8,7 @@ import { useDateRange } from "./DateRangeContext";
 import { format } from "date-fns";
 import { PropertyQueryId } from "api/propertyApi";
 import { useSearchParams } from "react-router-dom";
+import Loading from "components/Loading";
 const StyledContainer = styled.div`
   position: relative;
   font-size: 15px;
@@ -90,7 +91,7 @@ const StyledCalendar = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1;
 `;
-const TotalBeforeTaxes = ({ data }) => {
+const TotalBeforeTaxes = () => {
   const { selectedDateRange, countDay } = useDateRange();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
@@ -103,65 +104,77 @@ const TotalBeforeTaxes = ({ data }) => {
     // Ngăn chặn lan tỏa sự kiện từ StyledCalendar đến StyledCheckin
     e.stopPropagation();
   };
+  const [serachParam, setserachParam] = useSearchParams();
+  // console.log(serachParam.get("id"));
+  const propertyQuery = PropertyQueryId(serachParam.get("id"));
   return (
     <StyledContainer>
       <div>
-        <div>
-          <form>
-            <div>
-              <StyledSpan>${data.base_price}</StyledSpan>
-              <span>night</span>
-            </div>
-            <StyledBooking>
-              <StyledCheck>
-                <StyledCheckin onClick={handleClick}>
-                  <label>Checkin</label>
-                  <div>{`${format(
-                    selectedDateRange[0].startDate,
-                    "yyyy-MM-dd"
-                  )}`}</div>
-                </StyledCheckin>
+        {propertyQuery.isSuccess && (
+          <div>
+            <form>
+              <div>
+                <StyledSpan>${propertyQuery.data.base_price}</StyledSpan>
+                <span>night</span>
+              </div>
+              <StyledBooking>
+                <StyledCheck>
+                  <StyledCheckin onClick={handleClick}>
+                    <label>Checkin</label>
+                    <div>{`${format(
+                      selectedDateRange[0].startDate,
+                      "yyyy-MM-dd"
+                    )}`}</div>
+                  </StyledCheckin>
 
-                <StyledCheckin onClick={handleClick}>
-                  <label>Checkout</label>
-                  <div>{`${format(
-                    selectedDateRange[0].endDate,
-                    "yyyy-MM-dd"
-                  )}`}</div>
-                </StyledCheckin>
+                  <StyledCheckin onClick={handleClick}>
+                    <label>Checkout</label>
+                    <div>{`${format(
+                      selectedDateRange[0].endDate,
+                      "yyyy-MM-dd"
+                    )}`}</div>
+                  </StyledCheckin>
 
-                {isOpen && (
-                  <div
-                    style={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      background: "rgba(0, 0, 0, 0.5)",
-                      zIndex: 1,
-                    }}
-                    onClick={handleClose}
-                  >
-                    <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
-                    </StyledCalendar>
-                  </div>
-                )}
-              </StyledCheck>
-              <StyledCountGuest>
-                <label htmlFor="">Guests</label>
-                <div>{countDay}</div>
-                <FontAwesomeIcon icon={faChevronCircleDown} />
-              </StyledCountGuest>
-            </StyledBooking>
-            <StyledButton type="submit">Continute </StyledButton>
-            <StyledText>You won't be charged yet</StyledText>
-          </form>
-          <StyledReport>
-            <a href="#">Report this listing</a>
-          </StyledReport>
-        </div>
+                  {isOpen && (
+                    <div
+                      style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        background: "rgba(0, 0, 0, 0.5)",
+                        zIndex: 1,
+                      }}
+                      onClick={handleClose}
+                    >
+                      <StyledCalendar onClick={handleCalendarClick}>
+                        {isOpen && (
+                          <CalendarViewHost
+                            ranges={selectedDateRange}
+                            onChange={(item) => {
+                              countDay(item);
+                            }}
+                          />
+                        )}
+                      </StyledCalendar>
+                    </div>
+                  )}
+                </StyledCheck>
+                <StyledCountGuest>
+                  <label htmlFor="">Guests</label>
+                  <div>{countDay}</div>
+                  <FontAwesomeIcon icon={faChevronCircleDown} />
+                </StyledCountGuest>
+              </StyledBooking>
+              <StyledButton type="submit">Continute </StyledButton>
+              <StyledText>You won't be charged yet</StyledText>
+            </form>
+            <StyledReport>
+              <a href="#">Report this listing</a>
+            </StyledReport>
+          </div>
+        )}
       </div>
     </StyledContainer>
   );

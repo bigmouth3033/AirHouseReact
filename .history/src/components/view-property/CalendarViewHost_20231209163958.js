@@ -45,7 +45,7 @@ const CalendarViewHost = ({ data }) => {
       (total[0] >= minimun_stay && total[0] <= maximum_stay)
     ) {
     } else {
-      alert("Range from " + minimun_stay + " to " + maximum_stay);
+      alert("Range from  " + minimun_stay + "to " + maximum_stay);
       setSelectedDateRange([
         {
           startDate: startOfDay(new Date()),

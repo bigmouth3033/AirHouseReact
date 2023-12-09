@@ -32,9 +32,9 @@ const ViewProperty = () => {
       {propertyQuery.isLoading ? (
         <Loading />
       ) : (
-        <div>
+        <DateRangeProvider>
           {propertyQuery.isSuccess ? (
-            <DateRangeProvider data={propertyQuery.data}>
+            <div>
               <StyledContainer>
                 <NavViewhost data={propertyQuery.data} />
                 <Images data={propertyQuery.data} />
@@ -43,11 +43,11 @@ const ViewProperty = () => {
                   <TotalBeforeTaxes data={propertyQuery.data} />
                 </StyledInformation>
               </StyledContainer>
-            </DateRangeProvider>
+            </div>
           ) : (
             <PropertyNotFound />
           )}
-        </div>
+        </DateRangeProvider>
       )}
     </div>
   );

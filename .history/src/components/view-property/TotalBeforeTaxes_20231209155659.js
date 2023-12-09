@@ -144,7 +144,13 @@ const TotalBeforeTaxes = ({ data }) => {
                     onClick={handleClose}
                   >
                     <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
+                      {isOpen && (
+                        <CalendarViewHost
+                          data={data}
+                          selectedDateRange={selectedDateRange}
+                          onDateChange={handleDateChange}
+                        />
+                      )}
                     </StyledCalendar>
                   </div>
                 )}

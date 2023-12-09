@@ -91,7 +91,7 @@ const StyledCalendar = styled.div`
   z-index: 1;
 `;
 const TotalBeforeTaxes = ({ data }) => {
-  const { selectedDateRange, countDay } = useDateRange();
+  const { countDay } = useDateRange();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -117,17 +117,14 @@ const TotalBeforeTaxes = ({ data }) => {
                 <StyledCheckin onClick={handleClick}>
                   <label>Checkin</label>
                   <div>{`${format(
-                    selectedDateRange[0].startDate,
+                    countDay()[1].startDate,
                     "yyyy-MM-dd"
                   )}`}</div>
                 </StyledCheckin>
 
                 <StyledCheckin onClick={handleClick}>
                   <label>Checkout</label>
-                  <div>{`${format(
-                    selectedDateRange[0].endDate,
-                    "yyyy-MM-dd"
-                  )}`}</div>
+                  <div>{`${format(countDay()[2].endDate, "yyyy-MM-dd")}`}</div>
                 </StyledCheckin>
 
                 {isOpen && (
@@ -144,7 +141,14 @@ const TotalBeforeTaxes = ({ data }) => {
                     onClick={handleClose}
                   >
                     <StyledCalendar onClick={handleCalendarClick}>
-                      {isOpen && <CalendarViewHost data={data} />}
+                      {isOpen && (
+                        <CalendarViewHost
+                        // ranges={selectedDateRange}
+                        // onChange={(item) => {
+                        //   countDay(item);
+                        // }}
+                        />
+                      )}
                     </StyledCalendar>
                   </div>
                 )}

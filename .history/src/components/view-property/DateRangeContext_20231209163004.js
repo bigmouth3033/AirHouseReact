@@ -9,7 +9,7 @@ export const DateRangeProvider = ({ children, data }) => {
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: startOfDay(new Date()),
-      endDate: startOfDay(addDays(new Date(), data.maximum_stay)),
+      endDate: startOfDay(addDays(new Date(), data.minimun_stay)),
       key: "selection",
     },
   ]);
