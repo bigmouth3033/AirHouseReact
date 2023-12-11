@@ -104,7 +104,9 @@ const ViewProperty = lazy(() => import("components/view-property/ViewProperty"))
 
 // blog
 const CreateBlog = lazy(() => import("views/blog/CreateBlog"));
+const UpdateBlog = lazy(() => import("views/blog/UpdateBlog"));
 const BlogList = lazy(() => import("views/blog/BlogList"));
+const BlogCategoryList = lazy(() => import("views/blog/BlogCategoryList"));
 
 const router = createBrowserRouter([
   {
@@ -251,6 +253,30 @@ const router = createBrowserRouter([
       { path: "/admin/properties_status", name: "status", element: <Status /> },
       { path: "/admin/blog/create-blog", name: "create blog", element: <CreateBlog />, exact: true },
       { path: "/admin/blog/blog-list", name: "create blog", element: <BlogList />, exact: true },
+      {
+        path: "/admin/blog/create-blog",
+        name: "CreateBlog",
+        element: <CreateBlog />,
+        exact: true,
+      },
+      {
+        path: "/admin/blog/update-blog",
+        name: "CreateBlog",
+        element: <UpdateBlog />,
+        exact: true,
+      },
+      {
+        path: "/admin/blog/blog-list",
+        name: "BlogList",
+        element: <BlogList />,
+        exact: true,
+      },
+      {
+        path: "/admin/blog/blog-category-list",
+        name: "BlogCategoryList",
+        element: <BlogCategoryList />,
+        exact: true,
+      },
     ],
   },
 ]);

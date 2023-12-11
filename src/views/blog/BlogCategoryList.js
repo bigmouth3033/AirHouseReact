@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { useRef } from "react";
 
+import { cilPlus } from "@coreui/icons";
 import { cilSettings } from "@coreui/icons";
 import { cilTrash } from "@coreui/icons";
+import { cilSearch } from "@coreui/icons";
 import { CSpinner } from "@coreui/react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -18,11 +21,30 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ReadBlogPageQuery, DeleteBlogMutation } from "../../api/blogApi";
-import UpdateBlog from "./UpdateBlog";
+
+import { BlogCategoryQuery, DeleteBlogCategoryMutation } from "../../api/blogCategoryApi";
+import CreateCategoryPopUp from "./CreateCategoryPopUp";
 
 const StyledAmenities = styled.div``;
+const StyledCreateButton = styled.button`
+  background-color: blue;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px;
+  margin: 0 0 1.5rem 0;
+  font-size: 18px;
 
+  &:active {
+  }
+
+  & .create-icon {
+    width: 25px;
+    border: 1px solid white;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+`;
 const StyledContainer = styled.div`
   background-color: white;
   padding: 1rem 2rem;
@@ -132,22 +154,25 @@ const StyledPagination = styled.div`
 
 const StyledSearchContainer = styled.div``;
 
-export default function BlogList() {
+export default function BlogCategoryList() {
   const navigate = useNavigate();
 
+  const [showCreatePopUp, setShowCreatePopUp] = useState(false);
+  const [showUpdatePopUp, setshowUpdatePopUp] = useState(false);
+
   const [chosenId, setChosenId] = useState(null);
-  const deleteMutation = DeleteBlogMutation();
+  const deleteMutation = DeleteBlogCategoryMutation();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
 
-  const currentPageQuery = ReadBlogPageQuery(currentPage);
+  const currentPageQuery = BlogCategoryQuery(currentPage);
   const queryClient = useQueryClient();
 
   const totalItem = Number(currentPageQuery.data?.total || 0);
   const totalPage = Math.ceil(totalItem / 10);
-  console.log(currentPageQuery.data);
+
   const paginate = () => {
     const paginate = [];
 
@@ -180,6 +205,9 @@ export default function BlogList() {
             queryKey: ["Blog", currentPage],
           });
         },
+        onError: () => {
+          alert("Need to delete all blogs belong to this category first !");
+        },
       });
     }
   };
@@ -189,7 +217,8 @@ export default function BlogList() {
   const onUpdateEvent = (id) => {
     alert(id);
     setSearchParams({ id: id });
-    navigate("/admin/blog/update-blog?id=" + Number(id));
+    setshowUpdatePopUp(true);
+    setChosenId(id);
   };
 
   const onClickPrevious = () => {
@@ -228,21 +257,13 @@ export default function BlogList() {
     <StyledAmenities>
       <StyledContainer>
         <StyledSearchContainer>
-          <Link
-            style={{
-              textDecoration: "none",
-              color: "white",
-              backgroundColor: "navy",
-              border: "1px gray solid",
-              padding: "0.5rem",
-              borderRadius: "0.8rem",
-            }}
-            to="/admin/blog/create-blog"
-          >
-            Create New Blog
-          </Link>
+          <StyledCreateButton onClick={() => setShowCreatePopUp(true)}>
+            <CIcon icon={cilPlus} customClassName="create-icon" />
+            Create New Category
+          </StyledCreateButton>
+          {showCreatePopUp && <CreateCategoryPopUp currentPage={currentPage} setShowPopUp={setShowCreatePopUp} />}
           <br />
-          <br />
+
           <StyledSearchInput type="search" placeholder="Search" />
         </StyledSearchContainer>
         <StyledTable className="table table-responsive table-hover">
@@ -267,7 +288,8 @@ export default function BlogList() {
                 return (
                   <tr key={data.id}>
                     <td>{data.id}</td>
-                    <td>{data.title}</td>
+                    <td>{data.name}</td>
+
                     <td>
                       <CIcon onClick={() => onUpdateEvent(data.id)} icon={cilSettings} customClassName="update-icon" />
                     </td>

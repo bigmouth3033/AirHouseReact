@@ -2,17 +2,19 @@ import React, { useState, useRef, useCallback } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./style.scss";
-import { useMemo } from "react";
-import { CreateBlogMutation, UploadImageMutation } from "api/blogApi";
+import { useMemo, useEffect } from "react";
+import { UploadImageMutation, BlogQueryId, UpdateBlogMutation } from "api/blogApi";
 
-import axios from "axios";
-import axiosClient from "../../api/axiosClient";
+
 import { BlogCategoryQuery, CategoryValueQuery } from "../../api/blogCategoryApi";
+import { useSearchParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import Skeleton from "react-loading-skeleton";
 import { cilCloudUpload } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import styled from "styled-components";
+import "react-loading-skeleton/dist/skeleton.css";
 import DefaultImg from "assets/default-img.webp";
-import { faArrowLeftRotate } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 
 const StyledImgField = styled.div`
   display: flex;
@@ -145,22 +147,20 @@ const formats = [
   "direction",
 ];
 
-export default function CreateBlog() {
-  const uploadMutation = UploadImageMutation();
-  const createBlogMutation = CreateBlogMutation();
+export default function UpdateBlog() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const chosenId = Number(searchParams.get("id"));
+  console.log(chosenId);
+
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogContent, setBlogContent] = useState("");
+  const [error, setError] = useState(null);
 
   const imgUploadRef = useRef();
   const [imgSrc, setImgSrc] = useState(DefaultImg);
 
-  const { data: createdBlog } = createBlogMutation;
-
-  const qillRef = useRef();
-  const [value, setValue] = useState("");
-
-  const onUploadImg = (ev) => {
-    ev.preventDefault();
-    imgUploadRef.current.click();
-  };
+  const queryClient = useQueryClient();
+  const blogQuery = BlogQueryId(chosenId);
 
   const checkChange = () => {
     if (imgUploadRef.current.files.length != 0) {
@@ -168,6 +168,26 @@ export default function CreateBlog() {
       console.log(imgSrc);
     }
   };
+  const onUploadImg = (ev) => {
+    ev.preventDefault();
+    imgUploadRef.current.click();
+  };
+
+  useEffect(() => {
+    if (blogQuery.isSuccess) {
+      setBlogTitle(blogQuery.data.title);
+      setBlogContent(blogQuery.data.content);
+    }
+  }, [blogQuery.status]);
+
+  const updateBlogMutation = UpdateBlogMutation();
+
+  const uploadMutation = UploadImageMutation();
+
+  const { data: createdBlog } = updateBlogMutation;
+
+  const qillRef = useRef();
+  const [value, setValue] = useState("");
 
   const imageHandler = useCallback(async () => {
     const input = document.createElement("input");
@@ -178,32 +198,17 @@ export default function CreateBlog() {
     input.onchange = () => {
       if (input !== null && input.files !== null) {
         const file = input.files[0];
-        console.log(file);
+
         const formData = new FormData();
         formData.append("image", file);
 
         uploadMutation.mutate(formData, {
           onSuccess: (data) => {
             const quillEditor = qillRef.current.getEditor();
-            const range = quillEditor.getSelection(true); //lấy vị trí hiện tại của con trỏ
+            const range = quillEditor.getSelection(true);
             quillEditor.insertEmbed(range.index, "image", data.url);
           },
         });
-
-        // try {
-        //   const response = await axiosClient.post("/blog/uploadImage", formData);
-
-        //   if (response.status === 200) {
-        //     console.log(response.data.url);
-        //     const quillEditor = qillRef.current.getEditor(); //lấy trình soạn thảo Quill thông qua tham chiếu qillRef bằng cách sử dụng phương thức getEditor()
-        //     const range = quillEditor.getSelection(true); //lấy vùng chọn hiện tại trong trình soạn thảo Quill. Tham số true đại diện cho lấy vùng chọn đơn (có con trỏ).
-        //     quillEditor.insertEmbed(range.index, "image", response.data.url); // một phần tử "image" vào vị trí con trỏ hiện tại trong trình soạn thảo Quill
-        //   } else {
-        //     console.error("Image upload failed");
-        //   }
-        // } catch (error) {
-        //   console.error("Error uploading image:", error);
-        // }
       }
     };
   }, []);
@@ -211,6 +216,8 @@ export default function CreateBlog() {
   //fetch date BlogCategory from database
 
   const { data, isLoading } = CategoryValueQuery();
+  // console.log(data, isLoading);
+
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -223,27 +230,23 @@ export default function CreateBlog() {
 
   const handleChange = (content) => {
     setValue(content);
+    setBlogContent(content);
   };
-
   const handleSubmit = () => {
     const file = imgUploadRef.current.files[0];
 
     const formData = new FormData();
     const arrCate = Array.from(document.querySelectorAll('input[name="category"]:checked')).map((checkbox) => checkbox.value);
+
+    formData.append("id", document.getElementById("id").value);
     formData.append("title", document.getElementById("title").value);
     arrCate.forEach((cate) => {
       formData.append("category[]", cate);
     });
-    formData.append("content", value);
+    formData.append("content", blogContent);
     formData.append("image", file);
 
-    // console.log(
-    //   formData.get("title"),
-    //   formData.get("category"),
-    //   formData.get("content"),
-    //   formData.get("image")
-    // );
-    createBlogMutation.mutate(formData, {
+    updateBlogMutation.mutate(formData, {
       onSuccess: () => {
         document.getElementById("title").value = "";
         document.querySelectorAll('input[name="category"]:checked').forEach((checkbox) => {
@@ -253,20 +256,26 @@ export default function CreateBlog() {
       },
     });
   };
-
   return (
     <div className="text-editor">
       <div className="title-block">
-        <label htmlFor="">
-          <b>Input Blog Title</b>
-        </label>
-        <input type="text" name="title" id="title" />
+        <input type="text" id="id" value={chosenId} readOnly />
+        <label htmlFor="">Input Blog Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          onChange={(ev) => {
+            setBlogTitle(ev.target.value);
+          }}
+          value={blogTitle}
+        />
       </div>
 
       <div className="blogCate-block">
         <div className="title-block">
           <label htmlFor="" style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-            <b>Check Blog Category</b>
+            Check Blog Category
           </label>
         </div>
         {!isLoading && data && (
@@ -300,7 +309,7 @@ export default function CreateBlog() {
 
       <div className="title-block">
         <label htmlFor="" className="content">
-          <b>Input Blog Content</b>
+          Input Blog Content
         </label>
       </div>
 
@@ -310,16 +319,17 @@ export default function CreateBlog() {
         theme="snow"
         modules={modules}
         formats={formats}
-        value={value}
+        value={blogContent}
         onChange={handleChange}
         style={{ height: "350px" }}
       />
       <br />
-      {createdBlog && <p style={{ color: "green" }}>Blog {createdBlog.title} created successfully</p>}
+      {createdBlog && <p style={{ color: "green" }}>Blog {createdBlog.title} updated successfully</p>}
       <button onClick={handleSubmit}>Submit</button>
 
       <div dangerouslySetInnerHTML={{ __html: value }}></div>
       {value}
     </div>
   );
+  // });
 }
