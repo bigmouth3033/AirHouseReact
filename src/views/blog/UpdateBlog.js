@@ -18,7 +18,40 @@ import {
 import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
+import { cilCloudUpload } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 import "react-loading-skeleton/dist/skeleton.css";
+import DefaultImg from "assets/default-img.webp";
+import styled from "styled-components";
+
+const StyledImgField = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & input {
+    display: none;
+  }
+
+  & .upload-icon {
+    width: 30px;
+    margin-right: 5px;
+  }
+
+  & button {
+    background-color: blue;
+    color: white;
+    padding: 10px 0px;
+    border: 0;
+  }
+
+  & img {
+    height: 8rem;
+    width: max-content;
+    margin-bottom: 10px;
+    outline: 1px solid rgba(30, 144, 255);
+    border: 1px solid rgba(30, 144, 255);
+  }
+`;
 
 var Font = Quill.import("formats/font");
 
@@ -148,12 +181,25 @@ export default function UpdateBlog() {
   const [blogContent, setBlogContent] = useState("");
   const [error, setError] = useState(null);
 
+  const imgUploadRef = useRef();
+  const [imgSrc, setImgSrc] = useState(DefaultImg);
+
   const queryClient = useQueryClient();
   const blogQuery = BlogQueryId(chosenId);
+
+  const checkChange = () => {
+    if (imgUploadRef.current.files.length != 0) {
+      setImgSrc(URL.createObjectURL(imgUploadRef.current.files[0]));
+      console.log(imgSrc);
+    }
+  };
+  const onUploadImg = (ev) => {
+    ev.preventDefault();
+    imgUploadRef.current.click();
+  };
+
   useEffect(() => {
     if (blogQuery.isSuccess) {
-      // setImgSrc(blogQuery.data[0].icon_image);
-
       setBlogTitle(blogQuery.data.title);
       setBlogContent(blogQuery.data.content);
     }
@@ -211,7 +257,34 @@ export default function UpdateBlog() {
     setValue(content);
     setBlogContent(content);
   };
+  const handleSubmit = () => {
+    const file = imgUploadRef.current.files[0];
 
+    const formData = new FormData();
+    const arrCate = Array.from(
+      document.querySelectorAll('input[name="category"]:checked')
+    ).map((checkbox) => checkbox.value);
+
+    formData.append("id", document.getElementById("id").value);
+    formData.append("title", document.getElementById("title").value);
+    arrCate.forEach((cate) => {
+      formData.append("category[]", cate);
+    });
+    formData.append("content", blogContent);
+    formData.append("image", file);
+
+    updateBlogMutation.mutate(formData, {
+      onSuccess: () => {
+        document.getElementById("title").value = "";
+        document
+          .querySelectorAll('input[name="category"]:checked')
+          .forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+        setValue("");
+      },
+    });
+  };
   return (
     <div className="text-editor">
       <div className="title-block">
@@ -254,6 +327,23 @@ export default function UpdateBlog() {
           </ul>
         )}
       </div>
+      <StyledImgField>
+        <label>
+          <b>Blog Cover Image</b>
+        </label>
+        <input
+          ref={imgUploadRef}
+          accept="image/*"
+          onChange={checkChange}
+          type="file"
+          id="image"
+        />
+        <img src={imgSrc} alt="img" />
+        <button onClick={onUploadImg}>
+          <CIcon icon={cilCloudUpload} customClassName="upload-icon" />
+          Image Upload Here
+        </button>
+      </StyledImgField>
 
       <div className="title-block">
         <label htmlFor="" className="content">
@@ -277,29 +367,7 @@ export default function UpdateBlog() {
           Blog {createdBlog.title} updated successfully
         </p>
       )}
-      <button
-        onClick={() => {
-          updateBlogMutation.mutate(
-            {
-              id: document.getElementById("id").value,
-              title: document.getElementById("title").value, // Lấy giá trị từ input title
-              category: Array.from(
-                document.querySelectorAll('input[name="category"]:checked')
-              ).map((checkbox) => checkbox.value), // Lấy giá trị từ các checkbox category được chọn
-              content: blogContent, // Lấy giá trị từ ReactQuill
-            },
-            console.log(
-              document.getElementById("title").value,
-              Array.from(
-                document.querySelectorAll('input[name="category"]:checked')
-              ).map((checkbox) => checkbox.value),
-              blogContent
-            )
-          );
-        }}
-      >
-        Submit
-      </button>
+      <button onClick={handleSubmit}>Submit</button>
 
       <div dangerouslySetInnerHTML={{ __html: value }}></div>
       {value}

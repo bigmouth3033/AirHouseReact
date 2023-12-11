@@ -11,6 +11,40 @@ import {
   BlogCategoryQuery,
   CategoryValueQuery,
 } from "../../api/blogCategoryApi";
+import { cilCloudUpload } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+import styled from "styled-components";
+import DefaultImg from "assets/default-img.webp";
+import { faArrowLeftRotate } from "@fortawesome/free-solid-svg-icons";
+
+const StyledImgField = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & input {
+    display: none;
+  }
+
+  & .upload-icon {
+    width: 30px;
+    margin-right: 5px;
+  }
+
+  & button {
+    background-color: blue;
+    color: white;
+    padding: 10px 0px;
+    border: 0;
+  }
+
+  & img {
+    height: 8rem;
+    width: max-content;
+    margin-bottom: 10px;
+    outline: 1px solid rgba(30, 144, 255);
+    border: 1px solid rgba(30, 144, 255);
+  }
+`;
 
 var Font = Quill.import("formats/font");
 
@@ -134,10 +168,26 @@ const formats = [
 export default function CreateBlog() {
   const uploadMutation = UploadImageMutation();
   const createBlogMutation = CreateBlogMutation();
+
+  const imgUploadRef = useRef();
+  const [imgSrc, setImgSrc] = useState(DefaultImg);
+
   const { data: createdBlog } = createBlogMutation;
 
   const qillRef = useRef();
   const [value, setValue] = useState("");
+
+  const onUploadImg = (ev) => {
+    ev.preventDefault();
+    imgUploadRef.current.click();
+  };
+
+  const checkChange = () => {
+    if (imgUploadRef.current.files.length != 0) {
+      setImgSrc(URL.createObjectURL(imgUploadRef.current.files[0]));
+      console.log(imgSrc);
+    }
+  };
 
   const imageHandler = useCallback(async () => {
     const input = document.createElement("input");
@@ -148,7 +198,7 @@ export default function CreateBlog() {
     input.onchange = () => {
       if (input !== null && input.files !== null) {
         const file = input.files[0];
-
+        console.log(file);
         const formData = new FormData();
         formData.append("image", file);
 
@@ -181,8 +231,6 @@ export default function CreateBlog() {
   //fetch date BlogCategory from database
 
   const { data, isLoading } = CategoryValueQuery();
-  console.log(data, isLoading);
-
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -197,10 +245,45 @@ export default function CreateBlog() {
     setValue(content);
   };
 
+  const handleSubmit = () => {
+    const file = imgUploadRef.current.files[0];
+
+    const formData = new FormData();
+    const arrCate = Array.from(
+      document.querySelectorAll('input[name="category"]:checked')
+    ).map((checkbox) => checkbox.value);
+    formData.append("title", document.getElementById("title").value);
+    arrCate.forEach((cate) => {
+      formData.append("category[]", cate);
+    });
+    formData.append("content", value);
+    formData.append("image", file);
+
+    // console.log(
+    //   formData.get("title"),
+    //   formData.get("category"),
+    //   formData.get("content"),
+    //   formData.get("image")
+    // );
+    createBlogMutation.mutate(formData, {
+      onSuccess: () => {
+        document.getElementById("title").value = "";
+        document
+          .querySelectorAll('input[name="category"]:checked')
+          .forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+        setValue("");
+      },
+    });
+  };
+
   return (
     <div className="text-editor">
       <div className="title-block">
-        <label htmlFor="">Input Blog Title</label>
+        <label htmlFor="">
+          <b>Input Blog Title</b>
+        </label>
         <input type="text" name="title" id="title" />
       </div>
 
@@ -210,7 +293,7 @@ export default function CreateBlog() {
             htmlFor=""
             style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
           >
-            Check Blog Category
+            <b>Check Blog Category</b>
           </label>
         </div>
         {!isLoading && data && (
@@ -230,10 +313,27 @@ export default function CreateBlog() {
           </ul>
         )}
       </div>
+      <StyledImgField>
+        <label>
+          <b>Blog Cover Image</b>
+        </label>
+        <input
+          ref={imgUploadRef}
+          accept="image/*"
+          onChange={checkChange}
+          type="file"
+          id="image"
+        />
+        <img src={imgSrc} alt="img" />
+        <button onClick={onUploadImg}>
+          <CIcon icon={cilCloudUpload} customClassName="upload-icon" />
+          Image Upload Here
+        </button>
+      </StyledImgField>
 
       <div className="title-block">
         <label htmlFor="" className="content">
-          Input Blog Content
+          <b>Input Blog Content</b>
         </label>
       </div>
 
@@ -253,32 +353,7 @@ export default function CreateBlog() {
           Blog {createdBlog.title} created successfully
         </p>
       )}
-      <button
-        onClick={() => {
-          createBlogMutation.mutate(
-            {
-              title: document.getElementById("title").value, // Lấy giá trị từ input title
-              category: Array.from(
-                document.querySelectorAll('input[name="category"]:checked')
-              ).map((checkbox) => checkbox.value), // Lấy giá trị từ các checkbox category được chọn
-              content: value, // Lấy giá trị từ ReactQuill
-            },
-            {
-              onSuccess: () => {
-                document.getElementById("title").value = "";
-                document
-                  .querySelectorAll('input[name="category"]:checked')
-                  .forEach((checkbox) => {
-                    checkbox.checked = false;
-                  });
-                setValue("");
-              },
-            }
-          );
-        }}
-      >
-        Submit
-      </button>
+      <button onClick={handleSubmit}>Submit</button>
 
       <div dangerouslySetInnerHTML={{ __html: value }}></div>
       {value}

@@ -26,15 +26,15 @@ const updateBlogCategory = async (payload) => {
 };
 
 const deleteBlogCategory = async (id) => {
-  const response = await axiosClient.post("deleteBlogCategory", id);
+  const response = await axiosClient.get("deleteBlogCategory/" + id);
   return response.data;
 };
 
-// const filterById = async (query) => {
-//   const id = query.queryKey[1];
-//   const response = await axiosClient.get("filterByIdCategory?id=" + id);
-//   return response.data;
-// };
+const filterById = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("filterByIdBlogCategory?id=" + id);
+  return response.data;
+};
 
 // const readCurrentPage = async (query) => {
 //   const currentPage = query.queryKey[2];
@@ -53,14 +53,14 @@ const deleteBlogCategory = async (id) => {
 //   return categoryQuery;
 // };
 
-// export const CategoryQueryId = (id) => {
-//   const categoryQuery = useQuery({
-//     queryKey: ["category", id],
-//     queryFn: filterById,
-//   });
+export const BlogCategoryQueryId = (id) => {
+  const categoryQuery = useQuery({
+    queryKey: ["category", id],
+    queryFn: filterById,
+  });
 
-//   return categoryQuery;
-// };
+  return categoryQuery;
+};
 
 export const CreateBlogCategoryMutation = () => {
   const queryClient = useQueryClient();

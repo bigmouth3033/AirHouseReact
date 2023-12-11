@@ -4,13 +4,19 @@ import { useState } from "react";
 import { cilCloudUpload } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import PopUpContainer from "ui/PopUpContainer";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import DefaultImg from "assets/default-img.webp";
 import { useQueryClient } from "@tanstack/react-query";
 
 //api import
 import { CreateAmenitiesMutation } from "api/amenitiesApi";
-import { CreateBlogCategoryMutation } from "../../api/blogCategoryApi";
+import {
+  CreateBlogCategoryMutation,
+  CategoryValueQuery,
+  UpdateBlogCategoryMutation,
+  BlogCategoryQueryId,
+} from "../../api/blogCategoryApi";
+import { useSearchParams } from "react-router-dom";
 
 const StyledForm = styled.form`
   display: flex;
@@ -102,20 +108,36 @@ const StyledImgField = styled.div`
   }
 `;
 
-export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
+export default function UpdateCategoryPopUp({ currentPage, setShowPopUp }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const chosenId = Number(searchParams.get("id"));
+
   const queryClient = useQueryClient();
-  const createMutation = CreateBlogCategoryMutation();
+  const updateMutation = UpdateBlogCategoryMutation();
+  const cateQuery = BlogCategoryQueryId(chosenId);
 
   const [categoryName, setCategoryName] = useState("");
   const [error, setError] = useState(null);
 
-  const onAddNewCategory = (ev) => {
+  useEffect(() => {
+    if (cateQuery.isSuccess) {
+      // setImgSrc(blogQuery.data[0].icon_image);
+      console.log(cateQuery.data.name);
+      setCategoryName(cateQuery.data.name);
+    }
+  }, [cateQuery.status]);
+
+  const onUpdateCategory = (ev) => {
     ev.preventDefault();
+    alert(categoryName);
 
     const formData = new FormData();
+    
+
+    formData.append("id", chosenId);
     formData.append("name", categoryName);
 
-    createMutation.mutate(formData, {
+    updateMutation.mutate(formData, {
       onSuccess: () => {
         alert("sucess");
         setCategoryName("");
@@ -141,13 +163,12 @@ export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
     <StyledPopUpContainer setShowPopUp={turnOffPopUp}>
       <StyledForm>
         <StyledInputField>
-          <label>Category Name helloooo</label>
+          <label>Update Category Name</label>
           <input
             onChange={(ev) => {
               setCategoryName(ev.target.value);
             }}
             type="text"
-            placeholder="Category name"
             value={categoryName}
           />
         </StyledInputField>
@@ -162,7 +183,7 @@ export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
         <StyledButtonRow>
           <button
             disabled={categoryName == ""}
-            onClick={onAddNewCategory}
+            onClick={onUpdateCategory}
             className="submit-button"
           >
             Submit

@@ -19,13 +19,15 @@ import CIcon from "@coreui/icons-react";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import UpdateBlogPopUp from "./UpdateBlogPopUp";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ReadBlogPageQuery, DeleteBlogMutation } from "../../api/blogApi";
-import UpdateBlog from "./UpdateBlog";
-import { BlogCategoryQuery } from "../../api/blogCategoryApi";
-import CreateCategoryPopUp from "views/type/category/CreateCategoryPopUp";
+
+import {
+  BlogCategoryQuery,
+  DeleteBlogCategoryMutation,
+} from "../../api/blogCategoryApi";
+import CreateCategoryPopUp from "./CreateCategoryPopUp";
+import UpdateCategoryPopUp from "./UpdateCategoryPopUp";
 
 const StyledAmenities = styled.div``;
 const StyledCreateButton = styled.button`
@@ -160,9 +162,10 @@ export default function BlogCategoryList() {
   const navigate = useNavigate();
 
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
+  const [showUpdatePopUp, setshowUpdatePopUp] = useState(false);
 
   const [chosenId, setChosenId] = useState(null);
-  const deleteMutation = DeleteBlogMutation();
+  const deleteMutation = DeleteBlogCategoryMutation();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -208,6 +211,9 @@ export default function BlogCategoryList() {
             queryKey: ["Blog", currentPage],
           });
         },
+        onError: () => {
+          alert("Need to delete all blogs belong to this category first !");
+        },
       });
     }
   };
@@ -217,7 +223,8 @@ export default function BlogCategoryList() {
   const onUpdateEvent = (id) => {
     alert(id);
     setSearchParams({ id: id });
-    navigate("/admin/blog/update-blog?id=" + Number(id));
+    setshowUpdatePopUp(true);
+    setChosenId(id);
   };
 
   const onClickPrevious = () => {
@@ -267,6 +274,13 @@ export default function BlogCategoryList() {
             />
           )}
           <br />
+          {showUpdatePopUp && (
+            <UpdateCategoryPopUp
+              currentPage={currentPage}
+              chosenId={chosenId}
+              setShowPopUp={setshowUpdatePopUp}
+            />
+          )}
           <StyledSearchInput type="search" placeholder="Search" />
         </StyledSearchContainer>
         <StyledTable className="table table-responsive table-hover">
