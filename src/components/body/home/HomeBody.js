@@ -6,6 +6,8 @@ import { PropertyIndexQuery } from "api/hostApi";
 import { useStateContext } from "contexts/ContextProvider";
 import Loading from "components/Loading";
 import { BodyItemSkeleton } from "./BodyItem";
+import { useNavigate } from "react-router-dom";
+import NavUser from "components/navbar/home/NavUser";
 
 const StyledBody = styled.div``;
 
@@ -40,6 +42,14 @@ const StyledContainer = styled(StyledHomePageContainer)`
 function HomeBody() {
   const { chosenProperty } = useStateContext();
   const propertyQuery = PropertyIndexQuery(chosenProperty);
+  const navigate = useNavigate();
+
+  const onClickProperty = (id) => {
+    navigate({
+      pathname: "property",
+      search: `?id=${id}`,
+    });
+  };
 
   if (propertyQuery.isLoading) {
     return (
@@ -66,7 +76,8 @@ function HomeBody() {
   return (
     <StyledBody>
       <StyledContainer>
-        {propertyQuery.isSuccess && propertyQuery.data.map((item) => <BodyItem data={item} className="item" />)}
+        {propertyQuery.isSuccess &&
+          propertyQuery.data.map((item, index) => <BodyItem key={index} click={onClickProperty} data={item} className="item" />)}
       </StyledContainer>
     </StyledBody>
   );

@@ -85,6 +85,7 @@ const ButtonGroup = ({ max, next, previous, goToSlide, ...rest }) => {
 };
 
 const StyledItemContainer = styled.div`
+  cursor: pointer;
   display: grid;
   max-height: 24rem;
 `;
@@ -108,7 +109,7 @@ const StyledInfoBox = styled.div`
       font-size: 14px;
       font-weight: 500;
 
-      & span{
+      & span {
         font-weight: 300;
       }
     }
@@ -126,6 +127,10 @@ const StyledInfoBox = styled.div`
 
   & .second-box {
     font-size: 13px;
+
+    & .start {
+      color: rgba(255, 0, 0, 0.4);
+    }
   }
 `;
 
@@ -136,14 +141,9 @@ const StyledImgSkeleton = styled(Skeleton)`
 
 const StyledImgContainer = styled.div`
   height: 100%;
-  transition: all 0.3s ease-in-out;
-
-  & img {
-    transition: all 0.3s ease-in-out;
-  }
 `;
 
-function BodyItem({ data }) {
+function BodyItem({ data, click }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -157,14 +157,14 @@ function BodyItem({ data }) {
       >
         {data.images.map((img, index) => {
           return (
-            <StyledImgContainer>
+            <StyledImgContainer key={index} onClick={() => click(data.id)}>
               {loaded || <StyledImgSkeleton />}
               <img src={img.image} onLoad={() => setLoaded(true)} style={loaded ? { opacity: "1" } : { opacity: "0" }} />
             </StyledImgContainer>
           );
         })}
       </StyledCarousel>
-      <StyledInfoBox>
+      <StyledInfoBox onClick={() => click(data.id)}>
         <div className="first-box">
           <p>{data.name}</p>
           <p className="bed-info">
@@ -178,7 +178,7 @@ function BodyItem({ data }) {
           </p>
         </div>
         <p className="second-box">
-          5 <FontAwesomeIcon icon={faStar} />
+          5 <FontAwesomeIcon className="start" icon={faStar} />
         </p>
       </StyledInfoBox>
     </StyledItemContainer>

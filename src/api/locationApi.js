@@ -7,13 +7,8 @@ const getProvince = async () => {
 };
 
 const getDistrict = async (query) => {
-  let provinceId;
-  if (query.queryKey[1] < 10) {
-    provinceId = "0" + query.queryKey[1];
-  } else {
-    provinceId = query.queryKey[1];
-  }
-
+  let provinceId = query.queryKey[1];
+  
   const response = await axiosClient.get("getDistrict/province/" + provinceId);
   return response.data;
 };

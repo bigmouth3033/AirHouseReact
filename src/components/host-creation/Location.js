@@ -40,12 +40,11 @@ const StyledSecion2 = styled.section`
 
 const StyledForm = styled.form`
   border-radius: 5px;
-  margin-top: 15px;
-  padding: 30px 40px 0 40px;
+  padding: 30px 40px 20px 40px;
   overflow: auto;
-
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
+    padding: 2rem 5px;
   }
 `;
 
@@ -202,7 +201,7 @@ const StyledInputContainer = styled.div`
 
 const Location = () => {
   const [count, setCount] = useState(0);
-  const [selectedProvince, setSelectedProvince] = useState("1");
+  const [selectedProvince, setSelectedProvince] = useState("01");
   const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
   const provinceQuery = ProvinceQuery();
   const districtQuery = DistrictQuery(selectedProvince);
@@ -314,7 +313,9 @@ const Location = () => {
 
             <StyledGroupButon>
               <StyledLink onClick={onClickPrevious}>Back </StyledLink>
-              <StyledLink onClick={onClickNext}>Next </StyledLink>
+              <StyledLink disabled={districtQuery.isLoading} onClick={onClickNext}>
+                Next
+              </StyledLink>
             </StyledGroupButon>
           </StyledForm>
         )}

@@ -50,7 +50,7 @@ export default function DefaultLayout() {
     localStorage.setItem("ACCESS_TOKEN", userQuery.data.token);
   }
 
-  console.log(location.pathname);
+ 
 
   return (
     <StyledContainer>

@@ -192,6 +192,18 @@ const _nav = [
         component: CNavItem,
         name: "Blog",
         to: "blog",
+        items: [
+          {
+            component: CNavItem,
+            name: "Create Blog",
+            to: "blog/create-blog",
+          },
+          {
+            component: CNavItem,
+            name: "Blog List",
+            to: "blog/blog-list",
+          },
+        ],
       },
     ],
   },

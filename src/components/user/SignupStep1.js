@@ -1,81 +1,64 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { faFacebook } from "@fortawesome/free-brands-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { CheckEmailMutation } from "api/userApi";
 
 const StyledContainer = styled.div`
-  max-width: 500px;
-  margin: 0 auto;
+  border: 1px solid red;
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  background-color: white;
 `;
-const Styledh2 = styled.h2`
+const StyledTitle = styled.h2`
+  color: red;
   text-align: center;
   font-size: 20px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
   padding-bottom: 20px;
   border-bottom: 1px solid #dddddd;
   margin: 0 -25px;
 `;
 const StyledForm = styled.form`
-  height: 450px;
-  overflow: auto;
-  /* margin-right: -25px; */
-`;
-const StyledH2 = styled.h2`
-  font-size: 22px;
-  line-height: 26px;
-  font-weight: 600;
-  padding: 25px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
 `;
 const StyledFormContainer = styled.div`
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 `;
+
 const StyledInput = styled.input`
-  width: 440px;
   height: 50px;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid #dddddd;
   padding: 0 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
 
-  &:hover {
-    border: none;
-    border-radius: 12px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-  }
   &:focus {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-    border: none;
-    border-radius: 12px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    outline: 1px solid rgba(255, 0, 0, 0.3);
   }
 `;
 const StyledButtonSubmit = styled.button`
-  width: 100%;
   padding: 10px 25px;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   color: white;
   background-color: #db0c63;
-  border-radius: 12px;
   border: none;
+  cursor: pointer;
   &:active {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
   }
 `;
 const StyledWith = styled.div`
   text-align: center;
-  font-size: 18px;
-  margin: 40px 0;
+  font-size: 16px;
+  color: red;
+  font-weight: 400;
+  margin-top: 1.3rem;
+
   &::after {
     content: "";
     display: inline-block;
@@ -91,101 +74,70 @@ const StyledWith = styled.div`
     margin: 5px;
   }
 `;
-const StyledIcon = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 20px 0;
-  > * {
-    font-size: 40px;
-  }
-`;
-const StyledA = styled.a``;
-const StyledAa = styled.p`
-  -moz-transform: scaleY(-1);
-  -o-transform: scaleY(-1);
-  -webkit-transform: scaleY(-1);
-  transform: scaleY(-1);
-  -moz-transform: rotateX(210deg);
-  -o-transform: rotateX(210deg);
-  -webkit-transform: rotateX(210deg);
-  transform: rotateX(210deg);
-  perspective: 200px;
-  -webkit-mask-image: -webkit-gradient(
-    linear,
-    right top,
-    right bottom,
-    from(transparent),
-    color-stop(20%, transparent),
-    to(rgba(0, 0, 0, 0.4))
-  );
-`;
-const StyledError = styled.p`
+
+const StyledError = styled.div`
   color: red;
+  font-size: 14px;
+  height: 2.5rem;
+  padding: 5px 0;
 `;
-const SignupStep1 = () => {
-  const [email, setEmail] = useState("");
-  const [errorText, setErrorText] = useState("");
+
+const StyledWelcome = styled.div`
+  color: red;
+  padding: 0 25px;
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 20px;
+
+  margin: 0 -25px;
+`;
+
+
+
+const SignupStep1 = ({ state, dispatch }) => {
+  const [errorText, setErrorText] = useState(false);
+  const [notUnique, setNotUnique] = useState(false);
+  const checkMutation = CheckEmailMutation();
+
   const validateForm = (e) => {
-    if (email.trim() === "") {
-      e.preventDefault();
-      setErrorText("Email is required.");
-    } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-      e.preventDefault();
-      setErrorText("Email should contain special characters or numbers.");
+    e.preventDefault();
+    if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(state.email)) {
+      setErrorText(true);
+      return;
     } else {
-      setErrorText("");
-      // Thực hiện các hành động gửi form tại đây
+      setErrorText(false);
     }
+
+    checkMutation.mutate(state.email, {
+      onError: () => {
+        setNotUnique(true);
+      },
+      onSuccess: () => {
+        setNotUnique(false);
+        dispatch({ type: "handle-current", next: 2 });
+      },
+    });
   };
+
   return (
     <StyledContainer>
-      <Styledh2>Log in or sign up</Styledh2>
-      <StyledError>{errorText}</StyledError>
+      <StyledTitle>Log in or sign up</StyledTitle>
       <StyledForm>
-        <form>
-          <StyledH2>Welcome to AirHouse</StyledH2>
-          <StyledFormContainer>
-            <StyledInput
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </StyledFormContainer>
-          <StyledButtonSubmit type="submit" onClick={validateForm}>
-            Continute
-          </StyledButtonSubmit>
-        </form>
-        <StyledWith>Login with</StyledWith>
-        <StyledIcon>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faEnvelope} />
-          </StyledA>
-        </StyledIcon>
-        <StyledIcon>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faEnvelope} />
-          </StyledAa>
-        </StyledIcon>
+        <StyledWelcome>Welcome to AirHouse</StyledWelcome>
+        <StyledFormContainer>
+          <StyledInput
+            type="text"
+            placeholder="Email"
+            value={state.email}
+            onChange={(ev) => dispatch({ type: "handle-email", next: ev.target.value.trim() })}
+          />
+          <StyledError>
+            {errorText && <span>Please enter a valid email</span>}
+            {notUnique && <span>Someone is already using this email</span>}
+          </StyledError>
+        </StyledFormContainer>
+        <StyledButtonSubmit onClick={validateForm}>Continute</StyledButtonSubmit>
+        <StyledWith>Sign up with</StyledWith>
       </StyledForm>
     </StyledContainer>
   );

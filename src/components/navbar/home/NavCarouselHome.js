@@ -140,7 +140,7 @@ const StyledContainer = styled.div`
 
 const StyledImgContainer = styled.div`
   & img {
-    transition: all 1s ease-in-out;
+    transition: all 0.5s ease-in-out;
   }
 
   & .img-skeleton {

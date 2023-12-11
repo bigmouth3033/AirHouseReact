@@ -32,13 +32,14 @@ const StyledSecion1 = styled.section`
 `;
 
 const StyledSecion2 = styled.section``;
+
 const StyledForm = styled.form`
   border-radius: 5px;
   padding: 30px 40px 20px 40px;
   overflow: auto;
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
-    padding: 30px 40px 0px 40px;
+    padding: 2rem 5px;
   }
 `;
 
@@ -77,11 +78,6 @@ const StyledOverlay = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-const StyledLable = styled.label`
-  font-size: 18px;
-  padding-left: 10px;
-`;
-
 const StyledTitle = styled.div`
   color: black;
   font-size: 16px;
@@ -95,17 +91,28 @@ const StyledTitle = styled.div`
   }
 `;
 
+const StyledBoderInput = styled.div`
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  margin-bottom: 40px;
+  @media (max-width: 992px) {
+    border: 1px solid #eeeeee;
+  }
+  display: flex;
+  flex-direction: column;
+`;
+
 const StyledInput = styled.input`
-  width: calc(100% - 60px);
   height: 45px;
   border: 1px solid #717171;
   padding: 0 10px;
-  margin: 10px 30px 35px 30px;
+  margin: 1rem;
+
   @media (max-width: 992px) {
-    width: calc(100% - 70px);
     margin: 8px 0 20px 0;
   }
 `;
+
 const StyledButtonInput = styled.div`
   display: grid;
   padding: 20px;
@@ -141,16 +148,10 @@ const StyledButtonInput = styled.div`
       `;
     }
   }}
-`;
 
-const StyledBoderInput = styled.div`
-  width: 100%;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  margin-bottom: 40px;
   @media (max-width: 992px) {
-    border: 1px solid #eeeeee;
-    height: 150px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 15rem;
   }
 `;
 

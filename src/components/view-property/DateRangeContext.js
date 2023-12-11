@@ -1,69 +1,65 @@
-// DateRangeContext.js
 import React, { createContext, useState, useContext } from "react";
-import { isSameDay, startOfDay } from "date-fns";
-
+import { addDays, isSameDay, startOfDay } from "date-fns";
 const DateRangeContext = createContext();
 
-export const DateRangeProvider = ({ children }) => {
-  //chọn ngày đi ngày đến
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    {
-      startDate: startOfDay(new Date()),
-      endDate: startOfDay(new Date()),
-      key: "selection",
-    },
-  ]);
+const bookedDate = [
+  { start: "2023-12-12", end: "2023-12-15" },
+  { start: "2023-12-17", end: "2023-12-23" },
+  { start: "2023-12-25", end: "2023-12-26" },
+];
 
-  const bookedDates = [
-    startOfDay(new Date("2023-12-1")),
-    startOfDay(new Date("2023-12-5")),
-    startOfDay(new Date("2023-12-10")),
-  ];
+const formatDate = (dateObj) => {
+  const date = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
 
-  const isDateBooked = (date) => {
-    const isDisabled = bookedDates.some((bookedDate) =>
-      isSameDay(startOfDay(date), bookedDate)
-    );
+  return `${year}-${month < 10 ? "0" + month : month}-${date < 10 ? "0" + date : date}`;
+};
+
+const listDate = (start, end) => {
+  const allDatesInRange = [];
+
+  const current = new Date(start);
+  const endDate = new Date(end);
+
+  while (formatDate(current) <= formatDate(endDate)) {
+    allDatesInRange.push(formatDate(current));
+
+    current.setDate(current.getDate() + 1);
+  }
+
+  return allDatesInRange;
+};
+
+export const DateRangeProvider = ({ children, data }) => {
+  let arrBookedDate = [];
+  for (let i = 0; i < bookedDate.length; i++) {
+    arrBookedDate = [...arrBookedDate, ...listDate(bookedDate[i].start, bookedDate[i].end)];
+  }
+
+  const disabledBookDate = (date) => {
+    const isDisabled = arrBookedDate.some((bookedDate) => {
+      return bookedDate == formatDate(new Date(date));
+    });
+
     return isDisabled;
   };
-  const disableBookedDates = (date) => {
-    //     console.log("Is Disabled?", isDateBooked(date));
-    return isDateBooked(date);
-  };
-  const countDay = (item) => {
-    const { startDate, endDate } = item.selection;
 
-    // Tạo một mảng chứa tất cả các ngày trong khoảng
-    const allDatesInRange = [];
-    let currentDate = startOfDay(new Date(startDate));
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
 
-    while (currentDate <= endDate) {
-      const check = () => {
-        for (let index = 0; index < bookedDates.length; index++) {
-          if (isSameDay(bookedDates[index], currentDate)) {
-            return false;
-          }
-        }
-        return true;
-      };
-      if (check()) {
-        allDatesInRange.push(new Date(currentDate));
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    // In ra console tất cả các ngày trong khoảng đã chọn
-    console.log("Tất cả các ngày trong khoảng đã chọn:", allDatesInRange);
-    console.log("Số ngày được chọn:", allDatesInRange.length);
-    // Cập nhật state cho selectedDateRange
-    setSelectedDateRange([item.selection]);
-    return allDatesInRange.length;
-  };
   return (
     <DateRangeContext.Provider
       value={{
         selectedDateRange,
-        disableBookedDates,
-        countDay,
+        setSelectedDateRange,
+        disabledBookDate,
+        formatDate,
+        listDate,
+        
       }}
     >
       {children}

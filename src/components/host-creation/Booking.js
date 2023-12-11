@@ -31,9 +31,10 @@ const StyledSecion2 = styled.section``;
 const StyledForm = styled.form`
   border-radius: 5px;
   padding: 30px 40px 20px 40px;
+  overflow: auto;
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
-    padding: 30px 40px 0px 40px;
+    padding: 2rem 5px;
   }
 `;
 const StyleText = styled.div`
@@ -125,7 +126,6 @@ const StyledBoderInput = styled.div`
   margin-bottom: 40px;
   @media (max-width: 992px) {
     border: 1px solid #eeeeee;
-    height: 270px;
   }
 `;
 const StyledSpan = styled.span`
@@ -182,8 +182,6 @@ const StyledBoderCancellationPolicyInput = styled.select`
   }
 
   @media (max-width: 992px) {
-    width: calc(100% - 60px);
-    margin: 0 30px;
     height: 35px;
   }
 `;
@@ -314,7 +312,6 @@ const Booking = () => {
                     <option value={"09PM"}>09:00 PM</option>
                     <option value={"10PM"}>10:00 PM</option>
                     <option value={"11PM"}>11:00 PM</option>
-                    <option value={"12PM"}>12:00 PM</option>
                   </StyledSelect>
                 </StyledSelectContainer>
                 <StyledSelectContainer>
@@ -349,7 +346,6 @@ const Booking = () => {
                     <option value={"09PM"}>09:00 PM</option>
                     <option value={"10PM"}>10:00 PM</option>
                     <option value={"11PM"}>11:00 PM</option>
-                    <option value={"12PM"}>12:00 PM</option>
                   </StyledSelect>
                 </StyledSelectContainer>
               </StyledBooking>

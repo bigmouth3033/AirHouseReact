@@ -23,12 +23,13 @@ const StyledContainerShareSave = styled.div`
 `;
 const StyledTitle = styled.h1`
   font-size: 23px;
+  font-weight: 500;
   line-height: 30px;
 `;
-const NavViewhost = () => {
+const NavViewhost = ({ data }) => {
   return (
     <StyledNav>
-      <StyledTitle>Title</StyledTitle>
+      <StyledTitle>{data.name}</StyledTitle>
       <StyledShareSave>
         <StyledContainerShareSave>
           <p>
