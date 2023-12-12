@@ -3,7 +3,7 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./style.scss";
 import { useMemo, useEffect } from "react";
-import { UploadImageMutation, BlogQueryId, UpdateBlogMutation } from "api/blogApi";
+import { UploadImageMutation, BlogQueryId, UpdateBlogMutation } from "api/BlogApi";
 
 
 import { BlogCategoryQuery, CategoryValueQuery } from "../../api/blogCategoryApi";
