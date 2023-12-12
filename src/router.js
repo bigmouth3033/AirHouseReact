@@ -108,6 +108,8 @@ const UpdateBlog = lazy(() => import("views/blog/UpdateBlog"));
 const BlogList = lazy(() => import("views/blog/BlogList"));
 const BlogCategoryList = lazy(() => import("views/blog/BlogCategoryList"));
 
+const Blog = lazy(() => import("components/blog/Blog"));
+
 const router = createBrowserRouter([
   {
     path: "/user",
@@ -190,6 +192,11 @@ const router = createBrowserRouter([
       {
         path: "/property",
         element: <ViewProperty />,
+        exact: true,
+      },
+      {
+        path: "/blog",
+        element: <Blog />,
         exact: true,
       },
     ],
