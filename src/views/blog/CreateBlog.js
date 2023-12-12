@@ -274,6 +274,7 @@ export default function CreateBlog() {
             checkbox.checked = false;
           });
         setValue("");
+        setImgSrc(DefaultImg);
       },
     });
   };
