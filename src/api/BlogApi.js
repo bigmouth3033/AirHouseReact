@@ -29,6 +29,10 @@ const readBlog = async (query) => {
   });
   return response.data;
 };
+const readAllBlog = async () => {
+  const response = await axiosClient.get("readBlog");
+  return response.data;
+};
 
 const updateBlog = async (payload) => {
   const response = await axiosClient.post("updateBlog", payload);
@@ -52,6 +56,14 @@ export const BlogQueryId = (id) => {
   const blogQuery = useQuery({
     queryKey: ["blog", id],
     queryFn: filterById,
+  });
+
+  return blogQuery;
+};
+export const AllBlogQuery = () => {
+  const blogQuery = useQuery({
+    queryKey: ["blog"],
+    queryFn: readAllBlog,
   });
 
   return blogQuery;

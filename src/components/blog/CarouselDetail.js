@@ -10,40 +10,53 @@ const StyledCarouselDetail = styled.div`
   border: solid lightgrey 1px;
 
   & a {
-    font-weight: 900;
-    font-size: 1.5rem;
+    font-weight: 500;
+    font-size: 1.2rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   & p {
     margin-top: 1rem;
     color: lightslategray;
     font-weight: 300;
-    font-size: 1rem;
+    font-size: 0.75rem;
   }
 `;
 
 const StyledImg = styled.img`
-  border-top-right-radius: inherit;
-  border-top-left-radius: inherit;
+  border-top-right-radius: 4%;
+  border-top-left-radius: 4%;
   width: 100%;
   object-fit: cover;
   height: 70%;
 `;
 
 export default function CarouselDetail({ item }) {
+  const formatCreatedAt = (createdAt) => {
+    const date = new Date(createdAt);
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+
+    return formattedDate;
+  };
   return (
     <StyledCarouselDetail style={{ margin: "1rem 0.5rem" }}>
-      <StyledImg src={item.image} alt="" />
-      <div
-        style={{
-          marginTop: " 1.6rem",
-          marginLeft: "1rem",
-          paddingRight: "0.5rem",
-        }}
-      >
-        <a href={item.linkurl}>{item.title}</a>
-        <p>{item.date} </p>
-      </div>
+      <a href={item.linkurl}>
+        <StyledImg src={item.image} alt="" />
+        <div
+          style={{
+            marginTop: " 1.6rem",
+            marginLeft: "1rem",
+            paddingRight: "0.5rem",
+          }}
+        >
+          {item.title}
+          <p>{formatCreatedAt(item.created_at)}</p>
+        </div>
+      </a>
     </StyledCarouselDetail>
   );
 }

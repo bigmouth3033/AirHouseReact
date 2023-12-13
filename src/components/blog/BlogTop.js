@@ -1,5 +1,7 @@
+import { AllBlogQuery } from "api/BlogApi";
 import React from "react";
 import styled from "styled-components";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledBlogTop = styled.div`
   display: grid;
@@ -26,6 +28,7 @@ const StyleIMG = styled.div`
     width: 100%;
     padding-right: 2rem;
     padding-left: 2rem;
+    border-radius: 8%;
   }
 `;
 
@@ -47,6 +50,11 @@ const StyleContent = styled.div`
     color: black;
     font-weight: 600;
     font-size: 2.7rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 1024px) {
       font-size: 1.5rem;
     }
@@ -82,22 +90,66 @@ const StyleContent = styled.div`
 `;
 
 export default function BlogTop() {
+  const queryClient = useQueryClient();
+  const allBlogQuery = AllBlogQuery();
+  console.log(allBlogQuery.data);
+
+  const formatCreatedAt = (createdAt) => {
+    const date = new Date(createdAt);
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+
+    return formattedDate;
+  };
   return (
-    <StyledBlogTop>
-      <StyleContent>
-        <p>November 8, 2023</p>
-        <a href="https://news.airbnb.com/airbnb-2023-winter-release/">
-          Airbnb 2023 Winter Release: Introducing Guest Favorites, a collection
-          of the 2 million most-loved homes on Airbnb
-        </a>
-        <button>Read more</button>
-      </StyleContent>
-      <StyleIMG>
-        <img
-          src="https://news.airbnb.com/wp-content/uploads/sites/4/2023/10/Newsroom_Header-EN-US.jpeg?zoom=2&resize=1100%2C725"
-          alt="blog-top-img"
-        />
-      </StyleIMG>
-    </StyledBlogTop>
+    <a href="" style={{ textDecoration: "none" }}>
+      {allBlogQuery.isSuccess &&
+        allBlogQuery.data &&
+        allBlogQuery.data.items.length > 0 && (
+          <StyledBlogTop>
+            <StyleContent>
+              <p>
+                {formatCreatedAt(
+                  allBlogQuery.data.items[allBlogQuery.data.items.length - 1]
+                    .created_at
+                )}
+              </p>
+              <a href="https://news.airbnb.com/airbnb-2023-winter-release/">
+                {
+                  allBlogQuery.data.items[allBlogQuery.data.items.length - 1]
+                    .title
+                }
+              </a>
+              <button>Read more</button>
+            </StyleContent>
+            <StyleIMG>
+              <img
+                src={
+                  allBlogQuery.data.items[allBlogQuery.data.items.length - 1]
+                    .image
+                }
+                alt="blog-top-img"
+              />
+            </StyleIMG>
+          </StyledBlogTop>
+        )}
+    </a>
+    //CODE CŨ
+    // <StyledBlogTop>
+    //   <StyleContent>
+    //     <p>November 8, 2023</p>
+    //     <a href="https://news.airbnb.com/airbnb-2023-winter-release/">
+    //       Airbnb 2023 Winter Release: Introducing Guest Favorites, a collection
+    //       of the 2 million most-loved homes on Airbnb
+    //     </a>
+    //     <button>Read more</button>
+    //   </StyleContent>
+    //   <StyleIMG>
+    //     <img
+    //       src="https://news.airbnb.com/wp-content/uploads/sites/4/2023/10/Newsroom_Header-EN-US.jpeg?zoom=2&resize=1100%2C725"
+    //       alt="blog-top-img"
+    //     />
+    //   </StyleIMG>
+    // </StyledBlogTop>
   );
 }

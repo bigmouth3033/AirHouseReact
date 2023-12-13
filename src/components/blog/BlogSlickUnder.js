@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { blogDetailArr } from "../../data/data";
+import { AllBlogQuery } from "api/BlogApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyleCarouselBlock = styled.div`
   background-color: #f7f7f7; //màu chuẩn của web
@@ -24,6 +26,17 @@ const StyleCarouselTilte = styled.p`
   font-size: 1.7rem;
   font-weight: 600;
   padding-left: 3rem;
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    font-size: 1.55rem;
+    padding-left: 1rem;
+  }
+  @media (max-width: 576px) {
+    width: 90vw;
+    font-size: 1.3rem;
+    padding-left: 1rem;
+  }
 `;
 
 const StyleCarouselContent = styled.p`
@@ -34,6 +47,16 @@ const StyleCarouselContent = styled.p`
   font-size: 1.4rem;
   font-weight: 300;
   padding-left: 3rem;
+  @media (max-width: 768px) {
+    width: 90vw;
+    font-size: 1.2rem;
+    padding-left: 1rem;
+  }
+  @media (max-width: 576px) {
+    width: 90vw;
+    font-size: 0.9rem;
+    padding-left: 1rem;
+  }
 `;
 
 const StyleSlickButton = styled.button`
@@ -87,11 +110,14 @@ export default function BlogSlick() {
     ],
   };
 
+  const queryClient = useQueryClient();
+  const allBlogQuery = AllBlogQuery();
+
   return (
     <div style={{ backgroundColor: "#f7f7f7" }}>
       <StyleCarouselBlock>
         <StyleCarouselTilte>
-        The economic opportunities of hosting
+          The economic opportunities of hosting
         </StyleCarouselTilte>
         <StyleCarouselContent>
           Explore the unique, limited-time stays that give guests a rare glimpse
@@ -107,11 +133,14 @@ export default function BlogSlick() {
         </div>
 
         <Slider ref={setSlider} {...settings}>
-          {blogDetailArr.map((item, index) => (
-            <div>
-              <CarouselDetail item={item} key={index} />
-            </div>
-          ))}
+          {allBlogQuery.isSuccess &&
+            allBlogQuery.data &&
+            allBlogQuery.data.items.length > 0 &&
+            allBlogQuery.data.items.slice(16, 25).map((item, index) => (
+              <div>
+                <CarouselDetail item={item} key={index} />
+              </div>
+            ))}
         </Slider>
       </StyleCarouselBlock>
     </div>

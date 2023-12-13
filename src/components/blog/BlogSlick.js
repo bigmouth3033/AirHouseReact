@@ -7,6 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { blogDetailArr } from "../../data/data";
+import { AllBlogQuery } from "api/BlogApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyleCarouselBlock = styled.div`
   background-color: #f7f7f7; //màu chuẩn của web
@@ -95,7 +97,7 @@ export default function BlogSlick() {
     centerPadding: "60px",
     slidesToShow: 3,
     speed: 500,
-    initialSlide: 2,
+    initialSlide: 1,
     arrows: false, //ẩn mũi tên 2 bên
     responsive: [
       {
@@ -118,13 +120,18 @@ export default function BlogSlick() {
     ],
   };
 
+  const queryClient = useQueryClient();
+  const allBlogQuery = AllBlogQuery();
   return (
     <div style={{ backgroundColor: "#f7f7f7" }}>
       <StyleCarouselBlock>
-        <StyleCarouselTilte>One-of-a-kind stays, only on Airhouse</StyleCarouselTilte>
+        <StyleCarouselTilte>
+          One-of-a-kind stays, only on Airhouse
+        </StyleCarouselTilte>
         <StyleCarouselContent>
-          More people are turning to hosting for the first time. From community stories, to the latest Host earnings data and trends,
-          discover how it has never been easier to host and earn on Airhouse.
+          More people are turning to hosting for the first time. From community
+          stories, to the latest Host earnings data and trends, discover how it
+          has never been easier to host and earn on Airhouse.
         </StyleCarouselContent>
         <div style={{ textAlign: "right", paddingRight: "5%" }}>
           <StyleSlickButton style={{ cursor: "pointer" }} onClick={previous}>
@@ -136,11 +143,14 @@ export default function BlogSlick() {
         </div>
 
         <Slider ref={setSlider} {...settings}>
-          {blogDetailArr.map((item, index) => (
-            <div>
-              <CarouselDetail item={item} key={index} />
-            </div>
-          ))}
+          {allBlogQuery.isSuccess &&
+            allBlogQuery.data &&
+            allBlogQuery.data.items.length > 0 &&
+            allBlogQuery.data.items.map((item, index) => (
+              <div>
+                <CarouselDetail item={item} key={index} />
+              </div>
+            ))}
         </Slider>
       </StyleCarouselBlock>
     </div>
