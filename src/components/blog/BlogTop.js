@@ -18,6 +18,7 @@ const StyledBlogTop = styled.div`
     grid-template-areas:
       "column2"
       "column1"; /* Đảo ngược thứ tự của các vùng trong grid */
+    padding: 0;
   }
 `;
 
@@ -36,12 +37,21 @@ const StyleContent = styled.div`
   grid-area: column1; /* Gán cột 1 vào vùng có tên column1 */
   width: 100%;
   padding: 1rem 3rem;
+  margin-top: 1rem;
   & p {
     margin: 1rem;
     margin-left: 0;
     color: lightslategray;
     font-weight: 300;
     font-size: 1rem;
+
+    @media (max-width: 786px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      font-size: 0.7rem;
+    }
   }
 
   & a {
@@ -58,14 +68,21 @@ const StyleContent = styled.div`
 
     @media (max-width: 1024px) {
       font-size: 1.5rem;
+      line-height: 2.3rem;
     }
 
     @media (max-width: 786px) {
       font-size: 1rem;
+      line-height: 1.7rem;
+      margin-top: 0;
+      padding: 0;
     }
 
     @media (max-width: 600px) {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+      line-height: 1.5rem;
+      margin-top: 0;
+      padding: 0;
     }
   }
 
@@ -87,6 +104,18 @@ const StyleContent = styled.div`
     );
     color: white;
     cursor: pointer;
+
+    @media (max-width: 786px) {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.7rem;
+      margin: 1.2rem 0;
+    }
+
+    @media (max-width: 600px) {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.5rem;
+      margin: 1rem 0;
+    }
   }
 `;
 
@@ -135,22 +164,5 @@ export default function BlogTop() {
           </StyledBlogTop>
         )}
     </a>
-    //CODE CŨ
-    // <StyledBlogTop>
-    //   <StyleContent>
-    //     <p>November 8, 2023</p>
-    //     <a href="https://news.airbnb.com/airbnb-2023-winter-release/">
-    //       Airbnb 2023 Winter Release: Introducing Guest Favorites, a collection
-    //       of the 2 million most-loved homes on Airbnb
-    //     </a>
-    //     <button>Read more</button>
-    //   </StyleContent>
-    //   <StyleIMG>
-    //     <img
-    //       src="https://news.airbnb.com/wp-content/uploads/sites/4/2023/10/Newsroom_Header-EN-US.jpeg?zoom=2&resize=1100%2C725"
-    //       alt="blog-top-img"
-    //     />
-    //   </StyleIMG>
-    // </StyledBlogTop>
   );
 }

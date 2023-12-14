@@ -12,6 +12,7 @@ const StyleCateBlock = styled.div`
   display: block;
   max-width: 100rem;
   margin: 0 auto;
+  margin-bottom: 5rem;
 
   padding-top: 2rem;
   & .title {
@@ -38,10 +39,10 @@ const StyleTabTop = styled.div`
 const StyleTabButton = styled.button`
   margin: 0.4rem;
   max-width: max-content;
-  border: solid 1.5px lightgrey;
+  border: solid 1px lightgrey;
   border-radius: 50px;
-  padding: 0.8rem 1.1rem;
-  font-weight: bolder;
+  padding: 0.75rem 1.1rem;
+  font-weight: 500;
   font-size: 0.8rem;
   cursor: pointer;
   background-color: white;
@@ -52,7 +53,18 @@ const StyleTabButton = styled.button`
     active &&
     css`
       border: solid 2px black;
+      font-weight: 600;
+      pointer-events: none; /* Vô hiệu hóa sự kiện (hover)*/
     `}
+
+  &:hover {
+    border: solid 1.2px black;
+  }
+
+  @media (max-width: 784px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.7rem;
+  }
 `;
 
 const StyleTabBody = styled.div`
@@ -95,25 +107,15 @@ const StyleViewMore = styled.button`
 `;
 
 export default function Categories() {
-  // const TitleArr = [
-  //   "All",
-  //   "Company",
-  //   "Stays",
-  //   "Product",
-  //   "Policy",
-  //   "Community",
-  //   "Airbnb.org",
-  // ];
   const allBlogQuery = AllBlogQuery();
-  // const BlogQueryByCategoryId = BlogQueryByCategoryId();
 
   const { data, isLoading } = CategoryValueQuery();
 
   const [tab, setTab] = useState("All");
-  const [viewMore, setviewMore] = useState(8);
+  const [viewMore, setViewMore] = useState(8);
 
-  function viewMoreHanddle() {
-    setviewMore((viewMore) => viewMore + 8);
+  function viewMoreHandle() {
+    setViewMore((prevViewMore) => prevViewMore + 8);
   }
 
   if (allBlogQuery.isSuccess) {
@@ -152,29 +154,45 @@ export default function Categories() {
       </StyleTabTop>
       <StyleTabBody>
         {allBlogQuery.isSuccess &&
-          allBlogQuery.data &&
-          allBlogQuery.data.items.length > 0 &&
-          allBlogQuery.data.items
-            .filter((item) => {
-              // Kiểm tra xem thuộc tính categories có phải là mảng không
-              const isCategoriesArray = Array.isArray(item.categories);
+        allBlogQuery.data &&
+        allBlogQuery.data.items.length > 0 ? (
+          <>
+            {allBlogQuery.data.items
+              .filter((item) => {
+                // Kiểm tra xem thuộc tính categories có phải là mảng không
+                const isCategoriesArray = Array.isArray(item.categories);
 
-              return (
-                tab === "All" ||
-                (isCategoriesArray &&
-                  item.categories.some((category) => category.id === tab))
-              );
-            })
-            .map((item, index) => {
-              return (
-                <div key={index}>
-                  <CateDetail item={item} />
-                </div>
-              );
-            })}
+                return (
+                  tab === "All" ||
+                  (isCategoriesArray &&
+                    item.categories.some((category) => category.id === tab))
+                );
+              })
+              .slice(0, viewMore)
+              .map((item, index) => {
+                return (
+                  <div key={index}>
+                    <CateDetail item={item} />
+                  </div>
+                );
+              })}
+          </>
+        ) : (
+          <Skeleton />
+        )}
       </StyleTabBody>
 
-      <StyleViewMore onClick={viewMoreHanddle}>View more</StyleViewMore>
+      {allBlogQuery.isSuccess &&
+      allBlogQuery.data &&
+      allBlogQuery.data.items.length > viewMore ? (
+        <StyleViewMore onClick={viewMoreHandle}>View more</StyleViewMore>
+      ) : (
+        <>
+          <br />
+          <br />
+          <br />
+        </>
+      )}
     </StyleCateBlock>
   );
 }
