@@ -51,7 +51,22 @@ const filterById = async (query) => {
   });
   return response.data;
 };
+const filterByCategoryID = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("readBlog", {
+    params: { id: id },
+  });
+  return response.data;
+};
 
+export const BlogQueryByCategoryId = (id) => {
+  const blogQuery = useQuery({
+    queryKey: ["blog", id],
+    queryFn: filterByCategoryID,
+  });
+
+  return blogQuery;
+};
 export const BlogQueryId = (id) => {
   const blogQuery = useQuery({
     queryKey: ["blog", id],

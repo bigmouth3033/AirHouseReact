@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { blogDetailArr } from "../../data/data";
 import CateDetail from "./CateDetail";
+import { CategoryValueQuery } from "api/blogCategoryApi";
+import Blogdetail from "./Blogdetail";
+import { AllBlogQuery } from "api/BlogApi";
+import { BlogQueryByCategoryId } from "../../api/BlogApi";
 
 const StyleCateBlock = styled.div`
   display: block;
@@ -90,15 +94,19 @@ const StyleViewMore = styled.button`
 `;
 
 export default function Categories() {
-  const TitleArr = [
-    "All",
-    "Company",
-    "Stays",
-    "Product",
-    "Policy",
-    "Community",
-    "Airbnb.org",
-  ];
+  // const TitleArr = [
+  //   "All",
+  //   "Company",
+  //   "Stays",
+  //   "Product",
+  //   "Policy",
+  //   "Community",
+  //   "Airbnb.org",
+  // ];
+  const allBlogQuery = AllBlogQuery();
+  // const BlogQueryByCategoryId = BlogQueryByCategoryId();
+
+  const { data, isLoading } = CategoryValueQuery();
 
   const [tab, setTab] = useState("All");
   const [viewMore, setviewMore] = useState(8);
@@ -111,23 +119,35 @@ export default function Categories() {
     <StyleCateBlock>
       <p className="title">Categories</p>
       <StyleTabTop>
-        {TitleArr.map((title) => (
-          <StyleTabButton
-            key="title"
-            onClick={() => setTab(title)}
-            active={tab === title}
-          >
-            {title}
-          </StyleTabButton>
-        ))}
+        {!isLoading &&
+          data &&
+          data.map((blogCategory) => (
+            <StyleTabButton
+              key={blogCategory.id}
+              name="category"
+              value={blogCategory.id}
+              onClick={() => setTab(blogCategory.id)}
+              active={tab === blogCategory.name}
+            >
+              {blogCategory.name}
+            </StyleTabButton>
+          ))}
       </StyleTabTop>
       <StyleTabBody>
-        {blogDetailArr
-          .filter((item) => tab === "All" || item.category.includes(tab))
-          .slice(0, viewMore)
-          .map((item, index) => (
-            <CateDetail item={item} key={index} />
-          ))}
+        {allBlogQuery.isSuccess &&
+          allBlogQuery.data &&
+          allBlogQuery.data.items.length > 0 &&
+          allBlogQuery.data.items
+            .filter(
+              (item) => tab === "All" || allBlogQuery.data.items.includes(tab)
+            )
+            .map((item, index) => {
+              return (
+                <div>
+                  <CateDetail item={item} key={index} />
+                </div>
+              );
+            })}
       </StyleTabBody>
 
       <StyleViewMore onClick={viewMoreHanddle}>View more</StyleViewMore>

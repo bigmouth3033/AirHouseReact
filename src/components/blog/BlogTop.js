@@ -48,8 +48,9 @@ const StyleContent = styled.div`
     text-decoration: none;
     margin-top: 2rem;
     color: black;
-    font-weight: 600;
-    font-size: 2.7rem;
+    font-weight: 500;
+    font-size: 2.1rem;
+    line-height: 2.7rem;
 
     &:hover {
       text-decoration: underline;
@@ -64,7 +65,7 @@ const StyleContent = styled.div`
     }
 
     @media (max-width: 600px) {
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
   }
 
