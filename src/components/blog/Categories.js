@@ -6,6 +6,7 @@ import { CategoryValueQuery } from "api/blogCategoryApi";
 import Blogdetail from "./Blogdetail";
 import { AllBlogQuery } from "api/BlogApi";
 import { BlogQueryByCategoryId } from "../../api/BlogApi";
+import Skeleton from "react-loading-skeleton";
 
 const StyleCateBlock = styled.div`
   display: block;
@@ -115,36 +116,59 @@ export default function Categories() {
     setviewMore((viewMore) => viewMore + 8);
   }
 
+  if (allBlogQuery.isSuccess) {
+    console.log(allBlogQuery.data.items);
+  }
+
   return (
     <StyleCateBlock>
       <p className="title">Categories</p>
       <StyleTabTop>
-        {!isLoading &&
-          data &&
-          data.map((blogCategory) => (
+        {!isLoading ? (
+          <>
             <StyleTabButton
-              key={blogCategory.id}
               name="category"
-              value={blogCategory.id}
-              onClick={() => setTab(blogCategory.id)}
-              active={tab === blogCategory.name}
+              value="All"
+              onClick={() => setTab("All")}
+              active={tab === "All"}
             >
-              {blogCategory.name}
+              All
             </StyleTabButton>
-          ))}
+            {data.map((blogCategory) => (
+              <StyleTabButton
+                key={blogCategory.id}
+                name="category"
+                value={blogCategory.id}
+                onClick={() => setTab(blogCategory.id)}
+                active={tab === blogCategory.id}
+              >
+                {blogCategory.name}
+              </StyleTabButton>
+            ))}
+          </>
+        ) : (
+          <Skeleton />
+        )}
       </StyleTabTop>
       <StyleTabBody>
         {allBlogQuery.isSuccess &&
           allBlogQuery.data &&
           allBlogQuery.data.items.length > 0 &&
           allBlogQuery.data.items
-            .filter(
-              (item) => tab === "All" || allBlogQuery.data.items.includes(tab)
-            )
+            .filter((item) => {
+              // Kiểm tra xem thuộc tính categories có phải là mảng không
+              const isCategoriesArray = Array.isArray(item.categories);
+
+              return (
+                tab === "All" ||
+                (isCategoriesArray &&
+                  item.categories.some((category) => category.id === tab))
+              );
+            })
             .map((item, index) => {
               return (
-                <div>
-                  <CateDetail item={item} key={index} />
+                <div key={index}>
+                  <CateDetail item={item} />
                 </div>
               );
             })}
