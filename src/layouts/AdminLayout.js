@@ -8,12 +8,35 @@ import { Suspense } from "react";
 import { Navigate } from "react-router-dom";
 import Loading from "components/Loading";
 import { UserQuery } from "api/userApi";
+import styled from "styled-components";
+import { CategoryQuery } from "api/categoryApi";
+import { RoomTypeQuery } from "api/room-typeApi";
+import { AmenitiesQuery } from "api/amenitiesApi";
+import { PropertyTypeQuery } from "api/property-typeApi";
+import { ProvinceQuery } from "api/locationApi";
 import "../scss/style.scss";
+
+const StyledContainer = styled.div`
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+`;
 
 export default function AdminLayout() {
   const userQuery = UserQuery();
+  const categoryQuery = CategoryQuery();
+  const roomTypeQuery = RoomTypeQuery();
+  const amenitiesQuery = AmenitiesQuery();
+  const propertyQuery = PropertyTypeQuery();
+  const provinceQuery = ProvinceQuery();
 
-  if (userQuery.isLoading) {
+  if (
+    userQuery.isLoading ||
+    categoryQuery.isLoading ||
+    roomTypeQuery.isLoading ||
+    amenitiesQuery.isLoading ||
+    propertyQuery.isLoading ||
+    provinceQuery.isLoading
+  ) {
     return <Loading />;
   }
 
@@ -30,21 +53,23 @@ export default function AdminLayout() {
   }
 
   return (
-    <Provider store={store}>
-      <Suspense>
-        <AppSidebar />
-        <div className="wrapper d-flex flex-column min-vh-100 bg-light">
-          <AppHeader />
-          <div className="body flex-grow-1 px-3">
-            <CContainer lg>
-              <Suspense fallback={<CSpinner color="primary" />}>
-                <Outlet />
-              </Suspense>
-            </CContainer>
+    <StyledContainer>
+      <Provider store={store}>
+        <Suspense>
+          <AppSidebar />
+          <div className="wrapper d-flex flex-column min-vh-100 bg-light">
+            <AppHeader />
+            <div className="body flex-grow-1 px-3">
+              <CContainer lg>
+                <Suspense fallback={<CSpinner color="primary" />}>
+                  <Outlet />
+                </Suspense>
+              </CContainer>
+            </div>
+            <AppFooter />
           </div>
-          <AppFooter />
-        </div>
-      </Suspense>
-    </Provider>
+        </Suspense>
+      </Provider>
+    </StyledContainer>
   );
 }

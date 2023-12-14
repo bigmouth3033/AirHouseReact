@@ -31,7 +31,6 @@ const StyleAbout = styled.div`
   column-gap: 40px;
   padding-bottom: 5rem;
   padding-top: 5rem;
-  background-color: rgb(247,247,247);
 
   width: 90%;
   margin: auto;
@@ -65,7 +64,7 @@ const StyledLink = styled(Link)`
   font-size: 14px;
   margin-top: 3px;
 
-  &:hover{
+  &:hover {
     text-decoration: underline;
   }
 `;
@@ -88,8 +87,8 @@ const StyleA = styled.a`
 const StyledFooter = styled.div`
   font-family: "Poppins", sans-serif;
   bottom: 0;
-  background-color: white;
   z-index: 3;
+  background-color: rgb(247, 247, 247);
 `;
 
 const FooterHostCreation = () => {
@@ -109,7 +108,9 @@ const FooterHostCreation = () => {
         <AboutSession
           title={TitleAbout[0]}
           item={SupportDetail.map((value, index) => (
-            <StyleA key={index} href={link}>{value}</StyleA>
+            <StyleA key={index} href={link}>
+              {value}
+            </StyleA>
           ))}
         ></AboutSession>
         <AboutSession
@@ -123,7 +124,9 @@ const FooterHostCreation = () => {
         <AboutSession
           title={TitleAbout[2]}
           item={AirbnbDetail.map((value, index) => (
-            <StyleA key={index} href={link}>{value}</StyleA>
+            <StyleA key={index} href={link}>
+              {value}
+            </StyleA>
           ))}
         ></AboutSession>
       </StyleAbout>

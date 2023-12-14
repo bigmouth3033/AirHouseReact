@@ -6,10 +6,13 @@ import { createContext } from "react";
 const StateContext = createContext({
   pageWidth: window.innerWidth,
   setPageWidth: () => {},
+  chosenProperty: null,
+  setChosenProperty: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
   const [pageWidth, setPageWidth] = useState(window.innerWidth);
+  const [chosenProperty, setChosenProperty] = useState();
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -21,6 +24,8 @@ export const ContextProvider = ({ children }) => {
     <StateContext.Provider
       value={{
         pageWidth,
+        chosenProperty,
+        setChosenProperty,
       }}
     >
       {children}

@@ -4,60 +4,111 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
-import { useDateRange } from "./DateRangeContext";
-import { format } from "date-fns";
+import Calendar from "react-calendar";
+import "./calendar.css";
+import { faAngleUp, faChevronDown, faPlus, faSubtract } from "@fortawesome/free-solid-svg-icons";
+import { CreateBookingMutation } from "api/userBookingApi";
+import { CreateTransactionMutation } from "api/transactionApi";
+
 const StyledContainer = styled.div`
   position: relative;
   font-size: 15px;
-  max-width: 370px;
-  height: 275px;
-  border: 1px solid #dddddd;
-  padding: 24px;
-  border-radius: 8px;
+  height: fit-content;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 5px;
+  padding: 20px 20px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  @media (max-width: 992px) {
+    width: 470px;
+  }
 `;
-const StyledSpan = styled.span`
-  display: inline-block;
-  font-size: 22px;
-  padding: 0 10px 30px 0;
+const StyledPrice = styled.span`
+  font-size: 19px;
+  font-weight: 600;
+
+  & span {
+    font-size: 16px;
+    font-weight: 300;
+  }
 `;
 const StyledBooking = styled.div`
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
   border: 1px solid #dddddd;
   border-radius: 5px;
 `;
 const StyledCheck = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const StyledCheckin = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
   border-bottom: 1px solid #dddddd;
-  padding: 0 10px;
-  width: 100%;
-  height: 45px;
+  cursor: pointer;
+
+  > div {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 `;
+const StyledCheckin = styled.div`
+  border-right: 1px solid black;
+  & span:nth-of-type(1) {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  & span:nth-of-type(2) {
+    font-size: 13px;
+  }
+`;
+
+const StyledCheckOut = styled.div`
+  & span:nth-of-type(1) {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  & span:nth-of-type(2) {
+    font-size: 13px;
+  }
+`;
+
 const StyledCountGuest = styled.div`
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
+  padding: 10px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 10px;
+
+  & span {
+    font-weight: 600;
+  }
+
+  & p {
+    font-size: 13px;
+  }
+
+  & div {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 const StyledButton = styled.button`
-  width: 100%;
-  margin-top: 20px;
   padding: 10px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   color: white;
   background-color: #e51d50;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 
-  @media (max-width: 992px) {
+  &:hover {
+    color: rgba(255, 255, 255, 0.4);
   }
 `;
 const StyledText = styled.p`
@@ -78,81 +129,300 @@ const StyledCalendar = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1;
 `;
-const TotalBeforeTaxes = () => {
-  const { selectedDateRange, countDay } = useDateRange();
+
+const StyledGuest = styled.div`
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  z-index: 10;
+  background-color: #fff;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  transform: translate(5px, 3.6rem);
+`;
+
+const StyledAdultChildren = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #dddddd;
+
+  > div:nth-of-type(1) {
+    font-weight: 600;
+    font-size: 14px;
+  }
+`;
+const StyledAddSub = styled.span`
+  font-size: 10px;
+  padding: 0px 12px;
+  cursor: pointer;
+`;
+
+const StyledDetailText = styled.div`
+  text-align: center;
+`;
+
+const StyledDetailContent = styled.div`
+  .container {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+  }
+
+  .content {
+    font-size: 13px;
+    padding: 15px 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
+const StyledTotal = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 5px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  > span:nth-of-type(1) {
+    font-weight: 600;
+  }
+`;
+
+const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+  const createBooking = CreateBookingMutation();
+  const createTransaction = CreateTransactionMutation();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [showText, setShowText] = useState(false);
+  const [icon, setIcon] = useState(true);
+  const [guest, setGuest] = useState(1);
+  const [adult, setAdult] = useState(1);
+  const [children, setChildren] = useState(1);
+  const [infant, setInfant] = useState(1);
+
+  const handleClickDropdown = () => {
+    setShowText((prevShowText) => !prevShowText);
+    setIcon((icon) => !icon);
+  };
+
+  const { start_date, end_date, minimum_stay, maximum_stay } = data;
+
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
+
   const handleClose = () => {
     setIsOpen(false);
   };
+
   const handleCalendarClick = (e) => {
-    // Ngăn chặn lan tỏa sự kiện từ StyledCalendar đến StyledCheckin
     e.stopPropagation();
   };
+
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
+  const calBookedLength = (start, end) => {
+    return new Date(end).getDate() - new Date(start).getDate() + 1;
+  };
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+
+    if (value[0] == null || value[1] == null) {
+      alert("Please choose checkin and checkout day");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("property_id", data.id);
+    formData.append("check_in_date", formatDate(new Date(value[0])));
+    formData.append("check_out_date", formatDate(new Date(value[1])));
+
+    const bookedLength = new Date(value[1]).getDate() - new Date(value[0]).getDate();
+    const siteFees = formData.append("base_price", data.base_price);
+    formData.append("total", data.base_price * bookedLength);
+    formData.append("site_fees", data.base_price * bookedLength * 0.06);
+    formData.append("booking_date", formatDate(new Date()));
+    formData.append("total_person", guest);
+
+    createBooking.mutate(formData, {
+      onSuccess: () => {
+        alert("success");
+      },
+    });
+  };
+
   return (
     <StyledContainer>
-      <form>
-        <div>
-          <StyledSpan>$175</StyledSpan>
-          <span>night</span>
+      {isOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1,
+          }}
+          onClick={handleClose}
+        >
+          <StyledCalendar onClick={handleCalendarClick}>
+            <Calendar
+              onChange={onHandleChange}
+              tileDisabled={disabledBookDate}
+              allowPartialRange={true}
+              selectRange={true}
+              returnValue={"range"}
+              view={"month"}
+              minDate={new Date()}
+              maxDate={new Date(end_date)}
+              maxDetail={"month"}
+              value={value}
+              data={data}
+            />
+          </StyledCalendar>
         </div>
-        <StyledBooking>
-          <StyledCheck>
-            <StyledCheckin onClick={handleClick}>
-              <label>Checkin</label>
-              <div>{`${format(
-                selectedDateRange[0].startDate,
-                "yyyy-MM-dd"
-              )}`}</div>
-              <FontAwesomeIcon icon={faChevronCircleDown} />
-            </StyledCheckin>
+      )}
+      <StyledPrice>
+        $ {data.base_price} / <span>night</span>
+      </StyledPrice>
 
-            <StyledCheckin onClick={handleClick}>
-              <label>Checkout</label>
-              <div>{`${format(
-                selectedDateRange[0].endDate,
-                "yyyy-MM-dd"
-              )}`}</div>
-              <FontAwesomeIcon icon={faChevronCircleDown} />
-            </StyledCheckin>
+      <StyledBooking>
+        <StyledCheck>
+          <StyledCheckin onClick={handleClick}>
+            <span>Checkin</span>
+            <span> {value?.[0] ? formatDate(value[0]) : <p>mm-dd-yy</p>}</span>
+          </StyledCheckin>
 
-            {isOpen && (
-              <div
-                style={{
-                  position: "fixed",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  background: "rgba(0, 0, 0, 0.5)",
-                  zIndex: 1,
-                }}
-                onClick={handleClose}
-              >
-                <StyledCalendar onClick={handleCalendarClick}>
-                  {isOpen && (
-                    <CalendarViewHost
-                      ranges={selectedDateRange}
-                      onChange={(item) => {
-                        countDay(item);
-                      }}
-                    />
-                  )}
-                </StyledCalendar>
+          <StyledCheckOut onClick={handleClick}>
+            <span>Checkout</span>
+
+            <span>
+              {value?.[0] == null && value?.[1] == null && <p>mm-dd-yy</p>}
+              {value?.[0] != null && value?.[1] == null && <p>mm-dd-yy</p>}
+              {value?.[0] != null && value?.[1] != null && formatDate(value[1])}
+            </span>
+          </StyledCheckOut>
+        </StyledCheck>
+        {showText && (
+          <StyledGuest>
+            <StyledAdultChildren>
+              <div>Adults</div>
+              <div>
+                <StyledAddSub
+                  onClick={() => {
+                    if (adult != 1) {
+                      setAdult(adult - 1);
+                      setGuest(guest - 1);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faSubtract} />
+                </StyledAddSub>
+                {adult}
+                <StyledAddSub
+                  onClick={() => {
+                    if (guest < data.accomodates_count) {
+                      setAdult(adult + 1);
+                      setGuest(guest + 1);
+                    } else {
+                      alert(`maximum guest is ${data.accomodates_count}`);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </StyledAddSub>
               </div>
-            )}
-          </StyledCheck>
-          <StyledCountGuest>
-            <label htmlFor="">Guests</label>
-            <div>{countDay}</div>
+            </StyledAdultChildren>
+            <StyledAdultChildren>
+              <div>Childrens</div>
+              <div>
+                <StyledAddSub
+                  onClick={() => {
+                    if (children != 1) {
+                      setChildren(children - 1);
+                      setGuest(guest - 1);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faSubtract} />
+                </StyledAddSub>
+                {children}
+                <StyledAddSub
+                  onClick={() => {
+                    if (guest < data.accomodates_count) {
+                      setChildren(children + 1);
+                      setGuest(guest + 1);
+                    } else {
+                      alert(`maximum guest is ${data.accomodates_count}`);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </StyledAddSub>
+              </div>
+            </StyledAdultChildren>
+          </StyledGuest>
+        )}
+        <StyledCountGuest onClick={handleClickDropdown}>
+          <div>
+            <span>Guests</span>
             <FontAwesomeIcon icon={faChevronCircleDown} />
-          </StyledCountGuest>
-        </StyledBooking>
-        <StyledButton type="submit">Continute </StyledButton>
-        <StyledText>You won't be charged yet</StyledText>
-      </form>
+          </div>
+          <p>{guest} Guest</p>
+        </StyledCountGuest>
+      </StyledBooking>
+
+      <StyledButton onClick={onSubmit}>Continute</StyledButton>
+      <StyledDetailText>You'll be able to review before paying.</StyledDetailText>
+      <StyledDetailContent>
+        {value?.[0] && value?.[1] && (
+          <div className="container">
+            <div className="content">
+              <span>
+                {formatDate(value[0])} to {formatDate(value[1])}
+              </span>
+              <span>$ {data.base_price * calBookedLength(value[0], value[1])}</span>
+            </div>
+            <div className="content">
+              <span>{calBookedLength(value[0], value[1]) + 1} night</span>
+            </div>
+            <div className="content">
+              <span>{guest} guest</span>
+            </div>
+            <div className="content">
+              <span>Site fees</span>
+              <span>$ {data.base_price * calBookedLength(value[0], value[1]) * 0.06} </span>
+            </div>
+          </div>
+        )}
+      </StyledDetailContent>
+      <StyledTotal>
+        <span>Total</span>
+        <span>
+          $
+          {value?.[0] && value?.[1]
+            ? data.base_price * calBookedLength(value[0], value[1]) + data.base_price * calBookedLength(value[0], value[1]) * 0.06
+            : 0}
+        </span>
+      </StyledTotal>
       <StyledReport>
         <a href="#">Report this listing</a>
       </StyledReport>

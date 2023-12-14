@@ -130,3 +130,16 @@ export const UserIdQuery = (id) => {
 
   return userQuery;
 };
+
+const checkEmailUnique = async (email) => {
+  const response = await axiosClient.get("check-email-unique", { params: { email: email } });
+  return response.data;
+};
+
+export const CheckEmailMutation = () => {
+  const checkMutation = useMutation({
+    mutationFn: checkEmailUnique,
+  });
+
+  return checkMutation;
+};

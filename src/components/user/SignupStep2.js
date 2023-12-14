@@ -1,86 +1,66 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { faFacebook } from "@fortawesome/free-brands-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { getYear } from "date-fns";
-// npm install react-hook-form date-fns  --force
-const StyledError = styled.p`
-  color: red;
-`;
+import { CreateUserMutation } from "api/userApi";
+
 const StyledContainer = styled.div`
-  max-width: 500px;
-  margin: 0 auto;
+  border: 1px solid red;
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  background-color: white;
+  max-height: 550px;
+  overflow-y: scroll;
 `;
-const Styledh2 = styled.h2`
+const StyledTitle = styled.h2`
+  color: red;
   text-align: center;
   font-size: 20px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
   padding-bottom: 20px;
   border-bottom: 1px solid #dddddd;
   margin: 0 -25px;
 `;
 const StyledForm = styled.form`
-  height: 500px;
-  overflow: auto;
-  margin-right: -25px;
+  display: flex;
+  flex-direction: column;
 `;
 const StyledFormContainer = styled.div`
-  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
 `;
+
 const StyledInput = styled.input`
-  width: 440px;
-  height: 40px;
-  border-radius: 8px;
+  height: 50px;
+  border-radius: 4px;
   border: 1px solid #dddddd;
   padding: 0 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
 
-  &:hover {
-    border: none;
-    border-radius: 12px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-  }
   &:focus {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-    border: none;
-    border-radius: 12px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    outline: 1px solid rgba(255, 0, 0, 0.3);
   }
-`;
-const StyledSpan = styled.p`
-  font-size: 14px;
-  width: 400px;
-  color: #717171;
-  padding: 10px 0 20px 0;
 `;
 const StyledButtonSubmit = styled.button`
-  width: 440px;
-  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 12px 20px 4px; */
   padding: 10px 25px;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   color: white;
   background-color: #db0c63;
-  border-radius: 12px;
   border: none;
+  cursor: pointer;
   &:active {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
   }
 `;
 const StyledWith = styled.div`
   text-align: center;
   font-size: 16px;
-  margin: 30px 0;
+  color: red;
+  font-weight: 400;
+  margin-top: 1.3rem;
+
   &::after {
     content: "";
     display: inline-block;
@@ -96,189 +76,151 @@ const StyledWith = styled.div`
     margin: 5px;
   }
 `;
-const StyledIcon = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 20px 0;
-  > * {
-    font-size: 40px;
-  }
+
+const StyledError = styled.div`
+  color: red;
+  font-size: 14px;
+  height: 2.5rem;
+  padding: 5px 0;
 `;
-const StyledA = styled.a``;
-const StyledAa = styled.p`
-  -moz-transform: scaleY(-1);
-  -o-transform: scaleY(-1);
-  -webkit-transform: scaleY(-1);
-  transform: scaleY(-1);
-  -moz-transform: rotateX(210deg);
-  -o-transform: rotateX(210deg);
-  -webkit-transform: rotateX(210deg);
-  transform: rotateX(210deg);
-  perspective: 200px;
-  -webkit-mask-image: -webkit-gradient(
-    linear,
-    right top,
-    right bottom,
-    from(transparent),
-    color-stop(20%, transparent),
-    to(rgba(0, 0, 0, 0.4))
-  );
+
+const StyledWelcome = styled.div`
+  color: red;
+  padding: 0 25px;
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 20px;
+
+  margin: 0 -25px;
 `;
-const SignupStep2 = () => {
-  const [fname, setfName] = useState("");
-  const [lname, setlName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [errorText, setErrorText] = useState("");
+
+const StyledSpan = styled.p`
+  font-size: 14px;
+  color: #717171;
+  padding: 10px 0 0px 0;
+`;
+
+const PASSWORD_REGEX = /^.{9,}$/;
+
+const SignupStep2 = ({ state, dispatch, setShowSignUp }) => {
+  const createMutation = CreateUserMutation();
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
+  const [dobError, setDOBError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordConfirmError, setPasswordConfirmError] = useState(false);
 
   const validateForm = (e) => {
-    const selectedDate = new Date(birthday);
-    const today = new Date();
-    const age = today.getFullYear() - selectedDate.getFullYear();
+    e.preventDefault();
+    let isError = false;
 
-    if (fname.trim() === "") {
-      e.preventDefault();
-      setErrorText("First name is required.");
-    } else if (!/^[a-zA-Z ]+$/.test(fname)) {
-      e.preventDefault();
-      setErrorText(
-        "First name should not contain special characters or numbers."
-      );
-    } else if (lname.trim() === "") {
-      e.preventDefault();
-      setErrorText("Last name is required.");
-    } else if (!/^[a-zA-Z ]+$/.test(lname)) {
-      e.preventDefault();
-      setErrorText(
-        "Last name should not contain special characters or numbers."
-      );
-    } else if (isNaN(selectedDate.getTime())) {
-      e.preventDefault();
-      setErrorText("Invalid date of birth.");
-    } else if (age < 18) {
-      e.preventDefault();
-      setErrorText("You must be at least 18 years old.");
-    } else if (selectedDate > today) {
-      e.preventDefault();
-      setErrorText("Date of birth cannot be in the future.");
-    } else if (email.trim() === "") {
-      e.preventDefault();
-      setErrorText("Email is required.");
-    } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-      e.preventDefault();
-      setErrorText("Email should contain special characters or numbers.");
-    } else if (password.trim() === "") {
-      e.preventDefault();
-      setErrorText("Password is required");
-    } else if (
-      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/.test(password)
-    ) {
-      e.preventDefault();
-      setErrorText("Password should contain special characters or numbers.");
-    } else if (password !== passwordConfirm) {
-      e.preventDefault();
-      setErrorText("Password isn't confirm ");
+    if (state.first_name.trim().length == 0) {
+      setFirstNameError(true);
+      isError = true;
     } else {
-      setErrorText("");
-      // Thực hiện các hành động gửi form tại đây
+      setFirstNameError(false);
+    }
+
+    if (state.last_name.trim().length == 0) {
+      setLastNameError(true);
+      isError = true;
+    } else {
+      setLastNameError(false);
+    }
+
+    if (state.date_of_birth == null) {
+      setDOBError(true);
+      isError = true;
+    } else {
+      setDOBError(false);
+    }
+
+    if (!PASSWORD_REGEX.test(state.password)) {
+      setPasswordError(true);
+      isError = true;
+    } else {
+      setPasswordError(false);
+    }
+
+    if (state.password.trim() != state.password_confirm.trim()) {
+      setPasswordConfirmError(true);
+      isError = true;
+    } else {
+      setPasswordConfirmError(false);
+    }
+
+    if (isError == true) {
+      return;
+    }
+
+    if (isError == false) {
+      createMutation.mutate(
+        {
+          email: state.email,
+          password: state.password,
+          birthday: state.date_of_birth,
+          first_name: state.first_name,
+          last_name: state.last_name,
+        },
+        {
+          onSuccess: () => {
+            setShowSignUp(false);
+          },
+        }
+      );
     }
   };
 
   return (
     <StyledContainer>
-      <Styledh2>Finish signing up</Styledh2>
-      <StyledError>{errorText}</StyledError>
+      <StyledTitle>Finish signing up</StyledTitle>
       <StyledForm>
-        <form>
-          <StyledFormContainer>
-            <StyledInput
-              type="text"
-              placeholder="First name"
-              value={fname}
-              onChange={(e) => setfName(e.target.value)}
-            />
-            {/* <StyledInput type="text" placeholder="Fisrt name" required /> */}
-            <StyledInput
-              type="text"
-              placeholder="Last name"
-              value={lname}
-              onChange={(e) => setlName(e.target.value)}
-            />
-            <StyledSpan>
-              Make sure it matches the name on your goverment ID.
-            </StyledSpan>
-            {/* <StyledInput type="date" placeholder="Birthday" /> */}
-            <StyledInput
-              type="date"
-              id="birthday"
-              name="birthday"
-              value={birthday}
-              onChange={(e) => setBirthday(e.target.value)}
-            />
-            {/* <p style={{ color: "red" }}>{errorText}</p> */}
+        <StyledFormContainer>
+          <StyledInput
+            type="text"
+            placeholder="First name"
+            value={state.first_name}
+            onChange={(e) => dispatch({ type: "handle-first-name", next: e.target.value })}
+          />
+          <StyledError>{firstNameError && <span>First name is required</span>}</StyledError>
+          <StyledInput
+            type="text"
+            placeholder="Last name"
+            value={state.last_name}
+            onChange={(e) => dispatch({ type: "handle-last-name", next: e.target.value })}
+          />
+          <StyledSpan>Make sure it matches the name on your goverment ID.</StyledSpan>
+          <StyledError>{lastNameError && <span>Last name is required</span>}</StyledError>
+          <StyledInput
+            type="date"
+            id="birthday"
+            name="birthday"
+            value={state.date_of_birth}
+            onChange={(e) => dispatch({ type: "handle-date-of-birth", next: e.target.value })}
+          />
+          <StyledSpan>To signup, you need to be at least 18. Your birthday won't be share with other people who use AirHouse.</StyledSpan>
+          <StyledError>{dobError && <span>Date of birth is required</span>}</StyledError>
+          <StyledInput
+            type="password"
+            placeholder="Password"
+            value={state.password}
+            onChange={(e) => dispatch({ type: "handle-password", next: e.target.value })}
+          />
+          <StyledSpan>Password must have at least 9 characters</StyledSpan>
+          <StyledError>{passwordError && <span>Please enter valid password</span>}</StyledError>
+          <StyledInput
+            type="password"
+            placeholder="Password Confirm"
+            value={state.password_confirm}
+            onChange={(e) => dispatch({ type: "handle-password-confirm", next: e.target.value })}
+          />
+          <StyledError>{passwordConfirmError && <span>Wrong password confirmation</span>}</StyledError>
+        </StyledFormContainer>
+        <StyledButtonSubmit type="submit" onClick={validateForm}>
+          Finish
+        </StyledButtonSubmit>
 
-            <StyledSpan>
-              To signup, you need to be at least 18. Your birthday won't be
-              share with other people who use AirHouse.
-            </StyledSpan>
-            <StyledInput
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <StyledSpan>
-              We'll email you trip confirmations and receipts.
-            </StyledSpan>
-            <StyledInput
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <StyledInput
-              type="password"
-              placeholder="Password Confirm"
-              value={passwordConfirm}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-            />
-          </StyledFormContainer>
-          <StyledButtonSubmit type="submit" onClick={validateForm}>
-            Continute
-          </StyledButtonSubmit>
-        </form>
-        <StyledWith>Login with</StyledWith>
-        <StyledIcon>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faEnvelope} />
-          </StyledA>
-        </StyledIcon>
-        <StyledIcon>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faEnvelope} />
-          </StyledAa>
-        </StyledIcon>
+        <StyledWith>Sign up with</StyledWith>
       </StyledForm>
     </StyledContainer>
   );

@@ -3,17 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
+import Avatar from "react-avatar";
+import { useStateContext } from "contexts/ContextProvider";
 
 const StyledContainer = styled.div`
   max-width: 654px;
-  margin: auto;
 `;
 const StyledSection = styled.div`
   border-bottom: 1px solid #dddddd;
   display: flex;
   flex-direction: column;
   gap: 10px;
-
+  text-align: justify;
   padding: 1.5rem 0;
 `;
 const StyledDetailInfor = styled.div`
@@ -45,14 +46,26 @@ const StyledHost = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+
   p {
     margin-left: 20px;
+  }
+
+  & .hosted {
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  & .host-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 `;
 const StyledDesign = styled.div`
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  row-gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 1rem;
 `;
 const StyledP = styled.p`
   color: #717171;
@@ -60,17 +73,18 @@ const StyledP = styled.p`
 `;
 const StyledGroupIcon = styled.div`
   display: flex;
-  justify-content: start;
+  justify-content: stretch;
   align-items: center;
 `;
 const StyledImageIcon = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   margin-right: 20px;
 `;
 const StyledAboutText = styled.p`
   color: #717171;
   font-size: 16px;
+  line-height: 1.5;
 `;
 const StyledShowMore = styled.div`
   display: flex;
@@ -81,27 +95,6 @@ const StyledShowMore = styled.div`
     color: black;
   }
 `;
-const StyledAmenities = styled.img`
-  width: 35px;
-  height: 35px;
-  margin-right: 15px;
-`;
-const StyledGroupAmenities = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-`;
-const StyledShowAmenities = styled.div`
-  display: inline-block;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  padding: 7px 22px;
-  font-size: 18px;
-  margin: 15px 0;
-  &:hover {
-    background-color: #eeeeee;
-  }
-`;
 
 const StyledTitle = styled.div`
   display: flex;
@@ -109,17 +102,21 @@ const StyledTitle = styled.div`
   font-size: 19px;
   font-weight: 500;
 `;
-const Information = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState();
+const StyledAmentinies = styled.div`
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 10px;
+`;
+const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+  const { pageWidth } = useStateContext();
 
-  const handleDateChange = (item) => {
-    setSelectedDateRange([item.selection]);
-  };
   return (
     <StyledContainer>
       <StyledSection>
         <StyledTitle>
-          <span>Entire home in Ko Samui, Thailand</span>
+          <span>
+            {data.category.name} in {data.province.full_name}
+          </span>
           <StyledReview>
             <div>
               <FontAwesomeIcon icon={faStar} />
@@ -129,115 +126,69 @@ const Information = () => {
         </StyledTitle>
         <StyledDetailInfor>
           <StyledSpan>
-            <span>6 guests </span> <span> . </span>
+            <span>{data.accomodates_count} guests </span> <span> . </span>
           </StyledSpan>
           <StyledSpan>
-            <span>6 bedrooms</span> <span> . </span>
+            <span>{data.bedroom_count} bedrooms</span> <span> . </span>
           </StyledSpan>
           <StyledSpan>
-            <span>7 beds</span> <span> . </span>
+            <span>{data.bed_count} beds</span>
+            <span> . </span>
           </StyledSpan>
           <StyledSpan>
-            <span>5 baths</span>
+            <span>{data.bathroom_count} baths</span>
           </StyledSpan>
         </StyledDetailInfor>
       </StyledSection>
       <StyledSection>
         <StyledHost>
           <div>
-            <StyledImage src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
+            <Avatar size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
           </div>
-          <div>
-            <p>Hosted by Marc</p>
-            <p>11 years hosting</p>
+          <div className="host-container">
+            <p className="hosted">
+              Hosted by {data.user.first_name} {data.user.last_name}
+            </p>
+            <p> 11 year</p>
           </div>
         </StyledHost>
       </StyledSection>
       <StyledSection>
+        <StyledAmentinies>What this place offers</StyledAmentinies>
         <StyledDesign>
-          <StyledGroupIcon>
-            <div>
-              <StyledImageIcon src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <div>
-              <div>Designed by</div>
-              <StyledP>Marc Gerritsen</StyledP>
-            </div>
-          </StyledGroupIcon>
-          <StyledGroupIcon>
-            <div>
-              <StyledImageIcon src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <div>
-              <div>Featured in</div>
-              <StyledP>ArchDaily, April 2015 Dwell, January 2014</StyledP>
-            </div>
-          </StyledGroupIcon>
-          <StyledGroupIcon>
-            <div>
-              <StyledImageIcon src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <div>
-              <div>Self check-in</div>
-              <StyledP>Check yourself in with the smartlock.</StyledP>
-            </div>
-          </StyledGroupIcon>
+          {data.amenities.map((obamenities, index) => {
+            return (
+              <StyledGroupIcon>
+                <StyledImageIcon src={obamenities.icon_image} alt={index} />
+                <div>{obamenities.name}</div>
+              </StyledGroupIcon>
+            );
+          })}
         </StyledDesign>
       </StyledSection>
       <StyledSection>
-        <StyledAboutText>
-          Quarantining, social distancing and remote working is what this house is perfect for. Please ask us about special covid rates. It
-          is an architectural villa on the south side of Koh Samui, private and in a natural environment, it has sweeping ocean views and
-          has a great salt water lap pool. Half way up a hill, it gets natural breezes, whithout mozzies even at dusk. It is minimally
-          designed, but takes maximum advantage of the nature. It is called the naked house because the walls are left naked.....
-        </StyledAboutText>
-        <StyledShowMore>
-          <a href="">Show more</a>
-          <p>
-            <FontAwesomeIcon icon={faAngleRight} />
-          </p>
-        </StyledShowMore>
+        <StyledTitle>Description</StyledTitle>
+        <StyledAboutText>{data.description}</StyledAboutText>
+        <StyledShowMore></StyledShowMore>
       </StyledSection>
       <StyledSection>
-        <h2>What this place offers</h2>
-        <StyledGroupAmenities>
-          <StyledGroupIcon>
-            <div>
-              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <StyledP>Kitchen</StyledP>
-          </StyledGroupIcon>
-          <StyledGroupIcon>
-            <div>
-              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <StyledP>Kitchen</StyledP>
-          </StyledGroupIcon>
-          <StyledGroupIcon>
-            <div>
-              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <StyledP>Kitchen</StyledP>
-          </StyledGroupIcon>
-          <StyledGroupIcon>
-            <div>
-              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <StyledP>Kitchen</StyledP>
-          </StyledGroupIcon>
-          <StyledGroupIcon>
-            <div>
-              <StyledAmenities src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
-            </div>
-            <StyledP>Kitchen</StyledP>
-          </StyledGroupIcon>
-        </StyledGroupAmenities>
-        <StyledShowAmenities>Show all 43 amnities</StyledShowAmenities>
+        <h2>Location's property</h2>
+        <StyledP>
+          {data.province.name_en}, {data.district.name_en} {data.address}
+        </StyledP>
       </StyledSection>
       <StyledSection>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
-        <CalendarViewHost selectedDateRange={selectedDateRange} onDateChange={handleDateChange} />
+        {pageWidth <= 900 || (
+          <CalendarViewHost
+            disabledBookDate={disabledBookDate}
+            value={value}
+            setValue={setValue}
+            onHandleChange={onHandleChange}
+            data={data}
+          />
+        )}
       </StyledSection>
     </StyledContainer>
   );

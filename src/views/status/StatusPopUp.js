@@ -7,16 +7,37 @@ import { PropertyIdQuery } from "api/hostApi";
 import { AmenitiesQuery } from "api/amenitiesApi";
 import { DenyPropertyMutation } from "api/hostApi";
 import { AcceptPropertyMutation } from "api/hostApi";
+import { useQueryClient } from "@tanstack/react-query";
+import { CSpinner } from "@coreui/react";
 
 const StyledPopUp = styled(PopUpContainer)`
   background-color: white;
   color: black;
   top: 5%;
   overflow-y: scroll;
-  border-radius: 0;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; */
 
   & input {
     height: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  & input:focus,
+  & input:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    outline: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  & textarea {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  & textarea:focus,
+  & textarea:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    outline: 1px solid rgba(0, 0, 0, 0.3);
   }
 
   & label {
@@ -30,7 +51,7 @@ const StyledBody = styled.div`
   background-color: white;
   opacity: 1;
 
-  min-width: 60rem;
+  min-width: 55rem;
   height: 90vh;
 `;
 
@@ -58,7 +79,14 @@ const StyledHeaderButton = styled.button`
 
 const StyledContent = styled.div``;
 
-export default function StatusPopUp({ chosenId, setShowPopUp }) {
+const StyledSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+`;
+
+export default function StatusPopUp({ currentPage, chosenId, setShowPopUp }) {
   const propertyQuery = PropertyIdQuery(chosenId);
   const [isProperty, setIsProperty] = useState(true);
 
@@ -70,7 +98,9 @@ export default function StatusPopUp({ chosenId, setShowPopUp }) {
     <StyledPopUp setShowPopUp={setShowPopUp}>
       <StyledBody>
         {propertyQuery.isLoading ? (
-          <p>loading ...</p>
+          <StyledSpinner>
+            <CSpinner color="primary" />
+          </StyledSpinner>
         ) : (
           <StyledContent>
             <StyledHeader>
@@ -81,7 +111,7 @@ export default function StatusPopUp({ chosenId, setShowPopUp }) {
                 Host
               </StyledHeaderButton>
             </StyledHeader>
-            {isProperty ? <PropertyBody data={propertyQuery.data} /> : <UserBody />}
+            {isProperty ? <PropertyBody currentPage={currentPage} data={propertyQuery.data} /> : <UserBody />}
           </StyledContent>
         )}
       </StyledBody>
@@ -102,7 +132,7 @@ const StyledGrid = styled.div`
   & textarea {
     grid-column: 1 / span 2;
     resize: none;
-    height: 6rem;
+    height: 8rem;
   }
 
   > div {
@@ -113,6 +143,12 @@ const StyledGrid = styled.div`
 
   & button {
     background-color: white;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+  }
+
+  & button:hover {
+    border: 2px solid rgba(0, 0, 0, 0.8);
   }
 `;
 
@@ -135,10 +171,11 @@ const StyledFlex = styled.div`
 
 const StyledContentHeader = styled.div`
   text-align: center;
-  font-size: 19px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 500;
   margin: 2rem 0;
-  border-bottom: 1px solid #3369ff;
+  border-bottom: 3px solid #3369ff;
+  padding-bottom: 10px;
 `;
 
 const StyledAmenitiesContainer = styled.div``;
@@ -173,27 +210,29 @@ const StyledLable = styled.label`
 
 const StyledImages = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+
+  & div {
+    height: 20rem;
+  }
 
   & img {
-    height: 5rem;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
-function PropertyBody({ data }) {
-  const [message, setMessage] = useState("");
+function PropertyBody({ data, currentPage }) {
+  const queryClient = useQueryClient();
+  const [message, setMessage] = useState(data.admin_message);
   const acceptMutation = AcceptPropertyMutation();
   const denyMutation = DenyPropertyMutation();
   const amenitiesQuery = AmenitiesQuery();
   const amenitiesIdArr = data.amenities.map((amenity) => {
     return amenity.id;
   });
-
-  console.log(amenitiesIdArr);
-
-  if (amenitiesQuery.isLoading) {
-    return <p>loading...</p>;
-  }
 
   const onAccept = () => {
     const payload = {
@@ -202,7 +241,11 @@ function PropertyBody({ data }) {
     };
 
     acceptMutation.mutate(payload, {
-      onSuccess: alert("sucess"),
+      onSuccess: () => {
+        alert("sucess");
+        queryClient.invalidateQueries({ queryKey: ["property", data.id] });
+        queryClient.invalidateQueries({ queryKey: ["properties", "all", currentPage] });
+      },
     });
   };
 
@@ -218,7 +261,11 @@ function PropertyBody({ data }) {
     };
 
     denyMutation.mutate(payload, {
-      onSuccess: alert("sucess"),
+      onSuccess: () => {
+        alert("sucess");
+        queryClient.invalidateQueries({ queryKey: ["property", data.id] });
+        queryClient.invalidateQueries({ queryKey: ["properties", "all", currentPage] });
+      },
     });
   };
 
@@ -227,83 +274,83 @@ function PropertyBody({ data }) {
       <StyledGrid>
         <div>
           <label>Category</label>
-          <input type="text" value={data.category.name} />
+          <input readOnly type="text" value={data.category.name} />
         </div>
 
         <div>
           <label>Property Type</label>
-          <input type="text" value={data.property_type.name} />
+          <input readOnly type="text" value={data.property_type.name} />
         </div>
 
         <div>
           <label>Room Type</label>
-          <input type="text" value={data.room_type.name} />
+          <input readOnly type="text" value={data.room_type.name} />
         </div>
       </StyledGrid>
       <StyledContentHeader>Basic</StyledContentHeader>
       <StyledGrid>
         <div>
           <label>Bedroom</label>
-          <input type="text" value={data.bedroom_count} />
+          <input readOnly type="text" value={data.bedroom_count} />
         </div>
 
         <div>
           <label>Bathroom</label>
-          <input type="text" value={data.bathroom_count} />
+          <input readOnly type="text" value={data.bathroom_count} />
         </div>
 
         <div>
           <label>Accommodates</label>
-          <input type="text" value={data.accomodates_count} />
+          <input readOnly type="text" value={data.accomodates_count} />
         </div>
       </StyledGrid>
       <StyledContentHeader>Description</StyledContentHeader>
       <StyledFlex>
         <div>
           <label>Listing Name</label>
-          <input type="text" value={data.name} />
+          <input readOnly type="text" value={data.name} />
         </div>
         <div>
           <label>Description</label>
-          <textarea value={data.description}></textarea>
+          <textarea readOnly value={data.description}></textarea>
         </div>
       </StyledFlex>
       <StyledContentHeader>Detail</StyledContentHeader>
       <StyledFlex>
         <div>
           <label>About Place</label>
-          <textarea value={data.about_place || "none"}></textarea>
+          <textarea readOnly value={data.about_place}></textarea>
         </div>
         <div>
           <label>Place is great for</label>
-          <textarea value={data.place_great_for || "none"}></textarea>
+          <textarea readOnly value={data.place_great_for}></textarea>
         </div>
         <div>
           <label>Guest Access</label>
-          <textarea value={data.guest_access || "none"}></textarea>
+          <textarea readOnly value={data.guest_access}></textarea>
         </div>
         <div>
           <label>Interaction with Guests</label>
-          <textarea value={data.interaction_guest || "none"}></textarea>
+          <textarea readOnly value={data.interaction_guest}></textarea>
         </div>
         <div>
           <label>Other Things to Note</label>
-          <textarea value={data.thing_to_note || "none"}></textarea>
+          <textarea readOnly value={data.thing_to_note}></textarea>
         </div>
         <div>
           <label>Overview</label>
-          <textarea value={data.overview || "none"}></textarea>
+          <textarea readOnly value={data.overview}></textarea>
         </div>
         <div>
           <label>Getting Around</label>
-          <textarea value={data.getting_around || "none"}></textarea>
+          <textarea readOnly value={data.getting_around}></textarea>
         </div>
       </StyledFlex>
       <StyledContentHeader>Location</StyledContentHeader>
       <StyledFlex>
         <div>
           <label>Address</label>
-          <input type="text" value={`Việt Nam, ${data.province?.full_name}, ${data.district.full_name}, ${data.address}`} />
+          <input readOnly type="text" value={`Việt Nam, ${data.province?.full_name}, ${data.district.full_name}, ${data.address}`} />
         </div>
       </StyledFlex>
       <StyledContentHeader>Amenities</StyledContentHeader>
@@ -316,7 +363,13 @@ function PropertyBody({ data }) {
               .map((amenity, index) => {
                 return (
                   <StyledItemAmenities key={index}>
-                    <StyledInput checked={amenitiesIdArr.includes(amenity.id)} name="amenities" value={amenity.id} type="checkbox" />
+                    <StyledInput
+                      readOnly
+                      checked={amenitiesIdArr.includes(amenity.id)}
+                      name="amenities"
+                      value={amenity.id}
+                      type="checkbox"
+                    />
                     <StyledLable htmlFor="">{amenity.name}</StyledLable>
                   </StyledItemAmenities>
                 );
@@ -331,7 +384,13 @@ function PropertyBody({ data }) {
               .map((amenity, index) => {
                 return (
                   <StyledItemAmenities key={index}>
-                    <StyledInput checked={amenitiesIdArr.includes(amenity.id)} name="amenities" value={amenity.id} type="checkbox" />
+                    <StyledInput
+                      readOnly
+                      checked={amenitiesIdArr.includes(amenity.id)}
+                      name="amenities"
+                      value={amenity.id}
+                      type="checkbox"
+                    />
                     <StyledLable htmlFor="">{amenity.name}</StyledLable>
                   </StyledItemAmenities>
                 );
@@ -346,7 +405,13 @@ function PropertyBody({ data }) {
               .map((amenity, index) => {
                 return (
                   <StyledItemAmenities key={index}>
-                    <StyledInput checked={amenitiesIdArr.includes(amenity.id)} name="amenities" value={amenity.id} type="checkbox" />
+                    <StyledInput
+                      readOnly
+                      checked={amenitiesIdArr.includes(amenity.id)}
+                      name="amenities"
+                      value={amenity.id}
+                      type="checkbox"
+                    />
                     <StyledLable htmlFor="">{amenity.name}</StyledLable>
                   </StyledItemAmenities>
                 );
@@ -355,71 +420,74 @@ function PropertyBody({ data }) {
       </StyledAmenitiesContainer>
       <StyledContentHeader>Images and Video</StyledContentHeader>
       <StyledImages>
-        {data.images.map((image) => {
-          console.log(image);
-          return <img src={image} />;
+        {data.images.map((image, index) => {
+          return (
+            <div key={index}>
+              <img src={image} />
+            </div>
+          );
         })}
       </StyledImages>
       <StyledContentHeader>Pricing</StyledContentHeader>
       <StyledFlex>
         <div>
           <label>Base Price</label>
-          <input value={data.base_price} />
+          <input readOnly value={data.base_price} />
         </div>
       </StyledFlex>
       <StyledContentHeader>Booking</StyledContentHeader>
       <StyledGrid>
         <div>
           <label>Booking Per Day/Hour</label>
-          <input value={data.booking_per} />
+          <input readOnly value={data.booking_per} />
         </div>
 
         <div>
           <label>Booking Type</label>
-          <input value={data.booking_type} />
+          <input readOnly value={data.booking_type} />
         </div>
 
         <div>
           <label>Cancellation Policy</label>
-          <input value={data.cancelation} />
+          <input readOnly value={data.cancelation} />
         </div>
       </StyledGrid>
       <StyledGrid style={{ marginTop: "2rem" }}>
         <div>
           <label>Check in after</label>
-          <input value={data.check_in_after} />
+          <input readOnly value={data.check_in_after} />
         </div>
 
         <div>
           <label>Check out before</label>
-          <input value={data.check_out_before} />
+          <input readOnly value={data.check_out_before} />
         </div>
       </StyledGrid>
       <StyledContentHeader>Calendar</StyledContentHeader>
       <StyledGrid>
         <div>
           <label>Start Date</label>
-          <input value={data.start_date} />
+          <input readOnly value={data.start_date} />
         </div>
 
         <div>
           <label>End Date</label>
-          <input value={data.end_date} />
+          <input readOnly value={data.end_date} />
         </div>
 
         <div>
           <label>Minimum Stay</label>
-          <input value={data.minimum_stay} />
+          <input readOnly value={data.minimum_stay} />
         </div>
 
         <div>
           <label>Maximum Stay</label>
-          <input value={data.maximum_stay} />
+          <input readOnly value={data.maximum_stay} />
         </div>
 
         <div>
           <label>Status</label>
-          <input value={data.property_status ? "Not Available" : "Available"} />
+          <input readOnly value={data.property_status ? "Available" : "Not available"} />
         </div>
       </StyledGrid>
       <StyledContentHeader>Decision</StyledContentHeader>

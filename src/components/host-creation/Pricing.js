@@ -37,7 +37,7 @@ const StyledForm = styled.form`
   overflow: auto;
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
-    padding: 30px 40px 0px 40px;
+    padding: 2rem 5px;
   }
 `;
 
@@ -75,7 +75,7 @@ const StyledOverlay = styled.div`
 `;
 
 const StyledLable = styled.label`
-  font-size: 15px;
+  font-size: 14px;
   padding-left: 10px;
   color: black;
 `;
@@ -191,12 +191,22 @@ const Pricing = () => {
   const onClickNext = (ev) => {
     ev.preventDefault();
 
+    if (state.baseprice <= 0) {
+      alert("Price must larger than 0");
+      return;
+    }
+
     onSetActive(7);
     onSetAvailable(7);
   };
 
   const onClickPrevious = (ev) => {
     ev.preventDefault();
+
+    if (state.baseprice <= 0) {
+      alert("Price must larger than 0");
+      return;
+    }
 
     onSetActive(5);
   };

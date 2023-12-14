@@ -190,8 +190,13 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: "Blog",
-        to: "blog",
+        name: "Blog List",
+        to: "blog/blog-list",
+      },
+      {
+        component: CNavItem,
+        name: "Blog Category List",
+        to: "blog/blog-category-list",
       },
     ],
   },

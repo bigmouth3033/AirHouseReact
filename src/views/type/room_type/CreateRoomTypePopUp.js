@@ -108,7 +108,6 @@ export default function CreateRoomTypePopUp({ currentPage, setShowPopUp }) {
 
   const [imgSrc, setImgSrc] = useState(DefaultImg);
   const [roomTypeName, setRoomTypeName] = useState("");
-  const [error, setError] = useState(null);
 
   const onUploadImg = (ev) => {
     ev.preventDefault();
@@ -124,6 +123,14 @@ export default function CreateRoomTypePopUp({ currentPage, setShowPopUp }) {
   const onAddNewRoomType = (ev) => {
     ev.preventDefault();
 
+    const imgExtension = ["jpg", "png", "svg", "jpeg", "webp"];
+    const imgArr = imgUploadRef.current.files[0].name.split(".");
+
+    if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
+      alert("only accept img with format of jpg, png, svg, jpeg, webp");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("icon_image", imgUploadRef.current.files[0]);
     formData.append("name", roomTypeName);
@@ -133,12 +140,10 @@ export default function CreateRoomTypePopUp({ currentPage, setShowPopUp }) {
         alert("sucess");
         setRoomTypeName("");
         setImgSrc(DefaultImg);
-        setError(null);
         queryClient.invalidateQueries({ queryKey: ["roomtype", "page", currentPage] });
       },
       onError: (err) => {
         const response = err.response;
-        setError(response.data.errors);
         console.log(response.data.errors);
       },
     });
@@ -172,13 +177,6 @@ export default function CreateRoomTypePopUp({ currentPage, setShowPopUp }) {
             Image Upload
           </button>
         </StyledImgField>
-        {error && (
-          <div className="alert">
-            {Object.keys(error).map((key) => (
-              <div key={key}>{error[key]}</div>
-            ))}
-          </div>
-        )}
         <StyledButtonRow>
           <button disabled={roomTypeName == "" || imgSrc == DefaultImg} onClick={onAddNewRoomType} className="submit-button">
             Submit

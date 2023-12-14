@@ -179,6 +179,11 @@ const Calendar = () => {
   const onClickFinish = (ev) => {
     ev.preventDefault();
 
+    if (state.minimumStay <= 0 || state.maximumStay <= 0) {
+      alert("min stay and max stay must large than 0");
+      return;
+    }
+
     if (state.minimumStay > state.maximumStay) {
       alert("min stay cannot be larget than max stay");
       return;
@@ -222,6 +227,16 @@ const Calendar = () => {
 
   const onClickPrevious = (ev) => {
     ev.preventDefault();
+
+    if (state.minimumStay <= 0 || state.maximumStay <= 0) {
+      alert("min stay and max stay must large than 0");
+      return;
+    }
+
+    if (state.minimumStay > state.maximumStay) {
+      alert("min stay cannot be larget than max stay");
+      return;
+    }
 
     onSetActive(7);
   };
