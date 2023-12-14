@@ -4,7 +4,6 @@ import NavViewhost from "./NavViewhost";
 import Images from "./Images";
 import Information from "./Information";
 import TotalBeforeTaxes from "./TotalBeforeTaxes";
-import { DateRangeProvider } from "./DateRangeContext";
 import { useSearchParams } from "react-router-dom";
 import { PropertyQueryId } from "api/propertyApi";
 import Loading from "components/Loading";
@@ -13,16 +12,31 @@ import { useState } from "react";
 
 const StyledContainer = styled.div`
   max-width: 1150px;
+  padding: 0 1rem;
   margin: auto;
 `;
 const StyledInformation = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: 4fr 3fr;
+  grid-template-columns: 2fr 1fr;
   gap: 30px;
-  @media (max-width: 992px) {
+
+  @media (max-width: 1050px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 692px) {
     grid-template-columns: repeat(1, 1fr);
-    justify-items: center;
+
+    > div:nth-of-type(1) {
+      margin: auto;
+    }
+
+    > div:nth-of-type(2) {
+      grid-row: 1/1;
+
+      margin: auto;
+    }
   }
 `;
 
@@ -94,7 +108,7 @@ const ViewProperty = () => {
 
       if (selectedArr.length < propertyQuery.data.minimum_stay || selectedArr.length > propertyQuery.data.maximum_stay) {
         alert("wrong");
-        setValue(value);
+        setValue([null, null]);
         return;
       }
     }
@@ -130,6 +144,7 @@ const ViewProperty = () => {
               data={propertyQuery.data}
             />
             <TotalBeforeTaxes
+              className="totalbefore"
               disabledBookDate={disabledBookDate}
               value={value}
               setValue={setValue}

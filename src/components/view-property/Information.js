@@ -3,21 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
-import { PropertyQueryId } from "api/propertyApi";
-import { useSearchParams } from "react-router-dom";
-import Loading from "components/Loading";
-// import { search } from "core-js/fn/symbol";
+import Avatar from "react-avatar";
+import { useStateContext } from "contexts/ContextProvider";
 
 const StyledContainer = styled.div`
   max-width: 654px;
-  margin: auto;
 `;
 const StyledSection = styled.div`
   border-bottom: 1px solid #dddddd;
   display: flex;
   flex-direction: column;
   gap: 10px;
-
+  text-align: justify;
   padding: 1.5rem 0;
 `;
 const StyledDetailInfor = styled.div`
@@ -49,8 +46,20 @@ const StyledHost = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+
   p {
     margin-left: 20px;
+  }
+
+  & .hosted {
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  & .host-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 `;
 const StyledDesign = styled.div`
@@ -99,11 +108,15 @@ const StyledAmentinies = styled.div`
   margin-bottom: 10px;
 `;
 const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+  const { pageWidth } = useStateContext();
+
   return (
     <StyledContainer>
       <StyledSection>
         <StyledTitle>
-          <span>{data.name}</span>
+          <span>
+            {data.category.name} in {data.province.full_name}
+          </span>
           <StyledReview>
             <div>
               <FontAwesomeIcon icon={faStar} />
@@ -113,7 +126,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         </StyledTitle>
         <StyledDetailInfor>
           <StyledSpan>
-            <span>{data.guest_access} guests </span> <span> . </span>
+            <span>{data.accomodates_count} guests </span> <span> . </span>
           </StyledSpan>
           <StyledSpan>
             <span>{data.bedroom_count} bedrooms</span> <span> . </span>
@@ -130,12 +143,11 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
       <StyledSection>
         <StyledHost>
           <div>
-            <StyledImage src="https://a0.muscache.com/im/pictures/ea3a10aa-645f-4754-a4a2-9a4920b2c17b.jpg?im_w=720" alt="" />
+            <Avatar size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
           </div>
-          <div>
-            <p>
-              Hosted by {data.user.first_name} <span> </span>
-              {data.user.last_name}
+          <div className="host-container">
+            <p className="hosted">
+              Hosted by {data.user.first_name} {data.user.last_name}
             </p>
             <p> 11 year</p>
           </div>
@@ -147,11 +159,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
           {data.amenities.map((obamenities, index) => {
             return (
               <StyledGroupIcon>
-                <StyledImageIcon
-                  src={obamenities.icon_image}
-              
-                  alt={index}
-                />
+                <StyledImageIcon src={obamenities.icon_image} alt={index} />
                 <div>{obamenities.name}</div>
               </StyledGroupIcon>
             );
@@ -160,26 +168,27 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
       </StyledSection>
       <StyledSection>
         <StyledTitle>Description</StyledTitle>
-        <StyledAboutText>
-          <div>
-            <a href={data.video}>Video</a>
-          </div>
-          {data.description}
-        </StyledAboutText>
+        <StyledAboutText>{data.description}</StyledAboutText>
         <StyledShowMore></StyledShowMore>
       </StyledSection>
       <StyledSection>
         <h2>Location's property</h2>
         <StyledP>
-          {data.province.name_en}
-          <span> </span> {data.district.name_en}
-          <span> </span> {data.address}
+          {data.province.name_en}, {data.district.name_en} {data.address}
         </StyledP>
       </StyledSection>
       <StyledSection>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
-        <CalendarViewHost disabledBookDate={disabledBookDate} value={value} setValue={setValue} onHandleChange={onHandleChange} data={data} />
+        {pageWidth <= 900 || (
+          <CalendarViewHost
+            disabledBookDate={disabledBookDate}
+            value={value}
+            setValue={setValue}
+            onHandleChange={onHandleChange}
+            data={data}
+          />
+        )}
       </StyledSection>
     </StyledContainer>
   );

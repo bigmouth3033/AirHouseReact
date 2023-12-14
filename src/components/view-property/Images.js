@@ -4,21 +4,37 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import PopUpContainer from "ui/PopUpContainer";
+import { useStateContext } from "contexts/ContextProvider";
 
 const StyledContainer = styled.div`
-  /* height: 400px; */
 `;
 
 const StyledImageGroup = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: 200px 200px;
-  gap: 10px;
+  gap: 5px;
   margin: 0 auto;
   border-radius: 8px;
   overflow: hidden;
   .fisrtimage {
     grid-row: 1/3;
+  }
+
+  @media (max-width: 850px) {
+    grid-template-columns: 1fr 1fr;
+
+    .fisrtimage {
+      grid-row: 1/2;
+    }
+  }
+  @media (max-width: 550px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 400px;
+
+    .fisrtimage {
+      grid-row: 1/2;
+    }
   }
 `;
 const StyledImage = styled.img`
@@ -79,6 +95,16 @@ const Styledbutton = styled.button`
 `;
 const Images = ({ data }) => {
   const [clickImage, setclickImage] = useState(false);
+  const { pageWidth } = useStateContext();
+  let number = 5;
+
+  if (pageWidth < 850) {
+    number = 4;
+  }
+
+  if (pageWidth < 550) {
+    number = 1;
+  }
 
   return (
     <StyledContainer>
@@ -105,13 +131,14 @@ const Images = ({ data }) => {
       )}
       <StyledImageGroup>
         {data.images.map((imageUrl, index) => {
-          if (index < 5)
+          if (index < number) {
             return (
               <StyledImageContainer className={index === 0 ? "fisrtimage" : ""} onClick={() => setclickImage(true)}>
                 <StyledImage key={index} src={imageUrl} />
                 <StyledOverlay />
               </StyledImageContainer>
             );
+          }
         })}
       </StyledImageGroup>
     </StyledContainer>

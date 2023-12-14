@@ -31,24 +31,19 @@ const CalendarViewHost = ({ data, value, setValue, onHandleChange, disabledBookD
   const { start_date, end_date, minimum_stay, maximum_stay } = data;
 
   return (
-    <>
-      <p>
-        {formatDate(new Date(value?.[0]))}-{formatDate(new Date(value?.[1] || value?.[0]))}
-      </p>
-      <Calendar
-        onChange={onHandleChange}
-        tileDisabled={disabledBookDate}
-        allowPartialRange={true}
-        selectRange={true}
-        returnValue={"range"}
-        view={"month"}
-        minDate={new Date()}
-        maxDate={new Date(end_date)}
-        maxDetail={"month"}
-        showDoubleView={true}
-        value={value}
-      />
-    </>
+    <Calendar
+      onChange={onHandleChange}
+      tileDisabled={disabledBookDate}
+      allowPartialRange={true}
+      selectRange={true}
+      returnValue={"range"}
+      view={"month"}
+      minDate={new Date()}
+      maxDate={new Date(end_date)}
+      maxDetail={"month"}
+      showDoubleView={true}
+      value={value}
+    />
   );
 };
 

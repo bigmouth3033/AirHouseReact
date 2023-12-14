@@ -50,8 +50,6 @@ export default function DefaultLayout() {
     localStorage.setItem("ACCESS_TOKEN", userQuery.data.token);
   }
 
- 
-
   return (
     <StyledContainer>
       {location.pathname === "/" ? <NavHome /> : <NavTopHome />}
