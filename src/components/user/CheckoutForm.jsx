@@ -56,7 +56,17 @@ export default function CheckoutForm() {
       // console.error("Stripe Confirm Payment Error:", error);
       setMessage(error.message);
     } else if (paymentIntent.id) {
-     
+      // const transactionID = paymentIntent.id;
+      // console.log(transactionID);
+      // const formData = new FormData();
+      // formData.append("paymentIntent", transactionID);
+      // const createSuccessBookingMutation = CreateSuccessBookingMutation();
+      // createSuccessBookingMutation.mutate(formData, {
+      //   onSuccess: () => {
+      //     alert("Success");
+      //   },
+      // });
+    }
 
     setIsProcessing(false);
   };
