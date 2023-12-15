@@ -1,3 +1,5 @@
+import { useMutation } from "@tanstack/react-query";
+// import { updateUser, } from "api/ProfileApi";
 import axiosClient from "api/axiosClient";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -93,28 +95,36 @@ export default function Content(props) {
   };
 
   useEffect(() => {
-    setGender("male");
+    if (gender === '') {
+      setGender("Female");
+    }
   }, []);
 
-  //fetch Data
+
+
   const updateUser = async (payload) => {
     let response = await axiosClient.post("updateUser", payload);
-    console.log(response.data);
     return response.data;
   };
+  const mutation = useMutation({
+    mutationFn: (payload) => {
+      return updateUser(payload);
+    }
+  })
   const handleSubmit = (e) => {
     e.preventDefault();
-    let rs = updateUser({
+    const payload = {
       firstName,
       lastName,
       email,
       phoneNumber,
       address,
-      address,
       about,
       gender,
-    });
-    console.log(rs);
+    };
+    mutation.mutate(payload);
+
+    alert('cap nhat thong tin thanh cong');
   };
 
   return (
@@ -179,11 +189,11 @@ export default function Content(props) {
               <li>
                 <label>I Am </label>
               </li>
-              <li>
-                <select value={gender} name="gender" id="gender" onChange={(e) => handleGender(e)}>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+              <li>                
+                <select value={gender} name="gender" id="gender" onChange={(e) => handleGender(e)}>                  
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
               </li>
             </ul>
