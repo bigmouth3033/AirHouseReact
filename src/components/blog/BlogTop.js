@@ -2,6 +2,7 @@ import { AllBlogQuery } from "api/BlogApi";
 import React from "react";
 import styled from "styled-components";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const StyledBlogTop = styled.div`
   display: grid;
@@ -120,6 +121,14 @@ const StyleContent = styled.div`
 `;
 
 export default function BlogTop() {
+  const navigate = useNavigate();
+
+  const handleItemClick = () => {
+    navigate(
+      `/blog/${allBlogQuery.data.items[allBlogQuery.data.items.length - 1].id}`
+    );
+  };
+
   const queryClient = useQueryClient();
   const allBlogQuery = AllBlogQuery();
   console.log(allBlogQuery.data);
@@ -132,7 +141,7 @@ export default function BlogTop() {
     return formattedDate;
   };
   return (
-    <a href="" style={{ textDecoration: "none" }}>
+    <a href="" onClick={handleItemClick} style={{ textDecoration: "none" }}>
       {allBlogQuery.isSuccess &&
         allBlogQuery.data &&
         allBlogQuery.data.items.length > 0 && (
@@ -144,7 +153,7 @@ export default function BlogTop() {
                     .created_at
                 )}
               </p>
-              <a href="https://news.airbnb.com/airbnb-2023-winter-release/">
+              <a href="">
                 {
                   allBlogQuery.data.items[allBlogQuery.data.items.length - 1]
                     .title

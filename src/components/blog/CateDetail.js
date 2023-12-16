@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyleCateDetail = styled.div`
@@ -56,6 +57,12 @@ const StyleCateDetail = styled.div`
 `;
 
 export default function CateDetail({ item }) {
+  const navigate = useNavigate();
+
+  const handleItemClick = () => {
+    navigate(`/blog/${item.id}`);
+  };
+
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -65,10 +72,10 @@ export default function CateDetail({ item }) {
   };
 
   return (
-    <StyleCateDetail>
+    <StyleCateDetail onClick={handleItemClick}>
       <img src={item.image} alt="" />
       <div>
-        <a href="{item.linkurl}">{item.title}</a>
+        <a href="">{item.title}</a>
         <p>{formatCreatedAt(item.created_at)} </p>
       </div>
     </StyleCateDetail>

@@ -14,6 +14,7 @@ import { AmenitiesQuery } from "api/amenitiesApi";
 import { PropertyTypeQuery } from "api/property-typeApi";
 import { ProvinceQuery } from "api/locationApi";
 import Loading from "components/Loading";
+import { CategoryValueQuery } from "api/blogCategoryApi";
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
@@ -35,13 +36,15 @@ export default function DefaultLayout() {
   const propertyQuery = PropertyTypeQuery();
   const provinceQuery = ProvinceQuery();
   const location = useLocation();
+  const categoryValueQuery = CategoryValueQuery();
 
   if (
     provinceQuery.isLoading ||
     categoryQuery.isLoading ||
     roomTypeQuery.isLoading ||
     amenitiesQuery.isLoading ||
-    propertyQuery.isLoading
+    propertyQuery.isLoading ||
+    categoryValueQuery.isLoading
   ) {
     return <Loading />;
   }
@@ -50,15 +53,17 @@ export default function DefaultLayout() {
     localStorage.setItem("ACCESS_TOKEN", userQuery.data.token);
   }
 
- 
-
   return (
     <StyledContainer>
       {location.pathname === "/" ? <NavHome /> : <NavTopHome />}
       <StyledBody>
         <Outlet />
       </StyledBody>
-      {location.pathname === "/" ? <FooterBar variant={"home"} /> : <FooterIndex />}
+      {location.pathname === "/" ? (
+        <FooterBar variant={"home"} />
+      ) : (
+        <FooterIndex />
+      )}
     </StyledContainer>
   );
 }

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledCarouselDetail = styled.div`
   margin-top: 20rem;
@@ -12,6 +13,7 @@ const StyledCarouselDetail = styled.div`
   & a {
     font-weight: 500;
     font-size: 1.2rem;
+    color: black;
 
     &:hover {
       text-decoration: underline;
@@ -35,6 +37,12 @@ const StyledImg = styled.img`
 `;
 
 export default function CarouselDetail({ item }) {
+  const navigate = useNavigate();
+
+  const handleItemClick = () => {
+    navigate(`/blog/${item.id}`);
+  };
+
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -43,8 +51,11 @@ export default function CarouselDetail({ item }) {
     return formattedDate;
   };
   return (
-    <StyledCarouselDetail style={{ margin: "1rem 0.5rem" }}>
-      <a href={item.linkurl}>
+    <StyledCarouselDetail
+      onClick={handleItemClick}
+      style={{ margin: "1rem 0.5rem" }}
+    >
+      <a href="">
         <StyledImg src={item.image} alt="" />
         <div
           style={{

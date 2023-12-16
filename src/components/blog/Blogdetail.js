@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const StyledBlogdetail = styled.div`
   display: grid;
@@ -49,6 +50,12 @@ const StyledBlogdetail = styled.div`
 `;
 
 export default function Blogdetail({ item }) {
+  const navigate = useNavigate();
+
+  const handleItemClick = () => {
+    navigate(`/blog/${item.id}`);
+  };
+
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -57,7 +64,7 @@ export default function Blogdetail({ item }) {
     return formattedDate;
   };
   return (
-    <a href="" style={{ textDecoration: "none" }}>
+    <a href="" onClick={handleItemClick} style={{ textDecoration: "none" }}>
       <StyledBlogdetail>
         <img src={item.image} alt="" />
         <div style={{ marginTop: "0.3rem", marginLeft: "1rem" }}>
