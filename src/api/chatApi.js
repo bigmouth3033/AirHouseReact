@@ -13,26 +13,49 @@ const getMessage = async (query) => {
 
   return response.data;
 };
-export const GetMessageQuery = (user1, user2) => {
-  const messageQuery = useQuery({
-    queryKey: ["message", user1, user2],
-    queryFn: getMessage,
-  });
+// export const GetMessageQuery = (user1, user2) => {
+//   const messageQuery = useQuery({
+//     queryKey: ["message", user1, user2],
+//     queryFn: getMessage,
+//   });
 
-  return messageQuery;
-};
+//   return messageQuery;
+// };
 
-const sendMessage = async (payload) => {
+const SendMessage = async (payload) => {
   let response = await axiosClient.get("sendMessage", {
     params: { user1: payload.user1, user2: payload.user2, message: payload.message },
   });
   return response.data;
 };
 
-const getAllUser = async (payload) => {
-  let response = await axiosClient.get("getAllUser", {
-    params: { email: payload },
-  });
 
+// 17/12
+ export const GetAllUser = async () => {
+  let response = await axiosClient.get("getAllUser");
   return response.data;
 };
+
+export const GetAllUserQuery = () =>{
+  const AllUserQuery = useQuery({
+    queryKey: ['AllUser'],
+    queryFn: GetAllUser,
+  });
+  return AllUserQuery;
+}
+
+export const GetMessage = async (payload) =>{
+  let response = await axiosClient.post("getMessage",payload);
+  return response.data;
+}
+
+export const GetMessageQuery =  (user_to_email) =>{
+  const MessageQuery = useQuery({
+    queryKey: ['chat',user_to_email],
+    queryFn: () => GetMessage(user_to_email),
+    keepPreviousData: true,
+    retry: 1,
+  })
+  return MessageQuery;
+
+}
