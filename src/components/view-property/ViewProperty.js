@@ -83,7 +83,9 @@ const ViewProperty = () => {
     }
   }
 
-  console.log(bookedDate);
+  for (let i = 0; i < propertyQuery.data.exception_date.length; i++) {
+    bookedDate.push({ start: propertyQuery.data.exception_date[i].start_date, end: propertyQuery.data.exception_date[i].end_date });
+  }
 
   let arrBookedDate = [];
   for (let i = 0; i < bookedDate.length; i++) {

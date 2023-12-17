@@ -7,7 +7,7 @@ import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
 
 const StyledContainer = styled.div`
-  max-width: 654px;
+
 `;
 const StyledSection = styled.div`
   border-bottom: 1px solid #dddddd;
@@ -143,7 +143,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
       <StyledSection>
         <StyledHost>
           <div>
-            <Avatar size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
+            <Avatar src={data.user.image} size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
           </div>
           <div className="host-container">
             <p className="hosted">

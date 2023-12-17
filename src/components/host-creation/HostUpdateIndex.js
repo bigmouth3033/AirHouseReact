@@ -9,6 +9,8 @@ import { useLocation } from "react-router-dom";
 import { useBeforeunload } from "react-beforeunload";
 import { useSearchParams } from "react-router-dom";
 import { ReadPropertyUpdateQuery } from "api/propertyApi";
+import Loading from "components/Loading";
+import axiosClient from "api/axiosClient";
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
@@ -32,6 +34,9 @@ const StyledOptionChoice = styled(Link)`
 
 function reducer(state, action) {
   switch (action.type) {
+    case ACTIONS.CHANGE_ID:
+      return { ...state, property_id: action.next };
+
     case ACTIONS.CHANGE_PROPERTY:
       return { ...state, propertyName: action.next };
 
@@ -136,6 +141,7 @@ function reducer(state, action) {
 }
 
 const ACTIONS = {
+  CHANGE_ID: "CHANGE_ID",
   CHANGE_PROPERTY: "CHANGE_PROPERTY",
   CHANGE_AMENITIES: "CHANGE_AMENITIES",
   CHANGE_DESCRIPTION: "CHANGE_DESCRIPTION",
@@ -153,7 +159,6 @@ const ACTIONS = {
   CHANGE_DISTRICT: "CHANGE_DISTRICT",
   CHANGE_ADDRESS: "CHANGE_ADDRESS",
   CHANGE_BEDROOM_COUNT: "CHANGE_BEDROOM_COUNT",
-  CHANGE_BED_COUNT: "CHANGE_BED_COUNT",
   CHANGE_BATH_ROOM_COUNT: "CHANGE_BATH_ROOM_COUNT",
   CHANGE_ACCOMODATES_COUNT: "CHANGE_ACCOMODATES_COUNT",
   CHANGE_START_DATE: "CHANGE_START_DATE",
@@ -172,8 +177,49 @@ const ACTIONS = {
   CHANGE_EXCEPTION_DATE: "CHANGE_EXCEPTION_DATE",
 };
 
+function b64toBlob(b64Data, contentType, sliceSize) {
+  contentType = contentType || "";
+  sliceSize = sliceSize || 512;
+
+  var byteCharacters = atob(b64Data);
+  var byteArrays = [];
+
+  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    var byteNumbers = new Array(slice.length);
+    for (var i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    var byteArray = new Uint8Array(byteNumbers);
+
+    byteArrays.push(byteArray);
+  }
+
+  return new File(byteArrays, "pot.jpg", { type: contentType });
+}
+
+function myFunction(code) {
+  var str = code;
+  var enc = window.atob(str);
+
+  var image = new File([enc], "random.jpg", {
+    type: "image/jpeg",
+  });
+  var file = b64toBlob(str, "image/jpeg");
+  var fileb = new File(["akkaka"], "ranom", {
+    type: "image/jpeg",
+  });
+
+  return file;
+}
+
 export default function HostCreationIndex() {
+  const [serachParam] = useSearchParams();
+
   const [state, dispatch] = useReducer(reducer, {
+    propertyId: "",
     propertyName: "",
     amenities: [],
     description: "",
@@ -191,7 +237,7 @@ export default function HostCreationIndex() {
     district_id: 0,
     address: "",
     bedroomCount: 1,
-    bathRoomCount: 0,
+    bathRoomCount: 1,
     accomodatesCount: 1,
     startDate: "",
     endDate: "",
@@ -207,13 +253,16 @@ export default function HostCreationIndex() {
     images: [],
     video: "",
     exceptionDate: [],
+    property_id: serachParam.get("id") || null,
   });
+
+  const propertyQuery = ReadPropertyUpdateQuery(String(state.property_id));
 
   const navigate = useNavigate();
   const initialArr = Array(9).fill(false);
 
   const [active, setActive] = useState(initialArr);
-  const [available, setAvailable] = useState(initialArr);
+  const [available, setAvailable] = useState(Array(9).fill(true));
 
   const onSetActive = (index) => {
     const newArr = Array(9).fill(false);
@@ -222,7 +271,10 @@ export default function HostCreationIndex() {
     const url = ["basic", "description", "details", "location", "amenities", "photo", "pricing", "booking", "calendar"];
     setActive(newArr);
     window.scrollTo(0, 0);
-    navigate("content/" + url[index]);
+    navigate({
+      pathname: "content/" + url[index],
+      search: `?id=${state.property_id}`,
+    });
   };
 
   const onSetAvailable = (index) => {
@@ -236,10 +288,64 @@ export default function HostCreationIndex() {
   let location = useLocation();
 
   useEffect(() => {
-    if (JSON.stringify(initialArr) === JSON.stringify(available)) {
-      navigate("/user/host-creation/become-host");
+    if (JSON.stringify(initialArr) === JSON.stringify(active)) {
+      navigate({
+        pathname: "/user/host-update/become-host",
+        search: `?id=${serachParam.get("id")}`,
+      });
     }
-  }, []);
+
+    if (propertyQuery.isSuccess) {
+      dispatch({ type: ACTIONS.CHANGE_ID, next: propertyQuery.data.id });
+
+      const amenities = [];
+      propertyQuery.data.amenities.forEach((amenity) => amenities.push(String(amenity.id)));
+      dispatch({ type: ACTIONS.CHANGE_AMENITIES, next: amenities });
+      dispatch({ type: ACTIONS.CHANGE_DESCRIPTION, next: propertyQuery.data.description });
+      dispatch({ type: ACTIONS.CHANGE_PROPERTY, next: propertyQuery.data.name });
+      dispatch({ type: ACTIONS.CHANGE_ABOUT_PLACE, next: propertyQuery.data.about_place });
+      dispatch({ type: ACTIONS.CHANGE_PLACE_GREAT_FOR, next: propertyQuery.data.place_great_for });
+      dispatch({ type: ACTIONS.CHANGE_GUEST_ACCESS, next: propertyQuery.data.guest_access });
+      dispatch({ type: ACTIONS.CHANGE_INTERACTION_GUEST, next: propertyQuery.data.interaction_guest });
+      dispatch({ type: ACTIONS.CHANGE_THING_TO_NOTE, next: propertyQuery.data.thing_to_note });
+      dispatch({ type: ACTIONS.CHANGE_OVERVIEW, next: propertyQuery.data.overview });
+      dispatch({ type: ACTIONS.CHANGE_GETTING_AROUND, next: propertyQuery.data.getting_around });
+      dispatch({ type: ACTIONS.CHANGE_PROPERTY_TYPE, next: propertyQuery.data.property_type_id });
+      dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: propertyQuery.data.room_type_id });
+      dispatch({ type: ACTIONS.CHANGE_ID, next: propertyQuery.data.id });
+      dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: propertyQuery.data.category_id });
+      dispatch({ type: ACTIONS.CHANGE_PROVINCES, next: String(propertyQuery.data.provinces_id) });
+      dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: String(propertyQuery.data.districts_id) });
+      dispatch({ type: ACTIONS.CHANGE_ADDRESS, next: propertyQuery.data.address });
+      dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: String(propertyQuery.data.bedroom_count) });
+      dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: String(propertyQuery.data.bathroom_count) });
+      dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: String(propertyQuery.data.accomodates_count) });
+      dispatch({ type: ACTIONS.CHANGE_START_DATE, next: propertyQuery.data.start_date });
+      dispatch({ type: ACTIONS.CHANGE_END_DATE, next: propertyQuery.data.end_date });
+      dispatch({ type: ACTIONS.CHANGE_BASE_PRICE, next: propertyQuery.data.base_price });
+      dispatch({ type: ACTIONS.CHANGE_BOOKING_PER, next: propertyQuery.data.booking_per });
+      dispatch({ type: ACTIONS.CHANGE_BOOKING_TYPE, next: propertyQuery.data.booking_type });
+      dispatch({ type: ACTIONS.CHANGE_CHECKIN, next: propertyQuery.data.check_in_after });
+      dispatch({ type: ACTIONS.CHANGE_CHECKOUT, next: propertyQuery.data.check_out_before });
+      dispatch({ type: ACTIONS.CHANGE_CANCELATION, next: propertyQuery.data.cancelation });
+      dispatch({ type: ACTIONS.CHANGE_MINIMUM_STAY, next: propertyQuery.data.minimum_stay });
+      dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: propertyQuery.data.maximum_stay });
+
+      let images = [];
+      propertyQuery.data.images.forEach((item) => images.push(myFunction(item)));
+      dispatch({ type: ACTIONS.CHANGE_IMAGES, next: images });
+
+      dispatch({ type: ACTIONS.CHANGE_STATUS, next: propertyQuery.data.property_status == 1 ? true : false });
+    }
+  }, [propertyQuery.status]);
+
+  if (propertyQuery.isLoading) {
+    return <Loading />;
+  }
+
+  if (propertyQuery.isError) {
+    navigate("/");
+  }
 
   return (
     <>

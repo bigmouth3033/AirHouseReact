@@ -13,7 +13,7 @@ const StyledBox = styled.div`
     transition: all 0.05s;
   }
   & .title-list-container li:hover {
-    background-color: rgba(118, 118, 118, 0.5);
+    background-color: rgba(118, 118, 118, 0.2);
   }
 `;
 export default function SideBar({ setUserTitle }) {

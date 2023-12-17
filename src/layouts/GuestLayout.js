@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { UserQuery } from "api/userApi";
 import { Navigate } from "react-router-dom";
 import styled from "styled-components";
@@ -40,6 +40,7 @@ const StyledContainer = styled.div`
 `;
 
 export default function GuestLayout() {
+  const navigate = useNavigate();
   const userQuery = UserQuery();
   const categoryQuery = CategoryQuery();
   const roomTypeQuery = RoomTypeQuery();
@@ -67,9 +68,8 @@ export default function GuestLayout() {
       <NavTopHome />
       <StyledMenu>
         <button>Dashboard</button>
-        <button>Profile</button>
-        <button>My Listing</button>
-        <button>My Experience</button>
+        <button onClick={() => navigate("/user/profile/detail")}>Profile</button>
+        <button onClick={() => navigate("/user/listing")}>My Listing</button>
         <button>My Bookings</button>
         <button>My Trips</button>
         <button>Wishlist</button>

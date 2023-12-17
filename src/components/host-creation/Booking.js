@@ -288,20 +288,6 @@ const Booking = () => {
                       dispatch({ type: ACTIONS.CHANGE_CHECKIN, next: ev.target.value });
                     }}
                   >
-                    <option value={"12AM"}>12:00 AM</option>
-                    <option value={"01AM"}>01:00 AM</option>
-                    <option value={"02AM"}>02:00 AM</option>
-                    <option value={"03AM"}>03:00 AM</option>
-                    <option value={"04AM"}>04:00 AM</option>
-                    <option value={"05AM"}>05:00 AM</option>
-                    <option value={"06AM"}>06:00 AM</option>
-                    <option value={"07AM"}>07:00 AM</option>
-                    <option value={"08AM"}>08:00 AM</option>
-                    <option value={"09AM"}>09:00 AM</option>
-                    <option value={"10AM"}>10:00 AM</option>
-                    <option value={"11AM"}>11:00 AM</option>
-                    <option value={"12AM"}>12:00 AM</option>
-                    <option value={"01PM"}>01:00 PM</option>
                     <option value={"02PM"}>02:00 PM</option>
                     <option value={"03PM"}>03:00 PM</option>
                     <option value={"04PM"}>04:00 PM</option>
@@ -312,6 +298,7 @@ const Booking = () => {
                     <option value={"09PM"}>09:00 PM</option>
                     <option value={"10PM"}>10:00 PM</option>
                     <option value={"11PM"}>11:00 PM</option>
+                    <option value={"12PM"}>11:00 PM</option>
                   </StyledSelect>
                 </StyledSelectContainer>
                 <StyledSelectContainer>
@@ -322,7 +309,6 @@ const Booking = () => {
                       dispatch({ type: ACTIONS.CHANGE_CHECKOUT, next: ev.target.value });
                     }}
                   >
-                    <option value={"12AM"}>12:00 AM</option>
                     <option value={"01AM"}>01:00 AM</option>
                     <option value={"02AM"}>02:00 AM</option>
                     <option value={"03AM"}>03:00 AM</option>
@@ -335,17 +321,6 @@ const Booking = () => {
                     <option value={"10AM"}>10:00 AM</option>
                     <option value={"11AM"}>11:00 AM</option>
                     <option value={"12AM"}>12:00 AM</option>
-                    <option value={"01PM"}>01:00 PM</option>
-                    <option value={"02PM"}>02:00 PM</option>
-                    <option value={"03PM"}>03:00 PM</option>
-                    <option value={"04PM"}>04:00 PM</option>
-                    <option value={"05PM"}>05:00 PM</option>
-                    <option value={"06PM"}>06:00 PM</option>
-                    <option value={"07PM"}>07:00 PM</option>
-                    <option value={"08PM"}>08:00 PM</option>
-                    <option value={"09PM"}>09:00 PM</option>
-                    <option value={"10PM"}>10:00 PM</option>
-                    <option value={"11PM"}>11:00 PM</option>
                   </StyledSelect>
                 </StyledSelectContainer>
               </StyledBooking>

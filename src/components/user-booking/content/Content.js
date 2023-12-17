@@ -11,7 +11,9 @@ const StyledContainer = styled.div`
 
 export default function Content(props) {
   const [allBooking, setAllBooking] = useState(props.allBooking);
-  console.log("allbooking", allBooking);
+  const [page, setPage] = useState([]);
+  const [secletedPage,setSecletedPage] = useState();
+
 
   return (
     <StyledContainer>

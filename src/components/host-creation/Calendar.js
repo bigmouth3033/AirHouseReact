@@ -1,12 +1,16 @@
 import React, { createRef } from "react";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Img from "assets/images/hosting-img/calender.jpg";
 import { Link } from "react-router-dom";
 import { Calendar as CalendarLb } from "react-calendar";
 import "./calendar.css";
 import { useOutletContext } from "react-router-dom";
 import { CreatePropertyMutation } from "api/hostApi";
+import { UpdatePropertyMutation } from "api/propertyApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { CreateExceptionDateMutation } from "api/exceptionDateApi";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -156,13 +160,74 @@ const StyledSelect = styled.select`
   }
 `;
 
-const Calendar = () => {
-  const propertyMutation = CreatePropertyMutation();
+const StyledHeader = styled.div`
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 40px 0;
+`;
 
+const StyledHeaderButton = styled.button`
+  background-color: white;
+  border: none;
+  font-size: 17px;
+  border-bottom: 3px solid white;
+  padding-bottom: 4px;
+  cursor: pointer;
+
+  ${(props) => {
+    if (props.$style == true) {
+      return css`
+        border-bottom: 3px solid #dff000;
+      `;
+    }
+  }}
+`;
+
+const formatDate = (dateObj) => {
+  const date = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+
+  return `${year}-${month < 10 ? "0" + month : month}-${date < 10 ? "0" + date : date}`;
+};
+
+const listDate = (start, end) => {
+  const allDatesInRange = [];
+
+  const current = new Date(start);
+  const endDate = new Date(end);
+
+  while (formatDate(current) <= formatDate(endDate)) {
+    allDatesInRange.push(formatDate(current));
+
+    current.setDate(current.getDate() + 1);
+  }
+
+  return allDatesInRange;
+};
+
+const StyledExceptionList = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Calendar = () => {
+  const createExceptionMutation = CreateExceptionDateMutation();
+  const propertyMutation = CreatePropertyMutation();
+  const updateMutation = UpdatePropertyMutation();
+  const [active, setActive] = useState([true, false]);
   const [value, setValue] = useState(new Date());
   const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+  const [exceptionValue, setExceptionValue] = useState();
+  const [exceptionValueArray, setExceptionValueArray] = useState(state.exceptionDate);
 
   const [calendar, setCalendar] = useState();
+
+  const changeActive = (index) => {
+    const newArr = [false, false];
+    newArr[index] = true;
+    setActive(newArr);
+  };
 
   function formatDate(date) {
     var d = new Date(date),
@@ -220,9 +285,22 @@ const Calendar = () => {
     formData.append("minimum_stay", state.minimumStay);
     formData.append("maximum_stay", state.maximumStay);
     formData.append("property_status", state.property_status == "true" ? 1 : 0); //
+    state.exceptionDate.forEach((exception) => {
+      formData.append("exception[]", JSON.stringify(exception));
+    });
     Array.from(state.images).forEach((image) => formData.append("images[]", image));
     formData.append("video", state.video); //
-    propertyMutation.mutate(formData);
+
+    if (state.property_id) {
+      formData.append("id", state.property_id);
+      updateMutation.mutate(formData);
+    } else {
+      propertyMutation.mutate(formData, {
+        onSuccess: (data) => {
+          alert("success");
+        },
+      });
+    }
   };
 
   const onClickPrevious = (ev) => {
@@ -241,6 +319,38 @@ const Calendar = () => {
     onSetActive(7);
   };
 
+  const onAddExceptionDate = (ev) => {
+    ev.preventDefault();
+    setExceptionValueArray([
+      ...exceptionValueArray,
+      { start: formatDate(new Date(exceptionValue[0])), end: formatDate(new Date(exceptionValue[1])) },
+    ]);
+
+    dispatch({
+      type: ACTIONS.CHANGE_EXCEPTION_DATE,
+      next: [...exceptionValueArray, { start: formatDate(new Date(exceptionValue[0])), end: formatDate(new Date(exceptionValue[1])) }],
+    });
+  };
+
+  const onExceptionDate = ({ date }) => {
+    let arrExceptionDate = [];
+    for (let i = 0; i < exceptionValueArray.length; i++) {
+      arrExceptionDate = [...arrExceptionDate, ...listDate(exceptionValueArray[i].start, exceptionValueArray[i].end)];
+    }
+
+    const isDisabled = arrExceptionDate.some((bookedDate) => {
+      return bookedDate == formatDate(new Date(date));
+    });
+
+    return isDisabled;
+  };
+
+  const onDeleteException = (ev, dateIndex) => {
+    ev.preventDefault();
+    setExceptionValueArray(exceptionValueArray.filter((exception, index) => index != dateIndex));
+    dispatch({ type: ACTIONS.CHANGE_EXCEPTION_DATE, next: exceptionValueArray.filter((exception, index) => index != dateIndex) });
+  };
+
   return (
     <StyledContainer>
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
@@ -250,64 +360,106 @@ const Calendar = () => {
         </StyleText>
       </StyledSecion1>
       <StyledSecion2>
-        <StyledForm>
-          <StyledCalendar
-            value={[state.startDate, state.endDate]}
-            onChange={(value) => {
-              dispatch({ type: ACTIONS.CHANGE_START_DATE, next: value[0] });
-              dispatch({ type: ACTIONS.CHANGE_END_DATE, next: value[1] });
-            }}
-            allowPartialRange={true}
-            selectRange={true}
-            returnValue={"range"}
-            view={"month"}
-            minDate={new Date()}
-            maxDetail={"month"}
-          />
-          <StyledBox>
-            <label>Minimum Stay</label>
-            <StyledInput
-              value={state.minimumStay}
-              onChange={(ev) => {
-                dispatch({ type: ACTIONS.CHANGE_MINIMUM_STAY, next: ev.target.value });
-                if (state.minimumStay >= state.maximumStay) {
-                  dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: Number(state.minimumStay) + 1 });
-                }
+        <StyledHeader>
+          <StyledHeaderButton $style={active[0]} onClick={() => changeActive(0)}>
+            Calender
+          </StyledHeaderButton>
+          <StyledHeaderButton disabled={!state.endDate} $style={active[1]} onClick={() => changeActive(1)}>
+            Exception Date
+          </StyledHeaderButton>
+        </StyledHeader>
+        {active[0] && (
+          <StyledForm>
+            <StyledCalendar
+              value={[state.startDate, state.endDate]}
+              onChange={(value) => {
+                dispatch({ type: ACTIONS.CHANGE_START_DATE, next: value[0] });
+                dispatch({ type: ACTIONS.CHANGE_END_DATE, next: value[1] });
+                setExceptionValueArray([]);
+                dispatch({ type: ACTIONS.CHANGE_EXCEPTION_DATE, next: [] });
               }}
-              type="number"
-              min={1}
+              allowPartialRange={true}
+              selectRange={true}
+              returnValue={"range"}
+              view={"month"}
+              minDate={new Date()}
+              maxDetail={"month"}
             />
-          </StyledBox>
-
-          <StyledBox>
-            <label>Maximum Stay</label>
-            <StyledInput
-              min={state.minimumStay}
-              value={state.maximumStay}
-              onChange={(ev) => {
-                dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: ev.target.value });
-              }}
-              type="number"
+            <StyledBox>
+              <label>Minimum Stay</label>
+              <StyledInput
+                value={state.minimumStay}
+                onChange={(ev) => {
+                  dispatch({ type: ACTIONS.CHANGE_MINIMUM_STAY, next: ev.target.value });
+                  if (state.minimumStay >= state.maximumStay) {
+                    dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: Number(state.minimumStay) + 1 });
+                  }
+                }}
+                type="number"
+                min={1}
+              />
+            </StyledBox>
+            <StyledBox>
+              <label>Maximum Stay</label>
+              <StyledInput
+                min={state.minimumStay}
+                value={state.maximumStay}
+                onChange={(ev) => {
+                  dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: ev.target.value });
+                }}
+                type="number"
+              />
+            </StyledBox>
+            <StyledBox>
+              <label>Status</label>
+              <StyledSelect
+                onChange={(ev) => {
+                  dispatch({ type: ACTIONS.CHANGE_STATUS, next: ev.target.value });
+                }}
+                value={state.property_status}
+              >
+                <option value={true}>Available</option>
+                <option value={false}>Not Available</option>
+              </StyledSelect>
+            </StyledBox>
+            <StyledGroupButon>
+              <StyledLink onClick={onClickPrevious}>Back </StyledLink>
+              <StyledLink onClick={onClickFinish}>Finish </StyledLink>
+            </StyledGroupButon>
+          </StyledForm>
+        )}
+        {active[1] && (
+          <StyledForm>
+            <StyledCalendar
+              allowPartialRange={true}
+              selectRange={true}
+              returnValue={"range"}
+              view={"month"}
+              minDate={state.startDate}
+              maxDate={state.endDate}
+              maxDetail={"month"}
+              onChange={setExceptionValue}
+              tileDisabled={onExceptionDate}
             />
-          </StyledBox>
-
-          <StyledBox>
-            <label>Status</label>
-            <StyledSelect
-              onChange={(ev) => {
-                dispatch({ type: ACTIONS.CHANGE_STATUS, next: ev.target.value });
-              }}
-              value={state.property_status}
-            >
-              <option value={true}>Available</option>
-              <option value={false}>Not Available</option>
-            </StyledSelect>
-          </StyledBox>
-          <StyledGroupButon>
-            <StyledLink onClick={onClickPrevious}>Back </StyledLink>
-            <StyledLink onClick={onClickFinish}>Finish </StyledLink>
-          </StyledGroupButon>
-        </StyledForm>
+            <button onClick={onAddExceptionDate} disabled={!exceptionValue?.[1]}>
+              Submit
+            </button>
+            <div>
+              {exceptionValueArray.map((exceptionObj, index) => {
+                return (
+                  <StyledExceptionList onClick={(ev) => onDeleteException(ev, index)} key={index}>
+                    <span>
+                      {exceptionObj.start} to {exceptionObj.end}
+                    </span>
+                    <button>
+                      <FontAwesomeIcon icon={faClose} />{" "}
+                    </button>
+                  </StyledExceptionList>
+                );
+              })}
+            </div>
+          </StyledForm>
+        )}
       </StyledSecion2>
     </StyledContainer>
   );

@@ -27,25 +27,23 @@ const Box = styled.div`
 
 export default function () {
   return (
-    <div>
-      <Box>
-        <ul className="SideBar">
-          <li>
-            <Link to="/user/profile" className="Link">
-              Edit Profile
-            </Link>
-          </li>
+    <Box>
+      <ul className="SideBar">
+        <li>
+          <Link to="detail" className="Link">
+            Edit Profile
+          </Link>
+        </li>
 
-          <li>
-            <Link to="/user/profile/media" className="Link">
-              Profile Photos
-            </Link>
-          </li>
-          <li>Trust & Verification</li>
-          <li>Review About You</li>
-          <li>Review By You</li>
-        </ul>
-      </Box>
-    </div>
+        <li>
+          <Link to="/user/profile/media" className="Link">
+            Profile Photos
+          </Link>
+        </li>
+        <li>Trust & Verification</li>
+        <li>Review About You</li>
+        <li>Review By You</li>
+      </ul>
+    </Box>
   );
 }

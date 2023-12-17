@@ -1,23 +1,29 @@
-import axiosClient from "api/axiosClient";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { UpdateUserMutation } from "api/userApi";
 
 const Box = styled.div`
   & .ContentContainer {
     border: solid 1px #dee2e6;
-    /* font-size: 1.em; */
+
+
+    & label {
+      font-size: 14px;
+      font-weight: 300;
+    }
   }
   & .ContentContainer li {
     padding: 5px;
   }
 
   & .ContentContainer input {
-    height: 2.5em;
-    width: 300px;
+    width: 100%;
+    padding: 5px;
+    height: 35px;
   }
   & .ContentContainer select {
     height: 2.5em;
-    width: 300px;
+    width: 100%;
   }
   & .ContentContainer .submitInput {
     max-width: 100px;
@@ -27,13 +33,23 @@ const Box = styled.div`
   }
 
   & .ContentContainer input:hover {
-    border: solid 2px red;
+    border: solid 1px red;
+
+    outline: solid 1px red;
+  }
+
+  & .ContentContainer input:focus {
+    border: solid 1px red;
+
+    outline: solid 1px red;
   }
 
   & .ContentContainer .FormControll {
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 20px;
+    row-gap: 1rem;
+    column-gap: 1rem;
   }
   & .ContentContainer .error {
     color: red;
@@ -41,7 +57,7 @@ const Box = styled.div`
   }
 `;
 export default function Content(props) {
-  console.log(props.user);
+  const updateMutation = UpdateUserMutation();
   const [firstName, setFirstName] = useState(props.user.user.first_name);
   const [isValidFN, setIsValidFN] = useState(false);
 
@@ -58,7 +74,7 @@ export default function Content(props) {
   const [about, setAbout] = useState(props.user.user.about);
 
   const [gender, setGender] = useState(props.user.user.gender);
-  console.log("render");
+
   const handleFirstName = (e) => {
     setFirstName(e.target.value);
     if (e.target.value == "") {
@@ -93,28 +109,25 @@ export default function Content(props) {
   };
 
   useEffect(() => {
-    setGender("male");
+    if (gender === "") {
+      setGender("Female");
+    }
   }, []);
 
-  //fetch Data
-  const updateUser = async (payload) => {
-    let response = await axiosClient.post("updateUser", payload);
-    console.log(response.data);
-    return response.data;
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    let rs = updateUser({
+    const payload = {
       firstName,
       lastName,
       email,
       phoneNumber,
       address,
-      address,
       about,
       gender,
-    });
-    console.log(rs);
+    };
+    updateMutation.mutate(payload);
+
+    alert("cap nhat thong tin thanh cong");
   };
 
   return (
@@ -181,9 +194,9 @@ export default function Content(props) {
               </li>
               <li>
                 <select value={gender} name="gender" id="gender" onChange={(e) => handleGender(e)}>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
               </li>
             </ul>

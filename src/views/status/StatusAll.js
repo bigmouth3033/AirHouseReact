@@ -127,6 +127,7 @@ export default function StatusAll({ status, filterState }) {
   const [clickPopUp, setClickPopUp] = useState(false);
   const [chosenId, setChosenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
   const currentPageQuery = PropertiesCurrentPageQuery(
     status,
     currentPage,
@@ -148,8 +149,6 @@ export default function StatusAll({ status, filterState }) {
 
   const totalItem = Number(currentPageQuery.data?.total || 0);
   const totalPage = Math.ceil(totalItem / 20);
-
-  console.log(totalPage);
 
   const onClickPrevious = () => {
     window.scrollTo(0, 0);

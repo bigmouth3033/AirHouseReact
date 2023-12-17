@@ -143,9 +143,9 @@ const Basic = () => {
   const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
 
   useEffect(() => {
-    dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: 1 });
-    dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: 1 });
-    dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: 1 });
+    dispatch({ type: ACTIONS.CHANGE_BATH_ROOM_COUNT, next: state.bedroomCount });
+    dispatch({ type: ACTIONS.CHANGE_BEDROOM_COUNT, next: state.bathRoomCount });
+    dispatch({ type: ACTIONS.CHANGE_ACCOMODATES_COUNT, next: state.accomodatesCount });
   }, []);
 
   const navigate = useNavigate();
@@ -157,8 +157,14 @@ const Basic = () => {
 
   const onClickPrevious = (ev) => {
     ev.preventDefault();
-
-    navigate("/user/host-creation/become-host");
+    if (state.property_id) {
+      navigate({
+        pathname: "/user/host-update/become-host",
+        search: `id=${state.property_id}`,
+      });
+    } else {
+      navigate("/user/host-creation/become-host");
+    }
   };
 
   return (

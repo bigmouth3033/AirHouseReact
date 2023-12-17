@@ -143,3 +143,57 @@ export const CheckEmailMutation = () => {
 
   return checkMutation;
 };
+
+const signupGoogle = async (payload) => {
+  const response = await axiosClient.post("google-signup", payload);
+  return response.data;
+};
+
+export const SignUpGoogleMutation = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: signupGoogle,
+    onSuccess: (data) => {
+      localStorage.setItem("ACCESS_TOKEN", data.token);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  return mutation;
+};
+
+const updateUser = async (payload) => {
+  let response = await axiosClient.post("updateUser", payload);
+  return response.data;
+};
+
+export const UpdateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  return mutation;
+};
+
+const updateImage = async (payload) => {
+  let response = await axiosClient.post("uploadImageUser", payload);
+  return response.data;
+};
+
+export const UpdateImageMutation = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: updateImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  return mutation;
+};

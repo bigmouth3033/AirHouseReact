@@ -4,10 +4,12 @@ import { useRef } from "react";
 import { LoginUserMutation } from "../../api/userApi";
 import { GoogleLogin } from "@react-oauth/google";
 import { isExpired, decodeToken } from "react-jwt";
+import { SignUpGoogleMutation } from "../../api/userApi";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const StyledContainer = styled.div`
   border: 1px solid red;
-  min-width: 500px;
+  width: 500px;
   margin: 0 auto;
   padding: 25px;
   border-radius: 3px;
@@ -17,6 +19,11 @@ const StyledContainer = styled.div`
   left: 50%;
   transform: translateX(-50%);
   top: 10%;
+
+  & .google {
+    width: 100%;
+    height: 50px;
+  }
 `;
 const Styledh2 = styled.h2`
   color: red;
@@ -90,15 +97,20 @@ const StyledError = styled.div`
   font-size: 14px;
   height: 2.5rem;
   padding: 5px 0;
+  text-align: justify;
 `;
+
+const StyledGoogleLogin = styled.button``;
 
 const EMAIL_REGEX = /^[0-9a-zA-Z_]+@[0-9a-zA-Z]+\.[0-9a-zA-Z]+$/;
 const PASSWORD_REGEX = /^.{9,}$/;
 
 const Login = ({ setShowLogin }) => {
+  const signUpGoogleMutation = SignUpGoogleMutation();
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [wrongAccount, setWrongAccount] = useState(false);
+  const [signInError, setSignInError] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
   const loginMutation = LoginUserMutation();
@@ -139,6 +151,8 @@ const Login = ({ setShowLogin }) => {
     });
   };
 
+  const googleRef = useRef();
+
   return (
     <StyledContainer>
       <Styledh2>Login</Styledh2>
@@ -158,12 +172,28 @@ const Login = ({ setShowLogin }) => {
         <StyledWith>Login with</StyledWith>
         <GoogleLogin
           onSuccess={(credentialResponse) => {
-            console.log(decodeToken(credentialResponse?.credential));
+            const dataGoogle = decodeToken(credentialResponse?.credential);
+            const payload = {
+              email: dataGoogle.email,
+              first_name: dataGoogle.name,
+            };
+
+            signUpGoogleMutation.mutate(payload, {
+              onSuccess: () => {
+                setShowLogin(false);
+              },
+              onError: () => {
+                setSignInError(true);
+              },
+            });
           }}
           onError={() => {
             console.log("Login Failed");
           }}
         />
+        <StyledError>
+          {signInError && <span>AirHouse don't have any account associate with this email. Please sign-up first</span>}
+        </StyledError>
       </StyledForm>
     </StyledContainer>
   );

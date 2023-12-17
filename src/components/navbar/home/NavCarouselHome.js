@@ -10,11 +10,11 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 const responsive = {
   reponsive_1: {
-    breakpoint: { max: 1640, min: 1100 },
+    breakpoint: { max: 1640, min: 1540 },
     items: 11,
   },
   reponsive_2: {
-    breakpoint: { max: 1500, min: 1400 },
+    breakpoint: { max: 1540, min: 1400 },
     items: 10,
   },
   reponsive_3: {

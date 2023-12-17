@@ -42,7 +42,6 @@ const StyledOptionChoice = styled.button`
   font-weight: 600;
   color: black;
 
-
   ${(props) => {
     if (props.$active === true) {
       return css`

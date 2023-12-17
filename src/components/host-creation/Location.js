@@ -200,9 +200,9 @@ const StyledInputContainer = styled.div`
 `;
 
 const Location = () => {
-  const [count, setCount] = useState(0);
-  const [selectedProvince, setSelectedProvince] = useState("01");
   const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+  const [count, setCount] = useState(0);
+  const [selectedProvince, setSelectedProvince] = useState(state.provinces_id);
   const provinceQuery = ProvinceQuery();
   const districtQuery = DistrictQuery(selectedProvince);
 
@@ -228,13 +228,19 @@ const Location = () => {
   };
 
   useEffect(() => {
-    if (provinceQuery.isSuccess && count == 0) {
+    if (provinceQuery.isSuccess && state.provinces_id == 0) {
       setCount(1);
       dispatch({ type: ACTIONS.CHANGE_PROVINCES, next: provinceQuery.data[0].code });
     }
 
     if (districtQuery.isSuccess) {
-      dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: districtQuery.data[0].code });
+      const arr = [];
+      districtQuery.data.forEach((district) => arr.push(district.code));
+      if (arr.includes(state.district_id)) {
+        dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: state.district_id });
+      } else {
+        dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: districtQuery.data[0].code });
+      }
     }
   }, [provinceQuery.status, districtQuery.status]);
 

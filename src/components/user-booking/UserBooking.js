@@ -15,7 +15,7 @@ const Box = styled.div`
     max-width: 1500px;
     margin: auto;
     margin-top: 2rem;
-		margin-bottom: 2rem;
+    margin-bottom: 2rem;
 
     > p:nth-of-type(1) {
       font-size: 20px;

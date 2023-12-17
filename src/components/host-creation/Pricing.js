@@ -224,7 +224,7 @@ const Pricing = () => {
           <StyledBoderInput>
             <StyledTitle>Base price</StyledTitle>
             <StyledLable className="label-input">
-              Daily/hourly Price <StyledSpan>*</StyledSpan>
+              Daily Price <StyledSpan>*</StyledSpan>
             </StyledLable>
             <StyledButtonInput>
               <p>$</p>

@@ -5,7 +5,6 @@ const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
 const AircoverForHosts = lazy(() => import("./components/body/AirCoverForHost/AircoverForHosts"));
 const BestHost = lazy(() => import("./components/body/BestHost/BestHost"));
-const ProfileDetail = lazy(() => import("./components/body/profile/ProfileDetail"));
 
 const AdminLayout = lazy(() => import("layouts/AdminLayout"));
 const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
@@ -72,6 +71,7 @@ const RoomType = lazy(() => import("views/type/room_type/RoomType"));
 
 const GuestLayout = lazy(() => import("layouts/GuestLayout"));
 const HostCreationIndex = lazy(() => import("components/host-creation/HostCreationIndex"));
+const HostUpdateIndex = lazy(() => import("components/host-creation/HostUpdateIndex"));
 const BecomeHost = lazy(() => import("components/host-creation/BecomeHost"));
 const Basic = lazy(() => import("components/host-creation/Basic"));
 const Description = lazy(() => import("components/host-creation/Description"));
@@ -92,7 +92,7 @@ const Chat = lazy(() => import("components/chat/Chat"));
 
 // profile
 
-const Profile = lazy(() => import("components/Profile/UserLayout"));
+const ProfileLayout = lazy(() => import("components/Profile/UserLayout"));
 const EditProfile = lazy(() => import("components/Profile/EditProfile/EditProflie"));
 const ProfilePhoto = lazy(() => import("components/Profile/ProfilePhoto/ProfilePhoto"));
 
@@ -112,6 +112,8 @@ const Blog = lazy(() => import("components/blog/Blog"));
 
 const BookingList = lazy(() => import("components/user-booking/UserBooking"));
 
+const Listing = lazy(() => import("components/listing/ListingIndex"));
+
 const router = createBrowserRouter([
   {
     path: "/user",
@@ -124,17 +126,17 @@ const router = createBrowserRouter([
         exact: true,
       },
       {
-        path: "/user",
-        elemet: <Profile />,
+        path: "profile",
+        element: <ProfileLayout />,
         exact: true,
         children: [
           {
-            path: "profile",
+            path: "detail",
             element: <EditProfile />,
             exact: true,
           },
           {
-            path: "profile/media",
+            path: "media",
             element: <ProfilePhoto />,
             exact: true,
           },
@@ -165,8 +167,37 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/user/host-update",
+        element: <HostUpdateIndex />,
+        exact: true,
+        children: [
+          { path: "become-host", element: <BecomeHost />, exact: true },
+          {
+            path: "content",
+            element: <HostCreationContent />,
+            exact: true,
+            children: [
+              { path: "basic", element: <Basic />, exact: true },
+              { path: "description", element: <Description />, exact: true },
+              { path: "details", element: <Detail />, exact: true },
+              { path: "amenities", element: <Amenitiess />, exact: true },
+              { path: "photo", element: <Photos />, exact: true },
+              { path: "pricing", element: <Pricing />, exact: true },
+              { path: "location", element: <Location />, exact: true },
+              { path: "calendar", element: <Calendar />, exact: true },
+              { path: "booking", element: <Booking />, exact: true },
+            ],
+          },
+        ],
+      },
+      {
         path: "booking-list",
         element: <BookingList />,
+        exact: true,
+      },
+      {
+        path: "listing",
+        element: <Listing />,
         exact: true,
       },
     ],
@@ -189,11 +220,6 @@ const router = createBrowserRouter([
       {
         path: "/best-host",
         element: <BestHost />,
-        exact: true,
-      },
-      {
-        path: "/profile",
-        element: <ProfileDetail />,
         exact: true,
       },
       {

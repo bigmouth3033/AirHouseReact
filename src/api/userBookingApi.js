@@ -31,3 +31,18 @@ export const StatusBookingQuery = (userTitle) => {
   });
   return titleQuery;
 };
+
+const fethCurrentPage = async (secletedPage) => {
+  const response = await axiosClient.get(`readCurrentPage?page=${secletedPage}`);
+  return response.data;
+}
+
+export const CurrentPageByUserQuery = (secletedPage) => {
+  const titleQuery = useQuery({
+    queryKey: ["booking", "title",'page',secletedPage],
+    queryFn: () => fethCurrentPage(secletedPage),
+    keepPreviousData: true,
+    retry: 1,
+  });
+  return titleQuery;
+};

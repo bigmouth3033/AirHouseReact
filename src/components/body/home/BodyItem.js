@@ -35,13 +35,6 @@ const StyledCarousel = styled(Carousel)`
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
 
-  & p {
-    aspect-ratio: 1;
-    width: 100%;
-    height: 100%;
-    background-color: beige;
-  }
-
   &:hover .icon {
     display: block;
   }
@@ -87,7 +80,6 @@ const ButtonGroup = ({ max, next, previous, goToSlide, ...rest }) => {
 const StyledItemContainer = styled.div`
   cursor: pointer;
   display: grid;
-  max-height: 24rem;
 `;
 
 const StyledInfoBox = styled.div`
@@ -135,12 +127,17 @@ const StyledInfoBox = styled.div`
 `;
 
 const StyledImgSkeleton = styled(Skeleton)`
-  height: 100rem;
+  aspect-ratio: 1;
+  height: 100%;
   width: 100%;
 `;
 
 const StyledImgContainer = styled.div`
   height: 100%;
+
+  & img {
+    aspect-ratio: 1;
+  }
 `;
 
 function BodyItem({ data, click }) {
@@ -158,8 +155,7 @@ function BodyItem({ data, click }) {
         {data.images.map((img, index) => {
           return (
             <StyledImgContainer key={index} onClick={() => click(data.id)}>
-              {loaded || <StyledImgSkeleton />}
-              <img src={img.image} onLoad={() => setLoaded(true)} style={loaded ? { opacity: "1" } : { opacity: "0" }} />
+              <img src={img.image} />
             </StyledImgContainer>
           );
         })}

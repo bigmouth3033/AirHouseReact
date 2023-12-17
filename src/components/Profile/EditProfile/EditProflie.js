@@ -6,29 +6,15 @@ import { UserQuery } from "api/userApi";
 import Loading from "components/Loading";
 import { Navigate } from "react-router-dom";
 
-const Box = styled.div`
-  & .containerSideBar {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-  }
-`;
+const Box = styled.div``;
 export default function EditProflie() {
   const userQuery = UserQuery();
-  if (userQuery.isLoading) {
-    return <Loading />;
-  }
-  if (userQuery.isError) {
-    return <Navigate to="/admin_login" />;
-  }
 
   return (
-    <div>
-      <Box>
-        <div className="containerSideBar">
-          <SideBar />
-          <Content user={userQuery.data} />
-        </div>
-      </Box>
-    </div>
+    <Box>
+      <div className="containerSideBar">
+        <Content user={userQuery.data} />
+      </div>
+    </Box>
   );
 }
