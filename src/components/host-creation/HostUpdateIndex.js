@@ -242,11 +242,9 @@ export default function HostCreationIndex() {
     startDate: "",
     endDate: "",
     baseprice: 0,
-    bookingPer: "day",
     bookingType: "review",
     checkInAfter: "02PM",
     checkOutBefore: "12AM",
-    cancelation: "flexible",
     minimumStay: 0,
     maximumStay: 0,
     property_status: false,
@@ -323,11 +321,9 @@ export default function HostCreationIndex() {
       dispatch({ type: ACTIONS.CHANGE_START_DATE, next: propertyQuery.data.start_date });
       dispatch({ type: ACTIONS.CHANGE_END_DATE, next: propertyQuery.data.end_date });
       dispatch({ type: ACTIONS.CHANGE_BASE_PRICE, next: propertyQuery.data.base_price });
-      dispatch({ type: ACTIONS.CHANGE_BOOKING_PER, next: propertyQuery.data.booking_per });
       dispatch({ type: ACTIONS.CHANGE_BOOKING_TYPE, next: propertyQuery.data.booking_type });
       dispatch({ type: ACTIONS.CHANGE_CHECKIN, next: propertyQuery.data.check_in_after });
       dispatch({ type: ACTIONS.CHANGE_CHECKOUT, next: propertyQuery.data.check_out_before });
-      dispatch({ type: ACTIONS.CHANGE_CANCELATION, next: propertyQuery.data.cancelation });
       dispatch({ type: ACTIONS.CHANGE_MINIMUM_STAY, next: propertyQuery.data.minimum_stay });
       dispatch({ type: ACTIONS.CHANGE_MAXIMUM_STAY, next: propertyQuery.data.maximum_stay });
 
@@ -336,6 +332,13 @@ export default function HostCreationIndex() {
       dispatch({ type: ACTIONS.CHANGE_IMAGES, next: images });
 
       dispatch({ type: ACTIONS.CHANGE_STATUS, next: propertyQuery.data.property_status == 1 ? true : false });
+
+      const exceptions = [];
+      propertyQuery.data.exception_date.forEach((exception) => {
+        exceptions.push({ start: exception.start_date, end: exception.end_date });
+      });
+      
+      dispatch({ type: ACTIONS.CHANGE_EXCEPTION_DATE, next: exceptions });
     }
   }, [propertyQuery.status]);
 

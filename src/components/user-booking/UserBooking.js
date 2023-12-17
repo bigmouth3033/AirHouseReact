@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SideBar from "./sidebar/SideBar";
 import Content from "./content/Content";
@@ -25,18 +25,14 @@ const Box = styled.div`
 `;
 function UserBooking() {
   const [userTitle, setUserTitle] = useState("");
-  const [allBooking, setAllBooking] = useState([]);
-  const statusBookingQuery = StatusBookingQuery(userTitle);
-
-  if (statusBookingQuery.isLoading) return <h1>Loading..</h1>;
-  console.log("object", statusBookingQuery.data);
 
   return (
     <Box>
       <div className="grid-container-user-booking">
         <p>Booking</p> <p></p>
         <SideBar setUserTitle={setUserTitle} />
-        <Content allBooking={statusBookingQuery.data} />
+        <Content />
+        {/* <button onClick={handleOnClick}>Click</button> */}
       </div>
     </Box>
   );

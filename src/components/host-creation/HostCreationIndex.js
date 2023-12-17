@@ -196,11 +196,9 @@ export default function HostCreationIndex() {
     startDate: "",
     endDate: "",
     baseprice: 0,
-    bookingPer: "day",
     bookingType: "review",
     checkInAfter: "02PM",
     checkOutBefore: "12AM",
-    cancelation: "flexible",
     minimumStay: 0,
     maximumStay: 0,
     property_status: false,
@@ -231,14 +229,14 @@ export default function HostCreationIndex() {
     setAvailable(newArr);
   };
 
-  useBeforeunload(() => "You’ll lose your data!");
+  // useBeforeunload(() => "You’ll lose your data!");
 
   let location = useLocation();
 
   useEffect(() => {
-    if (JSON.stringify(initialArr) === JSON.stringify(available)) {
-      navigate("/user/host-creation/become-host");
-    }
+    // if (JSON.stringify(initialArr) === JSON.stringify(available)) {
+    //   navigate("/user/host-creation/become-host");
+    // }
   }, []);
 
   return (

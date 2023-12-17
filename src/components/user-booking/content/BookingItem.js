@@ -68,7 +68,7 @@ export default function BookingItem(props) {
             <div className="item3-item">
               <img className="user-image" src={props.BookingItem.user_image} />
               <div className="name-user-property">
-                {props.BookingItem.user_firstName} {props.BookingItem.user_lastName}
+                {props.BookingItem.first_name} {props.BookingItem.last_name}
               </div>
               <div className="Link">
                 <Link to="/user/chat/:id">SendMessage</Link>

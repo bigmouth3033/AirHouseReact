@@ -235,18 +235,6 @@ const Booking = () => {
               </StyledText>
               <StyledBooking>
                 <StyledSelectContainer>
-                  <StyledText>Booking Per Day/Hour</StyledText>
-                  <StyledSelect
-                    value={state.bookingPer}
-                    onChange={(ev) => {
-                      dispatch({ type: ACTIONS.CHANGE_BOOKING_TYPE, next: ev.target.value });
-                    }}
-                  >
-                    <option value={"day"}>Per day</option>
-                    <option value={"hours"}>Per hours</option>
-                  </StyledSelect>
-                </StyledSelectContainer>
-                <StyledSelectContainer>
                   <StyledText>Booking Type</StyledText>
                   <StyledSelect
                     value={state.bookingType}
@@ -268,17 +256,6 @@ const Booking = () => {
                 <span className="span">The requirements and conditions to book a reservation at your listing.</span>{" "}
                 <StyledSpan>*</StyledSpan>
               </StyledText>
-              <StyledText>Cancellation Policy</StyledText>
-              <StyledBoderCancellationPolicyInput
-                value={state.cancelation}
-                onChange={(ev) => {
-                  dispatch({ type: ACTIONS.CHANGE_CANCELATION, next: ev.target.value });
-                }}
-              >
-                <option value={"flexible"}>Flexible: Full refund 1 day prior to arrival, except fees</option>
-                <option value={"moderate"}>Moderate: Full refund 5 days prior to arrival, except fees</option>
-                <option value={"strict"}>Strict: 50% refund up until 1 week prior to arrival, except fees</option>
-              </StyledBoderCancellationPolicyInput>
               <StyledBooking>
                 <StyledSelectContainer>
                   <StyledText>Check in after</StyledText>

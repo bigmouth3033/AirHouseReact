@@ -11,6 +11,7 @@ import { UpdatePropertyMutation } from "api/propertyApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { CreateExceptionDateMutation } from "api/exceptionDateApi";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -167,20 +168,65 @@ const StyledHeader = styled.div`
 `;
 
 const StyledHeaderButton = styled.button`
+  transition: all 0.1s ease-in-out;
   background-color: white;
   border: none;
   font-size: 17px;
   border-bottom: 3px solid white;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
 
   ${(props) => {
     if (props.$style == true) {
       return css`
-        border-bottom: 3px solid #dff000;
+        border-bottom: 3px solid red;
       `;
     }
   }}
+`;
+
+const StyledSubmitButton = styled.button`
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+
+  &:active {
+    font-weight: 600;
+    background-color: white;
+  }
+`;
+
+const StyledExceptionList = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+
+  & .to {
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: none;
+    margin: 0 5px;
+  }
+
+  & span {
+    border-bottom: 1px solid black;
+  }
+
+  & button {
+    cursor: pointer;
+  }
+`;
+
+const StyledExceptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid black;
+  max-height: 10rem;
+  overflow-y: scroll;
 `;
 
 const formatDate = (dateObj) => {
@@ -206,12 +252,8 @@ const listDate = (start, end) => {
   return allDatesInRange;
 };
 
-const StyledExceptionList = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const Calendar = () => {
+  const navigate = useNavigate();
   const createExceptionMutation = CreateExceptionDateMutation();
   const propertyMutation = CreatePropertyMutation();
   const updateMutation = UpdatePropertyMutation();
@@ -229,7 +271,7 @@ const Calendar = () => {
     setActive(newArr);
   };
 
-  function formatDate(date) {
+  function formatDateToString(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
       day = "" + d.getDate(),
@@ -274,14 +316,12 @@ const Calendar = () => {
     formData.append("bedroom_count", state.bedroomCount);
     formData.append("bathroom_count", state.bathRoomCount);
     formData.append("accomodates_count", state.accomodatesCount);
-    formData.append("start_date", formatDate(new Date(state.startDate)));
-    formData.append("end_date", formatDate(new Date(state.endDate)));
+    formData.append("start_date", formatDateToString(new Date(state.startDate)));
+    formData.append("end_date", formatDateToString(new Date(state.endDate)));
     formData.append("base_price", state.baseprice); //
-    formData.append("booking_per", state.bookingPer); //
     formData.append("booking_type", state.bookingType); //
     formData.append("check_in_after", state.checkInAfter); //
     formData.append("check_out_before", state.checkOutBefore); //
-    formData.append("cancelation", state.cancelation); //
     formData.append("minimum_stay", state.minimumStay);
     formData.append("maximum_stay", state.maximumStay);
     formData.append("property_status", state.property_status == "true" ? 1 : 0); //
@@ -298,6 +338,7 @@ const Calendar = () => {
       propertyMutation.mutate(formData, {
         onSuccess: (data) => {
           alert("success");
+          navigate("/user/listing");
         },
       });
     }
@@ -349,6 +390,36 @@ const Calendar = () => {
     ev.preventDefault();
     setExceptionValueArray(exceptionValueArray.filter((exception, index) => index != dateIndex));
     dispatch({ type: ACTIONS.CHANGE_EXCEPTION_DATE, next: exceptionValueArray.filter((exception, index) => index != dateIndex) });
+  };
+
+  const onHandleChangeException = (date) => {
+    let selectedArr = [];
+
+    if (date[1] == null) {
+      selectedArr = [...listDate(formatDate(new Date(date[0])), formatDate(new Date(date[0])))];
+    } else {
+      selectedArr = [...listDate(formatDate(new Date(date[0])), formatDate(new Date(date[1])))];
+    }
+
+    let arrExceptionDate = [];
+    for (let i = 0; i < exceptionValueArray.length; i++) {
+      arrExceptionDate = [...arrExceptionDate, ...listDate(exceptionValueArray[i].start, exceptionValueArray[i].end)];
+    }
+
+    let isWrong = false;
+
+    selectedArr.forEach((selectedDate) => {
+      if (arrExceptionDate.includes(selectedDate)) {
+        isWrong = true;
+        return;
+      }
+    });
+
+    if (isWrong) {
+      setExceptionValue(exceptionValue);
+    } else {
+      setExceptionValue(date);
+    }
   };
 
   return (
@@ -431,33 +502,34 @@ const Calendar = () => {
         {active[1] && (
           <StyledForm>
             <StyledCalendar
+              value={exceptionValue}
               allowPartialRange={true}
               selectRange={true}
               returnValue={"range"}
               view={"month"}
-              minDate={state.startDate}
-              maxDate={state.endDate}
+              minDate={new Date(state.startDate)}
+              maxDate={new Date(state.endDate)}
               maxDetail={"month"}
-              onChange={setExceptionValue}
+              onChange={onHandleChangeException}
               tileDisabled={onExceptionDate}
             />
-            <button onClick={onAddExceptionDate} disabled={!exceptionValue?.[1]}>
+            <StyledSubmitButton onClick={onAddExceptionDate} disabled={!exceptionValue?.[1]}>
               Submit
-            </button>
-            <div>
+            </StyledSubmitButton>
+            <StyledExceptionContainer>
               {exceptionValueArray.map((exceptionObj, index) => {
                 return (
-                  <StyledExceptionList onClick={(ev) => onDeleteException(ev, index)} key={index}>
+                  <StyledExceptionList key={index}>
                     <span>
-                      {exceptionObj.start} to {exceptionObj.end}
+                      {exceptionObj.start} <span className="to">to</span> {exceptionObj.end}
                     </span>
-                    <button>
+                    <button onClick={(ev) => onDeleteException(ev, index)}>
                       <FontAwesomeIcon icon={faClose} />{" "}
                     </button>
                   </StyledExceptionList>
                 );
               })}
-            </div>
+            </StyledExceptionContainer>
           </StyledForm>
         )}
       </StyledSecion2>

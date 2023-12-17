@@ -9,6 +9,12 @@ import { DenyPropertyMutation } from "api/hostApi";
 import { AcceptPropertyMutation } from "api/hostApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { CSpinner } from "@coreui/react";
+import Calendar from "react-calendar";
+import "./calendar.css";
+
+const StyledCalendar = styled(Calendar)`
+  background-color: white;
+`;
 
 const StyledPopUp = styled(PopUpContainer)`
   background-color: white;
@@ -85,6 +91,29 @@ const StyledSpinner = styled.div`
   height: 100%;
   align-items: center;
 `;
+
+const formatDate = (dateObj) => {
+  const date = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+
+  return `${year}-${month < 10 ? "0" + month : month}-${date < 10 ? "0" + date : date}`;
+};
+
+const listDate = (start, end) => {
+  const allDatesInRange = [];
+
+  const current = new Date(start);
+  const endDate = new Date(end);
+
+  while (formatDate(current) <= formatDate(endDate)) {
+    allDatesInRange.push(formatDate(current));
+
+    current.setDate(current.getDate() + 1);
+  }
+
+  return allDatesInRange;
+};
 
 export default function StatusPopUp({ currentPage, chosenId, setShowPopUp }) {
   const propertyQuery = PropertyIdQuery(chosenId);
@@ -269,6 +298,19 @@ function PropertyBody({ data, currentPage }) {
     });
   };
 
+  const onExceptionDate = ({ date }) => {
+    let arrExceptionDate = [];
+    for (let i = 0; i < data.exception_date.length; i++) {
+      arrExceptionDate = [...arrExceptionDate, ...listDate(data.exception_date[i].start_date, data.exception_date[i].end_date)];
+    }
+
+    const isDisabled = arrExceptionDate.some((bookedDate) => {
+      return bookedDate == formatDate(new Date(date));
+    });
+
+    return isDisabled;
+  };
+
   return (
     <StyledPropertyBody>
       <StyledGrid>
@@ -432,24 +474,14 @@ function PropertyBody({ data, currentPage }) {
       <StyledFlex>
         <div>
           <label>Base Price</label>
-          <input readOnly value={data.base_price} />
+          <input readOnly value={"$" + data.base_price} />
         </div>
       </StyledFlex>
       <StyledContentHeader>Booking</StyledContentHeader>
       <StyledGrid>
         <div>
-          <label>Booking Per Day/Hour</label>
-          <input readOnly value={data.booking_per} />
-        </div>
-
-        <div>
           <label>Booking Type</label>
           <input readOnly value={data.booking_type} />
-        </div>
-
-        <div>
-          <label>Cancellation Policy</label>
-          <input readOnly value={data.cancelation} />
         </div>
       </StyledGrid>
       <StyledGrid style={{ marginTop: "2rem" }}>
@@ -464,6 +496,9 @@ function PropertyBody({ data, currentPage }) {
         </div>
       </StyledGrid>
       <StyledContentHeader>Calendar</StyledContentHeader>
+      <StyledFlex>
+        <StyledCalendar minDate={new Date(data.start_date)} maxDate={new Date(data.end_date)} tileDisabled={onExceptionDate} /> <br />
+      </StyledFlex>
       <StyledGrid>
         <div>
           <label>Start Date</label>
@@ -477,12 +512,12 @@ function PropertyBody({ data, currentPage }) {
 
         <div>
           <label>Minimum Stay</label>
-          <input readOnly value={data.minimum_stay} />
+          <input readOnly value={data.minimum_stay + " day"} />
         </div>
 
         <div>
           <label>Maximum Stay</label>
-          <input readOnly value={data.maximum_stay} />
+          <input readOnly value={data.maximum_stay + " day"} />
         </div>
 
         <div>

@@ -241,7 +241,7 @@ export default function StatusAll({ status, filterState }) {
                   <td className="status-name" colSpan="5">
                     <span className="td_container">
                       <span className="td_left">
-                        <Avatar size="30px" textSizeRatio={2} round={true} name={data.user.first_name} />
+                        <Avatar src={data.user.image} size="30px" textSizeRatio={2} round={true} name={data.user.first_name} />
                       </span>
                       <span className="td_right">
                         <span>{data.name}</span>

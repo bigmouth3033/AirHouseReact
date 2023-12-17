@@ -6,7 +6,7 @@ import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 3fr 3fr;
   min-height: 50rem;
 
   @media (max-width: 992px) {
@@ -236,30 +236,8 @@ const Pricing = () => {
                 type="number"
               />
             </StyledButtonInput>
-            <StyledP>
-              You can offer discounts for longer stays by setting
-              <StyledSpan> weekly and monthly</StyledSpan> prices.
-            </StyledP>
           </StyledBoderInput>
-          <StyledBoderInput>
-            <StyledTitle>Additional Pricing Options</StyledTitle>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Cleaning fee</StyledLable>
-            </StyleGroupPricing>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Additional guests</StyledLable>
-            </StyleGroupPricing>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Security deposit</StyledLable>
-            </StyleGroupPricing>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Weekend pricing</StyledLable>
-            </StyleGroupPricing>
-          </StyledBoderInput>
+       
 
           <StyledGroupButon>
             <StyledLink onClick={onClickPrevious}>Back </StyledLink>
