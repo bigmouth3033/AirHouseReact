@@ -30,17 +30,17 @@ export const StatusBookingQuery = (userTitle) => {
   return titleQuery;
 };
 
-export const fethCurrentPage = async () =>{
-  const response = await axiosClient.get('readCurrentPage');
-  return response.data;
-}
+// export const fethCurrentPage = async () =>{
+//   const response = await axiosClient.get('readCurrentPage');
+//   return response.data;
+// }
 
-export const CurrentPagebyUserQuery = (userTitle,page) => {
-  const titleQuery = useQuery({
-    queryKey: ["booking", "title", userTitle,page],
-    queryFn: fethCurrentPage,
-    keepPreviousData: true,
-    retry: 1,
-  });
-  return titleQuery;
-};
+// export const CurrentPagebyUserQuery = (userTitle,page) => {
+//   const titleQuery = useQuery({
+//     queryKey: ["booking", "title", userTitle,page],
+//     queryFn: fethCurrentPage,
+//     keepPreviousData: true,
+//     retry: 1,
+//   });
+//   return titleQuery;
+// };

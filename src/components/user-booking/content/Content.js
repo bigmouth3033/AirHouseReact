@@ -10,6 +10,14 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  & .PageNumber{
+    border: solid thin black;
+    padding: 10px;
+  }
+  & .PageNumberContainer{
+    display: flex;
+    gap: 10px;
+  }
 `;
 
 export default function Content(props) {
@@ -37,7 +45,7 @@ export default function Content(props) {
 
   let totalPage = null;
   if (currentPageByUserQuery.isSuccess) {
-    totalPage = Math.ceil(currentPageByUserQuery.data.total / 5);  
+    totalPage = Math.ceil(currentPageByUserQuery.data.total / 10);  
   }
   
   // const totalPage = 2
@@ -52,16 +60,16 @@ export default function Content(props) {
             })}
           </div>
       }
-      <ul>
+      <div className="PageNumberContainer">
         {Array(totalPage).fill(0).map((_,index) => {
           const pageNumber = index + 1
           return (
-            <li key={pageNumber} onClick={() => handlePagination(pageNumber)}>
+            <span key={pageNumber} onClick={() => handlePagination(pageNumber)} className="PageNumber">
               <Link to={`/user/booking-list?page=${pageNumber}`}>{pageNumber}</Link>
-            </li>
+            </span>
           )
         })}
-      </ul>
+      </div>
 
     </StyledContainer>
   );

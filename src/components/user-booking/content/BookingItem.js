@@ -52,13 +52,13 @@ export default function BookingItem(props) {
       <div className="booking-item">
         <div className="grid-container">
           <div className="item1">
-            <img className="property-image" src={props.BookingItem.image} />
+            <img className="property-image" src={props.BookingItem.property_image} />
           </div>
           <div className="item2">
             <p style={{ fontWeight: "bold" }}>{props.BookingItem.Property_Name}</p>
             <p>
               <FontAwesomeIcon className="bar" icon={faLocationDot} />
-              {props.BookingItem.province}, {props.BookingItem.districts}, {props.BookingItem.Property_Address}
+              {props.BookingItem.province_full_name}, {props.BookingItem.district_full_name}, {props.BookingItem.address}
             </p>
             <p>
               {props.BookingItem.check_in_date} to {props.BookingItem.check_out_date}
@@ -68,7 +68,7 @@ export default function BookingItem(props) {
             <div className="item3-item">
               <img className="user-image" src={props.BookingItem.user_image} />
               <div className="name-user-property">
-                {props.BookingItem.user_firstName} {props.BookingItem.user_lastName}
+                {props.BookingItem.first_name} {props.BookingItem.last_name}
               </div>
               <div className="Link">
                 <Link to="/user/chat/:id">SendMessage</Link>
