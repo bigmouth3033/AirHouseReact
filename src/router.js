@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
+import BlogSearch from "components/blog/BlogSearch";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -231,6 +232,11 @@ const router = createBrowserRouter([
       {
         path: "/blog/:id",
         element: <BlogPage />,
+        exact: true,
+      },
+      {
+        path: "/blog/search-page",
+        element: <BlogSearch />,
         exact: true,
       },
     ],
