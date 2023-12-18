@@ -6,7 +6,7 @@ import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 3fr 3fr;
   min-height: 50rem;
 
   @media (max-width: 992px) {
@@ -37,7 +37,7 @@ const StyledForm = styled.form`
   overflow: auto;
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
-    padding: 30px 40px 0px 40px;
+    padding: 2rem 5px;
   }
 `;
 
@@ -75,7 +75,7 @@ const StyledOverlay = styled.div`
 `;
 
 const StyledLable = styled.label`
-  font-size: 15px;
+  font-size: 14px;
   padding-left: 10px;
   color: black;
 `;
@@ -191,12 +191,22 @@ const Pricing = () => {
   const onClickNext = (ev) => {
     ev.preventDefault();
 
+    if (state.baseprice <= 0) {
+      alert("Price must larger than 0");
+      return;
+    }
+
     onSetActive(7);
     onSetAvailable(7);
   };
 
   const onClickPrevious = (ev) => {
     ev.preventDefault();
+
+    if (state.baseprice <= 0) {
+      alert("Price must larger than 0");
+      return;
+    }
 
     onSetActive(5);
   };
@@ -214,7 +224,7 @@ const Pricing = () => {
           <StyledBoderInput>
             <StyledTitle>Base price</StyledTitle>
             <StyledLable className="label-input">
-              Daily/hourly Price <StyledSpan>*</StyledSpan>
+              Daily Price <StyledSpan>*</StyledSpan>
             </StyledLable>
             <StyledButtonInput>
               <p>$</p>
@@ -226,30 +236,8 @@ const Pricing = () => {
                 type="number"
               />
             </StyledButtonInput>
-            <StyledP>
-              You can offer discounts for longer stays by setting
-              <StyledSpan> weekly and monthly</StyledSpan> prices.
-            </StyledP>
           </StyledBoderInput>
-          <StyledBoderInput>
-            <StyledTitle>Additional Pricing Options</StyledTitle>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Cleaning fee</StyledLable>
-            </StyleGroupPricing>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Additional guests</StyledLable>
-            </StyleGroupPricing>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Security deposit</StyledLable>
-            </StyleGroupPricing>
-            <StyleGroupPricing>
-              <StyledInputCheck type="checkbox" />
-              <StyledLable htmlFor="">Weekend pricing</StyledLable>
-            </StyleGroupPricing>
-          </StyledBoderInput>
+       
 
           <StyledGroupButon>
             <StyledLink onClick={onClickPrevious}>Back </StyledLink>

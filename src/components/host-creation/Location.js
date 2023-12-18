@@ -40,12 +40,11 @@ const StyledSecion2 = styled.section`
 
 const StyledForm = styled.form`
   border-radius: 5px;
-  margin-top: 15px;
-  padding: 30px 40px 0 40px;
+  padding: 30px 40px 20px 40px;
   overflow: auto;
-
   @media (max-width: 992px) {
     background-color: rgba(255, 255, 255, 0.5);
+    padding: 2rem 5px;
   }
 `;
 
@@ -201,9 +200,9 @@ const StyledInputContainer = styled.div`
 `;
 
 const Location = () => {
-  const [count, setCount] = useState(0);
-  const [selectedProvince, setSelectedProvince] = useState("1");
   const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+  const [count, setCount] = useState(0);
+  const [selectedProvince, setSelectedProvince] = useState(state.provinces_id);
   const provinceQuery = ProvinceQuery();
   const districtQuery = DistrictQuery(selectedProvince);
 
@@ -229,13 +228,19 @@ const Location = () => {
   };
 
   useEffect(() => {
-    if (provinceQuery.isSuccess && count == 0) {
+    if (provinceQuery.isSuccess && state.provinces_id == 0) {
       setCount(1);
       dispatch({ type: ACTIONS.CHANGE_PROVINCES, next: provinceQuery.data[0].code });
     }
 
     if (districtQuery.isSuccess) {
-      dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: districtQuery.data[0].code });
+      const arr = [];
+      districtQuery.data.forEach((district) => arr.push(district.code));
+      if (arr.includes(state.district_id)) {
+        dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: state.district_id });
+      } else {
+        dispatch({ type: ACTIONS.CHANGE_DISTRICT, next: districtQuery.data[0].code });
+      }
     }
   }, [provinceQuery.status, districtQuery.status]);
 
@@ -314,7 +319,9 @@ const Location = () => {
 
             <StyledGroupButon>
               <StyledLink onClick={onClickPrevious}>Back </StyledLink>
-              <StyledLink onClick={onClickNext}>Next </StyledLink>
+              <StyledLink disabled={districtQuery.isLoading} onClick={onClickNext}>
+                Next
+              </StyledLink>
             </StyledGroupButon>
           </StyledForm>
         )}

@@ -3,20 +3,23 @@ import StyledBoxContainer from "../../../ui/StyledBoxContainer";
 import Signup from "../../user/Signup";
 import Overlay from "../../../ui/Overlay";
 import { useState, useEffect, useRef } from "react";
-import { useStateContext } from "../../../contexts/ContextProvider";
 import Login from "../../user/Login";
-import { LogoutUserMutation } from "api/userApi";
+import { LogoutUserMutation, UserQuery } from "api/userApi";
+import SignupStep1 from "components/user/SignupStep1";
+import SignUpContainer from "components/user/SignUpContainer";
+import { useNavigate } from "react-router-dom";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
   padding: 10px 0;
   position: absolute;
-  transform: translate(-105%, 15%);
+  transform: translate(-105%, 30px);
   background-color: white;
   display: flex;
   flex-direction: column;
 
   & button {
+    text-align: left;
     padding: 0.7rem 1rem;
     background-color: white;
     border: none;
@@ -40,8 +43,10 @@ const StyledOverlay = styled(Overlay)`
 const StyledContainer = styled.div``;
 
 function UserDropDown({ blur, showDropDown }) {
+  const navigate = useNavigate();
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const userQuery = UserQuery();
 
   function onShowSignUpHandler() {
     setShowSignUp(true);
@@ -81,9 +86,13 @@ function UserDropDown({ blur, showDropDown }) {
 
   const logoutMutation = LogoutUserMutation();
 
-
   const onLogoutHandler = () => {
     logoutMutation.mutate();
+    blur();
+  };
+
+  const onListingHandler = () => {
+    navigate("/user/listing");
     blur();
   };
 
@@ -91,22 +100,15 @@ function UserDropDown({ blur, showDropDown }) {
     <StyledContainer>
       {showDropDown && (
         <StyledDropDownContainer ref={wrapperRef}>
-          <button onClick={onShowSignUpHandler}>Signup</button>
-          <button onClick={onShowLoginHandler}>Log in</button>
-          <button onClick={onLogoutHandler}>Log out</button>
-          <button>Airbnb your home</button>
+          {userQuery.isSuccess || <button onClick={onShowSignUpHandler}>Signup</button>}
+          {userQuery.isSuccess || <button onClick={onShowLoginHandler}>Log in</button>}
+          {userQuery.isSuccess && <button onClick={onLogoutHandler}>Log out</button>}
+          {userQuery.isSuccess && <button onClick={onListingHandler}>Listing</button>}
+          <button>AirHouse your home</button>
           <button onClick={() => alert("ngo dinh tan")}>Help Center</button>
         </StyledDropDownContainer>
       )}
-      {showSignUp ? (
-        <div>
-          <StyledOverlay onClick={() => setShowSignUp(false)} />
-          <Signup setShowSignUp={setShowSignUp} />
-        </div>
-      ) : (
-        <></>
-      )}
-
+      {showSignUp && <SignUpContainer setShowSignUp={setShowSignUp} />}
       {showLogin ? (
         <div>
           <StyledOverlay onClick={() => setShowLogin(false)} />

@@ -7,6 +7,8 @@ import { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useBeforeunload } from "react-beforeunload";
+import { useSearchParams } from "react-router-dom";
+import { ReadPropertyUpdateQuery } from "api/propertyApi";
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
@@ -127,6 +129,9 @@ function reducer(state, action) {
 
     case ACTIONS.CHANGE_VIDEO:
       return { ...state, video: action.next };
+
+    case ACTIONS.CHANGE_EXCEPTION_DATE:
+      return { ...state, exceptionDate: action.next };
   }
 }
 
@@ -164,6 +169,7 @@ const ACTIONS = {
   CHANGE_MINIMUM_STAY: "CHANGE_MINIMUM_STAY",
   CHANGE_IMAGES: "CHANGE_IMAGES",
   CHANGE_VIDEO: "CHANGE_VIDEO",
+  CHANGE_EXCEPTION_DATE: "CHANGE_EXCEPTION_DATE",
 };
 
 export default function HostCreationIndex() {
@@ -181,7 +187,7 @@ export default function HostCreationIndex() {
     propertyTypeId: 0,
     roomTypeId: 0,
     categoryId: 0,
-    provinces_id: 0,
+    provinces_id: "01",
     district_id: 0,
     address: "",
     bedroomCount: 1,
@@ -190,16 +196,15 @@ export default function HostCreationIndex() {
     startDate: "",
     endDate: "",
     baseprice: 0,
-    bookingPer: "day",
     bookingType: "review",
-    checkInAfter: "12AM",
+    checkInAfter: "02PM",
     checkOutBefore: "12AM",
-    cancelation: "flexible",
     minimumStay: 0,
     maximumStay: 0,
     property_status: false,
-    images: null,
+    images: [],
     video: "",
+    exceptionDate: [],
   });
 
   const navigate = useNavigate();
@@ -224,14 +229,14 @@ export default function HostCreationIndex() {
     setAvailable(newArr);
   };
 
-  useBeforeunload(() => "You’ll lose your data!");
+  // useBeforeunload(() => "You’ll lose your data!");
 
   let location = useLocation();
 
   useEffect(() => {
-    if (JSON.stringify(initialArr) === JSON.stringify(available)) {
-      navigate("/user/host-creation/become-host");
-    }
+    // if (JSON.stringify(initialArr) === JSON.stringify(available)) {
+    //   navigate("/user/host-creation/become-host");
+    // }
   }, []);
 
   return (

@@ -50,7 +50,6 @@ const StyledTextLink = styled(Link)`
   }
 `;
 
-
 const StyledContainer = styled.div`
   display: flex;
   align-items: center;
@@ -82,7 +81,7 @@ function NavUser() {
         {userQuery.isLoading || userQuery.isError ? (
           <FontAwesomeIcon className="user" icon={faCircleUser} />
         ) : (
-          <Avatar size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
+          <Avatar src={userQuery.data.user.image} size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
         )}
       </StyledUserContainer>
       <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
@@ -91,4 +90,3 @@ function NavUser() {
 }
 
 export default NavUser;
-

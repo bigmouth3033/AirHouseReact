@@ -111,7 +111,9 @@
 
 .react-calendar__tile:disabled {
   color: black;
+  font-weight: 600;
   text-decoration: line-through;
+  background-color: red;
 }
 
 .react-calendar__tile:enabled:hover,

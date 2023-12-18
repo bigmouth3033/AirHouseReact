@@ -18,6 +18,10 @@ const StyledContainer = styled.div`
   z-index: 10000;
 `;
 
+const StyledAbsolute = styled.div`
+  position: fixed;
+`;
+
 export default function PopUpContainer({ children, setShowPopUp, className }) {
   useEffect(() => {
     document.body.classList.add("no-scroll");
@@ -27,9 +31,9 @@ export default function PopUpContainer({ children, setShowPopUp, className }) {
   });
 
   return (
-    <div>
+    <>
       <StyledOverlay onClick={() => setShowPopUp(false)} />
       <StyledContainer className={className}>{children}</StyledContainer>
-    </div>
+    </>
   );
 }

@@ -1,11 +1,17 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { UserQuery } from "api/userApi";
 import { Navigate } from "react-router-dom";
 import styled from "styled-components";
 import NavTopHome from "components/navbar/home/NavTopHome";
 import FooterIndex from "components/footer/host-creation/FooterIndex";
 import Loading from "components/Loading";
+import { CategoryQuery } from "api/categoryApi";
+import { RoomTypeQuery } from "api/room-typeApi";
+import { AmenitiesQuery } from "api/amenitiesApi";
+import { PropertyTypeQuery } from "api/property-typeApi";
+import { ProvinceQuery } from "api/locationApi";
+import { CategoryValueQuery } from "../api/blogCategoryApi";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -35,9 +41,24 @@ const StyledContainer = styled.div`
 `;
 
 export default function GuestLayout() {
+  const navigate = useNavigate();
   const userQuery = UserQuery();
+  const categoryQuery = CategoryQuery();
+  const roomTypeQuery = RoomTypeQuery();
+  const amenitiesQuery = AmenitiesQuery();
+  const propertyQuery = PropertyTypeQuery();
+  const provinceQuery = ProvinceQuery();
+  const categoryValueQuery = CategoryValueQuery();
 
-  if (userQuery.isLoading) {
+  if (
+    userQuery.isLoading ||
+    provinceQuery.isLoading ||
+    categoryQuery.isLoading ||
+    roomTypeQuery.isLoading ||
+    amenitiesQuery.isLoading ||
+    propertyQuery.isLoading ||
+    categoryValueQuery.isLoading
+  ) {
     return <Loading />;
   }
 
@@ -50,9 +71,8 @@ export default function GuestLayout() {
       <NavTopHome />
       <StyledMenu>
         <button>Dashboard</button>
-        <button>Profile</button>
-        <button>My Listing</button>
-        <button>My Experience</button>
+        <button onClick={() => navigate("/user/profile/detail")}>Profile</button>
+        <button onClick={() => navigate("/user/listing")}>My Listing</button>
         <button>My Bookings</button>
         <button>My Trips</button>
         <button>Wishlist</button>
