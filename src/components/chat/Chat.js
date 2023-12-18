@@ -61,7 +61,11 @@ export default function Chat(props) {
   return (
     <StyledBox>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <input type="text" value={newUser} onChange={(e) => setNewUser(e.target.value)} />
+        <input
+          type="text"
+          value={newUser}
+          onChange={(e) => setNewUser(e.target.value)}
+        />
       </form>
       <div className="containerChat">
         <div className="sidebar">
@@ -75,7 +79,9 @@ export default function Chat(props) {
             })}
           </ul>
         </div>
-        <div className="content">{selectedUser && <Message info={selectedUser} />}</div>
+        <div className="content">
+          {selectedUser && <Message info={selectedUser} />}
+        </div>
       </div>
     </StyledBox>
   );

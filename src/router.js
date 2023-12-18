@@ -3,6 +3,8 @@ import { lazy } from "react";
 
 import PaymentBooking from "components/user/PaymentBooking";
 import PaymentSuccess from "components/user/PaymentSuccess";
+import Start from "components/user/Rating/Start";
+import PaymentNotFound from "components/user/PaymentNotFound";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -224,8 +226,18 @@ const router = createBrowserRouter([
         exact: true,
       },
       {
+        path: "/paymentError",
+        element: <PaymentNotFound />,
+        exact: true,
+      },
+      {
         path: "/sucsessPayment",
         element: <PaymentSuccess />,
+        exact: true,
+      },
+      {
+        path: "/preview",
+        element: <Start />,
         exact: true,
       },
     ],
