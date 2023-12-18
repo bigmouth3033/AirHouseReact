@@ -7,6 +7,7 @@ import Login from "../../user/Login";
 import { LogoutUserMutation, UserQuery } from "api/userApi";
 import SignupStep1 from "components/user/SignupStep1";
 import SignUpContainer from "components/user/SignUpContainer";
+import { useNavigate } from "react-router-dom";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
@@ -42,6 +43,7 @@ const StyledOverlay = styled(Overlay)`
 const StyledContainer = styled.div``;
 
 function UserDropDown({ blur, showDropDown }) {
+  const navigate = useNavigate();
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const userQuery = UserQuery();
@@ -89,6 +91,11 @@ function UserDropDown({ blur, showDropDown }) {
     blur();
   };
 
+  const onListingHandler = () => {
+    navigate("/user/listing");
+    blur();
+  };
+
   return (
     <StyledContainer>
       {showDropDown && (
@@ -96,7 +103,8 @@ function UserDropDown({ blur, showDropDown }) {
           {userQuery.isSuccess || <button onClick={onShowSignUpHandler}>Signup</button>}
           {userQuery.isSuccess || <button onClick={onShowLoginHandler}>Log in</button>}
           {userQuery.isSuccess && <button onClick={onLogoutHandler}>Log out</button>}
-          <button>Airbnb your home</button>
+          {userQuery.isSuccess && <button onClick={onListingHandler}>Listing</button>}
+          <button>AirHouse your home</button>
           <button onClick={() => alert("ngo dinh tan")}>Help Center</button>
         </StyledDropDownContainer>
       )}

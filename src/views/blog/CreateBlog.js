@@ -7,7 +7,10 @@ import { CreateBlogMutation, UploadImageMutation } from "api/blogApi";
 
 import axios from "axios";
 import axiosClient from "../../api/axiosClient";
-import { BlogCategoryQuery, CategoryValueQuery } from "../../api/blogCategoryApi";
+import {
+  BlogCategoryQuery,
+  CategoryValueQuery,
+} from "../../api/blogCategoryApi";
 import { cilCloudUpload } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import styled from "styled-components";
@@ -49,7 +52,20 @@ Font.whitelist = ["arial", "roboto", "raleway", "montserrat", "lato", "rubik"];
 Quill.register(Font, true);
 
 var Size = Quill.import("formats/size");
-Size.whitelist = ["9px", "10px", "11px", "12px", "14px", "16px", "18px", "20px", "22px", "24px", "26px", "28px"];
+Size.whitelist = [
+  "9px",
+  "10px",
+  "11px",
+  "12px",
+  "14px",
+  "16px",
+  "18px",
+  "20px",
+  "22px",
+  "24px",
+  "26px",
+  "28px",
+];
 Quill.register(Size, true);
 
 const Parchment = Quill.import("parchment");
@@ -72,7 +88,11 @@ const atValues = [
 
 const CustomToolbar = () => (
   <div id="toolbar">
-    <select className="ql-header" defaultValue={""} onChange={(e) => e.persist()}>
+    <select
+      className="ql-header"
+      defaultValue={""}
+      onChange={(e) => e.persist()}
+    >
       <option value="1" />
       <option value="2" />
       <option value="3" />
@@ -229,7 +249,9 @@ export default function CreateBlog() {
     const file = imgUploadRef.current.files[0];
 
     const formData = new FormData();
-    const arrCate = Array.from(document.querySelectorAll('input[name="category"]:checked')).map((checkbox) => checkbox.value);
+    const arrCate = Array.from(
+      document.querySelectorAll('input[name="category"]:checked')
+    ).map((checkbox) => checkbox.value);
     formData.append("title", document.getElementById("title").value);
     arrCate.forEach((cate) => {
       formData.append("category[]", cate);
@@ -246,10 +268,13 @@ export default function CreateBlog() {
     createBlogMutation.mutate(formData, {
       onSuccess: () => {
         document.getElementById("title").value = "";
-        document.querySelectorAll('input[name="category"]:checked').forEach((checkbox) => {
-          checkbox.checked = false;
-        });
+        document
+          .querySelectorAll('input[name="category"]:checked')
+          .forEach((checkbox) => {
+            checkbox.checked = false;
+          });
         setValue("");
+        setImgSrc(DefaultImg);
       },
     });
   };
@@ -265,7 +290,10 @@ export default function CreateBlog() {
 
       <div className="blogCate-block">
         <div className="title-block">
-          <label htmlFor="" style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+          <label
+            htmlFor=""
+            style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+          >
             <b>Check Blog Category</b>
           </label>
         </div>
@@ -290,7 +318,13 @@ export default function CreateBlog() {
         <label>
           <b>Blog Cover Image</b>
         </label>
-        <input ref={imgUploadRef} accept="image/*" onChange={checkChange} type="file" id="image" />
+        <input
+          ref={imgUploadRef}
+          accept="image/*"
+          onChange={checkChange}
+          type="file"
+          id="image"
+        />
         <img src={imgSrc} alt="img" />
         <button onClick={onUploadImg}>
           <CIcon icon={cilCloudUpload} customClassName="upload-icon" />
@@ -315,7 +349,11 @@ export default function CreateBlog() {
         style={{ height: "350px" }}
       />
       <br />
-      {createdBlog && <p style={{ color: "green" }}>Blog {createdBlog.title} created successfully</p>}
+      {createdBlog && (
+        <p style={{ color: "green" }}>
+          Blog {createdBlog.title} created successfully
+        </p>
+      )}
       <button onClick={handleSubmit}>Submit</button>
 
       <div dangerouslySetInnerHTML={{ __html: value }}></div>

@@ -11,6 +11,7 @@ import { RoomTypeQuery } from "api/room-typeApi";
 import { AmenitiesQuery } from "api/amenitiesApi";
 import { PropertyTypeQuery } from "api/property-typeApi";
 import { ProvinceQuery } from "api/locationApi";
+import { CategoryValueQuery } from "../api/blogCategoryApi";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ export default function GuestLayout() {
   const amenitiesQuery = AmenitiesQuery();
   const propertyQuery = PropertyTypeQuery();
   const provinceQuery = ProvinceQuery();
+  const categoryValueQuery = CategoryValueQuery();
 
   if (
     userQuery.isLoading ||
@@ -54,7 +56,8 @@ export default function GuestLayout() {
     categoryQuery.isLoading ||
     roomTypeQuery.isLoading ||
     amenitiesQuery.isLoading ||
-    propertyQuery.isLoading
+    propertyQuery.isLoading ||
+    categoryValueQuery.isLoading
   ) {
     return <Loading />;
   }

@@ -333,7 +333,11 @@ const Calendar = () => {
 
     if (state.property_id) {
       formData.append("id", state.property_id);
-      updateMutation.mutate(formData);
+      updateMutation.mutate(formData, {
+        onSuccess: () => {
+          alert("success update");
+        },
+      });
     } else {
       propertyMutation.mutate(formData, {
         onSuccess: (data) => {

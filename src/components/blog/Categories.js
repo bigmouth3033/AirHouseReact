@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { blogDetailArr } from "../../data/data";
 import CateDetail from "./CateDetail";
+import { CategoryValueQuery } from "api/blogCategoryApi";
+import Blogdetail from "./Blogdetail";
+import { AllBlogQuery } from "api/blogApi";
+import { BlogQueryByCategoryId } from "../../api/blogApi";
+import Skeleton from "react-loading-skeleton";
 
 const StyleCateBlock = styled.div`
   display: block;
   max-width: 100rem;
   margin: 0 auto;
+  margin-bottom: 5rem;
 
   padding-top: 2rem;
   & .title {
@@ -33,10 +39,10 @@ const StyleTabTop = styled.div`
 const StyleTabButton = styled.button`
   margin: 0.4rem;
   max-width: max-content;
-  border: solid 1.5px lightgrey;
+  border: solid 1px lightgrey;
   border-radius: 50px;
-  padding: 0.8rem 1.1rem;
-  font-weight: bolder;
+  padding: 0.75rem 1.1rem;
+  font-weight: 500;
   font-size: 0.8rem;
   cursor: pointer;
   background-color: white;
@@ -47,7 +53,18 @@ const StyleTabButton = styled.button`
     active &&
     css`
       border: solid 2px black;
+      font-weight: 600;
+      pointer-events: none; /* Vô hiệu hóa sự kiện (hover)*/
     `}
+
+  &:hover {
+    border: solid 1.2px black;
+  }
+
+  @media (max-width: 784px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.7rem;
+  }
 `;
 
 const StyleTabBody = styled.div`
@@ -90,47 +107,92 @@ const StyleViewMore = styled.button`
 `;
 
 export default function Categories() {
-  const TitleArr = [
-    "All",
-    "Company",
-    "Stays",
-    "Product",
-    "Policy",
-    "Community",
-    "Airbnb.org",
-  ];
+  const allBlogQuery = AllBlogQuery();
+
+  const { data, isLoading } = CategoryValueQuery();
 
   const [tab, setTab] = useState("All");
-  const [viewMore, setviewMore] = useState(8);
+  const [viewMore, setViewMore] = useState(8);
 
-  function viewMoreHanddle() {
-    setviewMore((viewMore) => viewMore + 8);
+  function viewMoreHandle() {
+    setViewMore((prevViewMore) => prevViewMore + 8);
+  }
+
+  if (allBlogQuery.isSuccess) {
+    console.log(allBlogQuery.data.items);
   }
 
   return (
     <StyleCateBlock>
       <p className="title">Categories</p>
       <StyleTabTop>
-        {TitleArr.map((title) => (
-          <StyleTabButton
-            key="title"
-            onClick={() => setTab(title)}
-            active={tab === title}
-          >
-            {title}
-          </StyleTabButton>
-        ))}
+        {!isLoading ? (
+          <>
+            <StyleTabButton
+              name="category"
+              value="All"
+              onClick={() => setTab("All")}
+              active={tab === "All"}
+            >
+              All
+            </StyleTabButton>
+            {data.map((blogCategory) => (
+              <StyleTabButton
+                key={blogCategory.id}
+                name="category"
+                value={blogCategory.id}
+                onClick={() => setTab(blogCategory.id)}
+                active={tab === blogCategory.id}
+              >
+                {blogCategory.name}
+              </StyleTabButton>
+            ))}
+          </>
+        ) : (
+          <Skeleton />
+        )}
       </StyleTabTop>
       <StyleTabBody>
-        {blogDetailArr
-          .filter((item) => tab === "All" || item.category.includes(tab))
-          .slice(0, viewMore)
-          .map((item, index) => (
-            <CateDetail item={item} key={index} />
-          ))}
+        {allBlogQuery.isSuccess &&
+        allBlogQuery.data &&
+        allBlogQuery.data.items.length > 0 ? (
+          <>
+            {allBlogQuery.data.items
+              .filter((item) => {
+                // Kiểm tra xem thuộc tính categories có phải là mảng không
+                const isCategoriesArray = Array.isArray(item.categories);
+
+                return (
+                  tab === "All" ||
+                  (isCategoriesArray &&
+                    item.categories.some((category) => category.id === tab))
+                );
+              })
+              .slice(0, viewMore)
+              .map((item, index) => {
+                return (
+                  <div key={index}>
+                    <CateDetail item={item} />
+                  </div>
+                );
+              })}
+          </>
+        ) : (
+          <Skeleton />
+        )}
       </StyleTabBody>
 
-      <StyleViewMore onClick={viewMoreHanddle}>View more</StyleViewMore>
+      {allBlogQuery.isSuccess &&
+      allBlogQuery.data &&
+      allBlogQuery.data.items.length > viewMore ? (
+        <StyleViewMore onClick={viewMoreHandle}>View more</StyleViewMore>
+      ) : (
+        <>
+          <br />
+          <br />
+          <br />
+        </>
+      )}
     </StyleCateBlock>
   );
 }

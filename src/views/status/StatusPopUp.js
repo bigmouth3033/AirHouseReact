@@ -279,7 +279,7 @@ function PropertyBody({ data, currentPage }) {
   };
 
   const onDeny = () => {
-    if (message == "") {
+    if (!message ) {
       alert("Please leave a message to host");
       return;
     }

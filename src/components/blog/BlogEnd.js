@@ -7,7 +7,7 @@ const StyledBlogEnd = styled.div`
 
   max-width: 100rem;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 0;
 
   @media (max-width: 600px) {
     display: grid;

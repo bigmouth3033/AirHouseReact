@@ -9,6 +9,7 @@ import "./calendar.css";
 import { faAngleUp, faChevronDown, faPlus, faSubtract } from "@fortawesome/free-solid-svg-icons";
 import { CreateBookingMutation } from "api/userBookingApi";
 import { CreateTransactionMutation } from "api/transactionApi";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   position: relative;
@@ -195,6 +196,7 @@ const StyledTotal = styled.div`
 `;
 
 const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+  const navigate = useNavigate();
   const createBooking = CreateBookingMutation();
   const createTransaction = CreateTransactionMutation();
 
@@ -260,10 +262,10 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
     formData.append("site_fees", data.base_price * bookedLength * 0.06);
     formData.append("booking_date", formatDate(new Date()));
     formData.append("total_person", guest);
-
     createBooking.mutate(formData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         alert("success");
+        navigate("/user/payment?booking_id=" + data.id);
       },
     });
   };
@@ -291,7 +293,7 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
               selectRange={true}
               returnValue={"range"}
               view={"month"}
-              minDate={new Date()}
+              minDate={new Date(start_date)}
               maxDate={new Date(end_date)}
               maxDetail={"month"}
               value={value}

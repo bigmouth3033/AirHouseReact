@@ -15,34 +15,50 @@ export const CreateBookingMutation = () => {
   return createMutation;
 };
 
-export const getBookingByUser = async (query) => {
-  const page = query.queryKey[3];
+const readBooking = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("/readBooking?booking_id=" + id);
+  return response.data;
+};
+export const UserReadBooking = (booking_id) => {
+  const bookingQuery = useQuery({
+    queryKey: ["booking", booking_id],
+    queryFn: readBooking,
+    staleTime: 0,
+    cacheTime: 0,
+    retry: 1,
+  });
 
-  const response = await axiosClient.get("getBookingByUser", { params: { page: page } });
+  return bookingQuery;
+};
+//payment
+const createSuccessBooking = async (payload) => {
+  const response = await axiosClient.post("successBooking", payload);
+
   return response.data;
 };
 
-export const StatusBookingQuery = (userTitle) => {
-  const titleQuery = useQuery({
-    queryKey: ["booking", "title", userTitle],
-    queryFn: getBookingByUser,
-    keepPreviousData: true,
-    retry: 1,
+export const CreateSuccessBookingMutation = () => {
+  const successMutation = useMutation({
+    mutationFn: createSuccessBooking,
   });
-  return titleQuery;
+  return successMutation;
 };
-
-const fethCurrentPage = async (secletedPage) => {
-  const response = await axiosClient.get(`readCurrentPage?page=${secletedPage}`);
+//reading
+const readSuccess = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("readSuccessBooking", {
+    params: { payment_intent: id },
+  });
   return response.data;
-}
-
-export const CurrentPageByUserQuery = (secletedPage) => {
-  const titleQuery = useQuery({
-    queryKey: ["booking", "title",'page',secletedPage],
-    queryFn: () => fethCurrentPage(secletedPage),
-    keepPreviousData: true,
+};
+export const UserReadSuccess = (payment_id) => {
+  const paymentSuccessQuery = useQuery({
+    queryKey: ["paymentBooking", payment_id],
+    queryFn: readSuccess,
+    cacheTime: 0,
     retry: 1,
   });
-  return titleQuery;
+
+  return paymentSuccessQuery;
 };

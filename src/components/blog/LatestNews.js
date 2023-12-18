@@ -2,6 +2,8 @@ import React from "react";
 import Blogdetail from "./Blogdetail";
 import { blogDetailArr } from "../../data/data";
 import styled from "styled-components";
+import { AllBlogQuery } from "api/blogApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyleLatestNewsBlock = styled.div`
   margin: 5rem;
@@ -50,17 +52,24 @@ const StyledTitle = styled.p`
 `;
 
 export default function LatestNews() {
+  const queryClient = useQueryClient();
+  const allBlogQuery = AllBlogQuery();
+  console.log(allBlogQuery.data);
+
   return (
     <StyleLatestNewsBlock>
       <StyledTitle>Latest News</StyledTitle>
       <StyledBlogList>
-        {blogDetailArr.slice(0, 4).map((item, index) => {
-          return (
-            <div>
-              <Blogdetail item={item} key={index} />
-            </div>
-          );
-        })}
+        {allBlogQuery.isSuccess &&
+          allBlogQuery.data &&
+          allBlogQuery.data.items.length > 0 &&
+          allBlogQuery.data.items.slice(0, 4).map((item, index) => {
+            return (
+              <div>
+                <Blogdetail item={item} key={index} />
+              </div>
+            );
+          })}
       </StyledBlogList>
     </StyleLatestNewsBlock>
   );
