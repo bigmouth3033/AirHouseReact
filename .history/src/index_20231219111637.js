@@ -1,6 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+<<<<<<< HEAD
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+
+=======
 
 import reportWebVitals from "./reportWebVitals";
 import { ContextProvider } from "./contexts/ContextProvider";
@@ -19,6 +24,7 @@ const queryClient = new QueryClient({
   },
 });
 
+>>>>>>> 7ddab1df6256a7cf4229d309572522a6276d4eb3
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ContextProvider>
