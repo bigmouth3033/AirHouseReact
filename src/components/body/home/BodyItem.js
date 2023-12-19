@@ -10,6 +10,8 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const responsive = {
   superLargeDesktop: {
@@ -155,7 +157,7 @@ function BodyItem({ data, click }) {
         {data.images.map((img, index) => {
           return (
             <StyledImgContainer key={index} onClick={() => click(data.id)}>
-              <img src={img.image} />
+              <LazyLoadImage effect="blur" width={"100%"} height={"100%"} src={img.image} />
             </StyledImgContainer>
           );
         })}
