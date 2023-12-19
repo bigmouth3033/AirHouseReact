@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/1635921594_list_your_space.jpg";
-import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { CategoryQuery } from "api/categoryApi";
 import { RoomTypeQuery } from "api/room-typeApi";
 import { PropertyTypeQuery } from "api/property-typeApi";
 import { useNavigate } from "react-router-dom";
 import Loading from "components/Loading";
+import { useState } from "react";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -133,7 +133,14 @@ const BecomeHost = () => {
   const propertyTypeQuery = PropertyTypeQuery();
 
   useEffect(() => {
-    if (categoryQuery.isSuccess && roomTypeQuery.isSuccess && propertyTypeQuery.isSuccess) {
+    if (state.property_id) {
+      dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: state.categoryId });
+      dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: state.roomTypeId });
+      dispatch({ type: ACTIONS.CHANGE_PROPERTY_TYPE, next: state.propertyTypeId });
+      return;
+    }
+
+    if (categoryQuery.isSuccess && roomTypeQuery.isSuccess && propertyTypeQuery.isSuccess && state.propertyTypeId == 0) {
       dispatch({ type: ACTIONS.CHANGE_CATEGORY, next: categoryQuery.data[0].id });
       dispatch({ type: ACTIONS.CHANGE_ROOM_TYPE, next: roomTypeQuery.data[0].id });
       dispatch({ type: ACTIONS.CHANGE_PROPERTY_TYPE, next: propertyTypeQuery.data[0].id });

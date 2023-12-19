@@ -119,7 +119,6 @@ export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
   const [imgSrc, setImgSrc] = useState(DefaultImg);
   const [categoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
-  const [error, setError] = useState(null);
 
   const onUploadImg = (ev) => {
     ev.preventDefault();
@@ -135,10 +134,18 @@ export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
   const onAddNewCategory = (ev) => {
     ev.preventDefault();
 
+    const imgExtension = ["jpg", "png", "svg", "jpeg", "webp"];
+    const imgArr = imgUploadRef.current.files[0].name.split(".");
+
+    if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
+      alert("only accept img with format of jpg, png, svg, jpeg, webp");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("icon_image", imgUploadRef.current.files[0]);
     formData.append("name", categoryName);
-    formData.append("description", description)
+    formData.append("description", description);
 
     createMutation.mutate(formData, {
       onSuccess: () => {
@@ -146,12 +153,10 @@ export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
         setCategoryName("");
         setImgSrc(DefaultImg);
         setDescription("");
-        setError(null);
         queryClient.invalidateQueries({ queryKey: ["category", "page", currentPage] });
       },
       onError: (err) => {
         const response = err.response;
-        setError(response.data.errors);
         console.log(response.data.errors);
       },
     });
@@ -189,15 +194,12 @@ export default function CreateCategoryPopUp({ currentPage, setShowPopUp }) {
             Image Upload
           </button>
         </StyledImgField>
-        {error && (
-          <div className="alert">
-            {Object.keys(error).map((key) => (
-              <div key={key}>{error[key]}</div>
-            ))}
-          </div>
-        )}
         <StyledButtonRow>
-          <button disabled={ description == ""|| categoryName == "" || imgSrc == DefaultImg} onClick={onAddNewCategory} className="submit-button">
+          <button
+            disabled={description == "" || categoryName == "" || imgSrc == DefaultImg}
+            onClick={onAddNewCategory}
+            className="submit-button"
+          >
             Submit
           </button>
         </StyledButtonRow>

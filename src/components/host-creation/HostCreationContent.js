@@ -38,14 +38,9 @@ const StyledOptionChoice = styled.button`
   padding: 8px 25px;
   border: 0;
   background-color: rgb(223, 219, 210);
-  cursor: pointer;
   font-size: 14px;
   font-weight: 600;
   color: black;
-
-  &:hover {
-    color: red;
-  }
 
   ${(props) => {
     if (props.$active === true) {
@@ -82,31 +77,31 @@ export default function HostCreationContent() {
   return (
     <>
       <StyledOption>
-        <StyledOptionChoice $disabled={!available[0]} disabled={!available[0]} $active={active[0]} onClick={() => onSetActive(0)}>
+        <StyledOptionChoice $disabled={!available[0]} disabled={!available[0]} $active={active[0]}>
           Basic
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[1]} disabled={!available[1]} $active={active[1]} onClick={() => onSetActive(1)}>
+        <StyledOptionChoice $disabled={!available[1]} disabled={!available[1]} $active={active[1]}>
           Description
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[2]} disabled={!available[2]} $active={active[2]} onClick={() => onSetActive(2)}>
+        <StyledOptionChoice $disabled={!available[2]} disabled={!available[2]} $active={active[2]}>
           Details
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[3]} disabled={!available[3]} $active={active[3]} onClick={() => onSetActive(3)}>
+        <StyledOptionChoice $disabled={!available[3]} disabled={!available[3]} $active={active[3]}>
           Location
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[4]} disabled={!available[4]} $active={active[4]} onClick={() => onSetActive(4)}>
+        <StyledOptionChoice $disabled={!available[4]} disabled={!available[4]} $active={active[4]}>
           Amenities
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[5]} disabled={!available[5]} $active={active[5]} onClick={() => onSetActive(5)}>
+        <StyledOptionChoice $disabled={!available[5]} disabled={!available[5]} $active={active[5]}>
           Photo
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[6]} disabled={!available[6]} $active={active[6]} onClick={() => onSetActive(6)}>
+        <StyledOptionChoice $disabled={!available[6]} disabled={!available[6]} $active={active[6]}>
           Pricing
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[7]} disabled={!available[7]} $active={active[7]} onClick={() => onSetActive(7)}>
+        <StyledOptionChoice $disabled={!available[7]} disabled={!available[7]} $active={active[7]}>
           Booking
         </StyledOptionChoice>
-        <StyledOptionChoice $disabled={!available[8]} disabled={!available[8]} $active={active[8]} onClick={() => onSetActive(8)}>
+        <StyledOptionChoice $disabled={!available[8]} disabled={!available[8]} $active={active[8]}>
           Calendar
         </StyledOptionChoice>
         <button onClick={() => console.log(state)}>click</button>

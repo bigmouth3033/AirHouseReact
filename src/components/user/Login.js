@@ -1,73 +1,70 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { faFacebook } from "@fortawesome/free-brands-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useState } from "react";
 import { useRef } from "react";
 import { LoginUserMutation } from "../../api/userApi";
+import { GoogleLogin } from "@react-oauth/google";
+import { isExpired, decodeToken } from "react-jwt";
+import { SignUpGoogleMutation } from "../../api/userApi";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const StyledContainer = styled.div`
-  max-width: 500px;
+  border: 1px solid red;
+  width: 500px;
   margin: 0 auto;
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
   z-index: 6;
-  position: absolute;
+  position: fixed;
   background-color: white;
   left: 50%;
   transform: translateX(-50%);
-  top: 170%;
+  top: 10%;
+
+  & .google {
+    width: 100%;
+    height: 50px;
+  }
 `;
 const Styledh2 = styled.h2`
+  color: red;
   text-align: center;
   font-size: 20px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
   padding-bottom: 20px;
   border-bottom: 1px solid #dddddd;
   margin: 0 -25px;
 `;
 const StyledForm = styled.form`
-  height: 440px;
-  overflow: auto;
-  margin-right: -25px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
 `;
 const StyledFormContainer = styled.div`
-  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
 `;
+
 const StyledInput = styled.input`
-  width: 440px;
-  margin-bottom: 20px;
   height: 50px;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid #dddddd;
   padding: 0 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
 
-  &:hover {
-    border: none;
-    border-radius: 12px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-  }
   &:focus {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-    border: none;
-    border-radius: 12px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    outline: 1px solid rgba(255, 0, 0, 0.3);
   }
 `;
 const StyledButtonSubmit = styled.button`
-  width: 440px;
   padding: 10px 25px;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   color: white;
   background-color: #db0c63;
-  border-radius: 12px;
   border: none;
+  cursor: pointer;
   &:active {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
   }
@@ -75,7 +72,10 @@ const StyledButtonSubmit = styled.button`
 const StyledWith = styled.div`
   text-align: center;
   font-size: 16px;
-  margin: 30px 0;
+  color: red;
+  font-weight: 400;
+  margin-top: 1.3rem;
+
   &::after {
     content: "";
     display: inline-block;
@@ -91,96 +91,112 @@ const StyledWith = styled.div`
     margin: 5px;
   }
 `;
-const StyledIcon = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 20px 0;
-  > * {
-    font-size: 40px;
-  }
-`;
-const StyledA = styled.a``;
-const StyledAa = styled.p`
-  -moz-transform: scaleY(-1);
-  -o-transform: scaleY(-1);
-  -webkit-transform: scaleY(-1);
-  transform: scaleY(-1);
-  -moz-transform: rotateX(210deg);
-  -o-transform: rotateX(210deg);
-  -webkit-transform: rotateX(210deg);
-  transform: rotateX(210deg);
-  perspective: 200px;
-`;
-const StyledError = styled.p`
+
+const StyledError = styled.div`
   color: red;
+  font-size: 14px;
+  height: 2.5rem;
+  padding: 5px 0;
+  text-align: justify;
 `;
-const SignupStep2 = ({ setShowLogin }) => {
+
+const StyledGoogleLogin = styled.button``;
+
+const EMAIL_REGEX = /^[0-9a-zA-Z_]+@[0-9a-zA-Z]+\.[0-9a-zA-Z]+$/;
+const PASSWORD_REGEX = /^.{9,}$/;
+
+const Login = ({ setShowLogin }) => {
+  const signUpGoogleMutation = SignUpGoogleMutation();
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [wrongAccount, setWrongAccount] = useState(false);
+  const [signInError, setSignInError] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
   const loginMutation = LoginUserMutation();
   const validateForm = (e) => {
     e.preventDefault();
+    let isError = false;
+    setWrongAccount(false);
+
+    if (!EMAIL_REGEX.test(emailRef.current.value)) {
+      setEmailError(true);
+      isError = true;
+    }
+
+    if (!PASSWORD_REGEX.test(passwordRef.current.value)) {
+      setPasswordError(true);
+      isError = true;
+    }
+
+    if (isError === true) {
+      return;
+    } else {
+      setEmailError(false);
+      setPasswordError(false);
+    }
 
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
 
-    console.log(payload);
-
-    loginMutation.mutate(payload);
-    setShowLogin(false);
+    loginMutation.mutate(payload, {
+      onSuccess: () => {
+        setShowLogin(false);
+      },
+      onError: () => {
+        setWrongAccount(true);
+      },
+    });
   };
 
-  if (loginMutation.isError) {
-    console.log(loginMutation.error);
-  }
+  const googleRef = useRef();
 
   return (
     <StyledContainer>
       <Styledh2>Login</Styledh2>
-      {/* <StyledError>{errorText}</StyledError> */}
       <StyledForm>
         <StyledFormContainer>
-          <StyledInput ref={emailRef} type="email" placeholder="Email" />
+          <StyledInput ref={emailRef} type="email" />
+          <StyledError>{emailError && <span>Please enter a valid email</span>}</StyledError>
           <StyledInput type="password" placeholder="Password" ref={passwordRef} />
+          <StyledError>
+            {passwordError && <span>Password must have atleast 9 letters</span>}
+            {wrongAccount && <span>Wrong account or password</span>}
+          </StyledError>
         </StyledFormContainer>
         <StyledButtonSubmit type="submit" onClick={validateForm}>
           Continute
         </StyledButtonSubmit>
         <StyledWith>Login with</StyledWith>
-        <StyledIcon>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledA>
-          <StyledA href="">
-            <FontAwesomeIcon icon={faEnvelope} />
-          </StyledA>
-        </StyledIcon>
-        <StyledIcon>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faTwitter} style={{ color: "#0962fb" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faFacebook} style={{ color: "#1853b9" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faGoogle} style={{ color: "#e00000" }} />
-          </StyledAa>
-          <StyledAa href="">
-            <FontAwesomeIcon icon={faEnvelope} />
-          </StyledAa>
-        </StyledIcon>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            const dataGoogle = decodeToken(credentialResponse?.credential);
+            const payload = {
+              email: dataGoogle.email,
+              first_name: dataGoogle.name,
+            };
+
+            signUpGoogleMutation.mutate(payload, {
+              onSuccess: () => {
+                setShowLogin(false);
+              },
+              onError: () => {
+                setSignInError(true);
+              },
+            });
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+        <StyledError>
+          {signInError && <span>AirHouse don't have any account associate with this email. Please sign-up first</span>}
+        </StyledError>
       </StyledForm>
     </StyledContainer>
   );
 };
 
-export default SignupStep2;
+export default Login;
