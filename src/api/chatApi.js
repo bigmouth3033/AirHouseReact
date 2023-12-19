@@ -22,12 +22,7 @@ const getMessage = async (query) => {
 //   return messageQuery;
 // };
 
-const SendMessage = async (payload) => {
-  let response = await axiosClient.get("sendMessage", {
-    params: { user1: payload.user1, user2: payload.user2, message: payload.message },
-  });
-  return response.data;
-};
+
 
 
 // 17/12
@@ -57,5 +52,16 @@ export const GetMessageQuery =  (user_to_email) =>{
     retry: 1,
   })
   return MessageQuery;
+}
 
+const sendMessage = async (payload) => {
+  let response = await axiosClient.post("sendMessage", payload);
+  return response.data;
+};
+
+export const SendMessageMutation = (payload) =>{
+  const mutation = useMutation({
+    mutationFn:sendMessage
+  })
+  return mutation;
 }
