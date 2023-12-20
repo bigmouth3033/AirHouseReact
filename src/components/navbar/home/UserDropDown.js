@@ -8,6 +8,7 @@ import { LogoutUserMutation, UserQuery } from "api/userApi";
 import SignupStep1 from "components/user/SignupStep1";
 import SignUpContainer from "components/user/SignUpContainer";
 import { useNavigate } from "react-router-dom";
+import { useStateContext } from "contexts/ContextProvider";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;

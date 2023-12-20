@@ -254,7 +254,6 @@ const listDate = (start, end) => {
 
 const Calendar = () => {
   const navigate = useNavigate();
-  const createExceptionMutation = CreateExceptionDateMutation();
   const propertyMutation = CreatePropertyMutation();
   const updateMutation = UpdatePropertyMutation();
   const [active, setActive] = useState([true, false]);

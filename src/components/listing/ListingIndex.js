@@ -10,12 +10,18 @@ const StyledContainer = styled.div`
   column-gap: 2rem;
   row-gap: 1rem;
   max-width: 1500px;
+  padding: 0 1rem;
   margin: 2rem auto;
   margin-bottom: 2rem;
 
   > h3 {
     font-size: 17px;
     font-weight: 600;
+  }
+
+
+  @media (max-width: 750px){
+    grid-template-columns: 1fr;
   }
 `;
 

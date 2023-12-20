@@ -78,7 +78,7 @@ const ViewProperty = () => {
   const bookedDate = [];
 
   for (let i = 0; i < propertyQuery.data.booking.length; i++) {
-    if (propertyQuery.data.booking[i].booking_status == "success") {
+    if (propertyQuery.data.booking[i].booking_status == "success" || propertyQuery.data.booking[i].booking_status == "accepted") {
       bookedDate.push({ start: propertyQuery.data.booking[i].check_in_date, end: propertyQuery.data.booking[i].check_out_date });
     }
   }

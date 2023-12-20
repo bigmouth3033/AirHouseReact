@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import Calendar from "react-calendar";
 import "./calendar.css";
+
+const StyledCalendar = styled(Calendar)`
+  & .react-calendar__tile {
+    height: 50px;
+  }
+`;
 
 const bookedDate = [{ start: "2023-12-12", end: "2023-12-15" }];
 
@@ -31,7 +38,7 @@ const CalendarViewHost = ({ data, value, setValue, onHandleChange, disabledBookD
   const { start_date, end_date, minimum_stay, maximum_stay } = data;
 
   return (
-    <Calendar
+    <StyledCalendar
       onChange={onHandleChange}
       tileDisabled={disabledBookDate}
       allowPartialRange={true}

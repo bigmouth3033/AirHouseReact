@@ -3,12 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
-import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
+import { ReadAverageStart } from "api/startApi";
+import RatingStart from "./RatingStart";
+import { ReadStartAllQuery } from "api/startApi";
+import Avatar from "react-avatar";
+import { Rating } from "react-simple-star-rating";
 
-const StyledContainer = styled.div`
-
-`;
+const StyledContainer = styled.div``;
 const StyledSection = styled.div`
   border-bottom: 1px solid #dddddd;
   display: flex;
@@ -109,6 +111,8 @@ const StyledAmentinies = styled.div`
 `;
 const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
   const { pageWidth } = useStateContext();
+  const readStartQuery = ReadStartAllQuery(data.id);
+  const readAverageStart = ReadAverageStart(data.id);
 
   return (
     <StyledContainer>
@@ -119,9 +123,9 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
           </span>
           <StyledReview>
             <div>
-              <FontAwesomeIcon icon={faStar} />
+              <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc00" }} />
             </div>
-            <p> 4.86</p>
+            {readAverageStart.isSuccess && <p> {readAverageStart.data.average}</p>}
           </StyledReview>
         </StyledTitle>
         <StyledDetailInfor>
@@ -158,7 +162,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         <StyledDesign>
           {data.amenities.map((obamenities, index) => {
             return (
-              <StyledGroupIcon>
+              <StyledGroupIcon key={index}>
                 <StyledImageIcon src={obamenities.icon_image} alt={index} />
                 <div>{obamenities.name}</div>
               </StyledGroupIcon>
@@ -190,6 +194,23 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
           />
         )}
       </StyledSection>
+      <div>
+        <RatingStart id={data.id} />
+      </div>
+      <div>
+        {readStartQuery.isSuccess &&
+          readStartQuery.data.map((rating) => {
+            return (
+              <div>
+                <div>
+                  <Avatar src={rating.user.image} size="30px" textSizeRatio={2} round={true} name={rating.user.first_name} />
+                  <Rating start={rating.start} />
+                </div>
+                <p>{rating.message}</p>
+              </div>
+            );
+          })}
+      </div>
     </StyledContainer>
   );
 };

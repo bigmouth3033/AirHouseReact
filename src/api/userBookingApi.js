@@ -62,3 +62,25 @@ export const UserReadSuccess = (payment_id) => {
 
   return paymentSuccessQuery;
 };
+
+const viepPropertyBooking = async (query) => {
+  const propertyId = query.queryKey[1];
+  const status = query.queryKey[2];
+  const startDate = query.queryKey[3];
+  const endDate = query.queryKey[4];
+  const currentPage = query.queryKey[5];
+
+  const response = await axiosClient.get("view-property-booking", {
+    params: { property_id: propertyId, startDate: startDate, endDate: endDate, booking_status: status, page: currentPage },
+  });
+  return response.data;
+};
+
+export const PropertyBookingQuery = (propertyId, bookingStatus, startDate, endDate, currentPage) => {
+  const query = useQuery({
+    queryKey: ["property-booking", propertyId, bookingStatus, startDate, endDate, currentPage],
+    queryFn: viepPropertyBooking,
+  });
+
+  return query;
+};

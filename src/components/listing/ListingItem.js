@@ -15,7 +15,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1.5fr 2fr 1fr;
-  grid-auto-rows: 11rem;
+  grid-auto-rows: 12.5rem;
 
   column-gap: 1rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
@@ -25,6 +25,24 @@ const StyledContainer = styled.div`
   .icon {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 1150px) {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 14rem auto;
+
+    & .first {
+      grid-column: 1/3;
+    }
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 14rem auto auto;
+
+    & .first {
+      grid-column: 1;
+    }
   }
 `;
 
@@ -92,6 +110,20 @@ const StyledThird = styled.div`
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
+
+  & p {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  & button {
+    cursor: pointer;
+    background-color: red;
+    border: none;
+    color: white;
+    border-radius: 5px;
+  }
 `;
 
 export const ListingItemSkeleton = () => {
@@ -165,10 +197,17 @@ export default function ListingItem({ data }) {
     });
   };
 
+  const onShowBooking = () => {
+    navigate({
+      pathname: "/user/booking-detail",
+      search: `property_id=${data.id}&start_date=${data.start_date}&end_date=${data.end_date}`
+    });
+  };
+
   return (
     <>
       <StyledContainer>
-        <StyledFirst>
+        <StyledFirst className="first">
           <img src={data.images[0].image} />
         </StyledFirst>
         <StyledSecond>
@@ -202,7 +241,7 @@ export default function ListingItem({ data }) {
             </p>
           </div>
         </StyledSecond>
-        <StyledThird>
+        <StyledThird className="third">
           <div>
             {data.acception_status == "accept" && <p>Approved</p>}
             {data.acception_status == "waiting" && <p>Awaiting for approve</p>}
@@ -210,7 +249,7 @@ export default function ListingItem({ data }) {
           </div>
           <button onClick={() => onClickUpdate(data.id)}>Edit</button>
           {data.admin_message && <button onClick={onClickShowMessage}>Show Admin Message</button>}
-          <button>Show Booking</button>
+          <button onClick={onShowBooking}>Show Booking</button>
         </StyledThird>
       </StyledContainer>
       {showMessage ? (

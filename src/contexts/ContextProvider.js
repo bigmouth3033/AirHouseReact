@@ -8,6 +8,8 @@ const StateContext = createContext({
   setPageWidth: () => {},
   chosenProperty: null,
   setChosenProperty: () => {},
+  showLogin: null,
+  onShowLoginHandler: () => {},
 });
 
 export const ContextProvider = ({ children }) => {

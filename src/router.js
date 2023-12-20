@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
+import BookingDetail from "components/property-booking-detail/BookingDetail";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -73,6 +74,9 @@ const PaymentNotFound = lazy(() => import("components/payment/PaymentNotFound"))
 
 const BlogPage = lazy(() => import("components/blog/BlogPage"));
 const BlogSearch = lazy(() => import("components/blog/BlogSearch"));
+
+
+const BookDetail = lazy(() => import("components/property-booking-detail/BookingDetail"))
 
 const router = createBrowserRouter([
   {
@@ -175,6 +179,11 @@ const router = createBrowserRouter([
         element: <PaymentSuccess />,
         exact: true,
       },
+      {
+        path: "/user/booking-detail",
+        element: <BookingDetail/>,
+        exact: true
+      }
     ],
   },
   {
