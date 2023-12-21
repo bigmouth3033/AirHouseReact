@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Img from "assets/images/hosting-img/room_bed.jpg";
-import { Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 
 const StyledContainer = styled.div`
@@ -123,13 +122,13 @@ const StyledLink = styled.button`
 `;
 
 const Details = () => {
-  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] = useOutletContext();
+  const [state, dispatch, ACTIONS, onSetActive, onSetAvailable] =
+    useOutletContext();
 
   const onClickPrevious = (ev) => {
     ev.preventDefault();
 
     onSetActive(1);
-
   };
 
   const onClickNext = (ev) => {
@@ -144,7 +143,10 @@ const Details = () => {
       <StyledSecion1 style={{ backgroundImage: `url(${Img})` }}>
         <StyledImgOverlay />
         <StyleText>
-          <h2>You can add more details Tell travelers about your space and hosting style.</h2>
+          <h2>
+            You can add more details Tell travelers about your space and hosting
+            style.
+          </h2>
         </StyleText>
       </StyledSecion1>
       <StyledSecion2>
@@ -154,49 +156,70 @@ const Details = () => {
           <StyledTextarea
             value={state.aboutPlace}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_ABOUT_PLACE, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_ABOUT_PLACE,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledLable htmlFor="">Place is great for</StyledLable>
           <StyledTextarea
             value={state.placeGreatFor}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_PLACE_GREAT_FOR, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_PLACE_GREAT_FOR,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledLable htmlFor="">Guest Access</StyledLable>
           <StyledTextarea
             value={state.guestAccess}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_GUEST_ACCESS, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_GUEST_ACCESS,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledLable htmlFor="">Interaction with Guests</StyledLable>
           <StyledTextarea
             value={state.interactionGuest}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_INTERACTION_GUEST, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_INTERACTION_GUEST,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledLable htmlFor="">Other Things to Note</StyledLable>
           <StyledTextarea
             value={state.thingToNote}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_THING_TO_NOTE, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_THING_TO_NOTE,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledLable htmlFor="">Overview</StyledLable>
           <StyledTextarea
             value={state.overview}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_OVERVIEW, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_OVERVIEW,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledLable htmlFor="">Getting Around</StyledLable>
           <StyledTextarea
             value={state.gettingAround}
             onChange={(ev) => {
-              dispatch({ type: ACTIONS.CHANGE_GETTING_AROUND, next: ev.target.value });
+              dispatch({
+                type: ACTIONS.CHANGE_GETTING_AROUND,
+                next: ev.target.value,
+              });
             }}
           ></StyledTextarea>
           <StyledGroupButon>

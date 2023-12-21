@@ -41,7 +41,10 @@ export default function CheckoutForm({ data }) {
     const formData = new FormData();
     formData.append("amount", amount);
     formData.append("booking_id", booking_id);
-    const response = await axiosClient.post("http://127.0.0.1:8000/api/create-payment-intent", formData);
+    const response = await axiosClient.post(
+      "http://127.0.0.1:8000/api/create-payment-intent",
+      formData
+    );
 
     const data = await response.data;
     return data.clientSecret;
@@ -69,7 +72,11 @@ export default function CheckoutForm({ data }) {
         clientSecret: clientSecret,
         elements,
         confirmParams: {
-          return_url: "http://localhost:3000/user/sucsessPayment?booking_id=" + booking_id + "&booking_status=" + booking_status,
+          return_url:
+            "http://localhost:3000/user/sucsessPayment?booking_id=" +
+            booking_id +
+            "&booking_status=" +
+            booking_status,
         },
       });
     } catch (error) {
@@ -83,7 +90,9 @@ export default function CheckoutForm({ data }) {
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
       <StyledButton disabled={isProcessing || !stripe || !elements} id="submit">
-        <span id="button-text">{isProcessing ? "Processing ... " : "Pay now"}</span>
+        <span id="button-text">
+          {isProcessing ? "Processing ... " : "Pay now"}
+        </span>
       </StyledButton>
       {message && <StyledMessage id="payment-message">{message}</StyledMessage>}
     </form>

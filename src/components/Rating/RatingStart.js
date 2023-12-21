@@ -3,8 +3,19 @@ import { CreateStart, ReadStart } from "api/startApi";
 import React, { useEffect, useRef, useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import styled from "styled-components";
+const StyledGroupVote = styled.div`
+  border: 1px black solid;
+  border-radius: 5px;
+  width: 500px;
+  height: 40px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  overflow: hidden;
+  margin: 0 auto;
+`;
+
 const StyledPreview = styled.input`
-  /* border: none; */
+  border: none;
   height: 40px;
   border: 1px solid #dddddd;
   padding: 5px;
@@ -13,20 +24,17 @@ const StyledPreview = styled.input`
   }
 `;
 const StyledButtunVote = styled.button`
-  display: block;
-  padding: 0.5rem 3rem;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
+  height: 40px;
+  border: none;
   color: white;
-  font-size: 18px;
-  background-color: #0080ff;
+  font-size: 14px;
+  background-color: #ff0011;
   &:hover {
-    background-color: #0000ff;
+    background-color: #ff0000;
   }
 `;
-const Start = () => {
-  const property_id = 2299;
-  const createStart = CreateStart();
+const RatingStart = ({ property_id }) => {
+  const createStart = CreateStart(property_id);
   const readStart = ReadStart(property_id);
   const preview = useRef(null);
   const [show, setShow] = useState(true);
@@ -49,6 +57,14 @@ const Start = () => {
     setRating(rate);
     setShow(true);
   };
+  const StyledMessage = styled.div`
+    color: #717171;
+    font-size: 14px;
+    line-height: 1.5;
+    width: 500px;
+    margin: 0 auto;
+    padding: 1rem 0;
+  `;
   const queryClient = useQueryClient();
   const handleVote = () => {
     const formData = new FormData();
@@ -86,22 +102,24 @@ const Start = () => {
     <div>
       <div>
         <Rating onClick={handleRating} initialValue={rating} />
-        <div>{readStart.isSuccess && readStart.data.start.message}</div>
+        <StyledMessage>
+          {readStart.isSuccess && readStart.data.start.message}
+        </StyledMessage>
       </div>
       <div>
         {show && (
-          <div>
+          <StyledGroupVote>
             <StyledPreview
               ref={preview}
               type="text"
               placeholder="What is your problem?"
             />
             <StyledButtunVote onClick={handleVote}>Vote</StyledButtunVote>
-          </div>
+          </StyledGroupVote>
         )}
       </div>
     </div>
   );
 };
 
-export default Start;
+export default RatingStart;

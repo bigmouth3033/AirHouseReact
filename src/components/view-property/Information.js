@@ -1,13 +1,8 @@
-import { faAngleRight, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
 import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
-import AverageRating from "components/Rating/AverageRating";
-import { ReadAverageStart } from "api/startApi";
-import Loading from "components/Loading";
+import { useState } from "react";
 
 const StyledContainer = styled.div``;
 const StyledSection = styled.div`
@@ -15,6 +10,14 @@ const StyledSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  text-align: justify;
+  padding: 1.5rem 0;
+`;
+const StyledSectionLast = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  line-height: 1.5;
   text-align: justify;
   padding: 1.5rem 0;
 `;
@@ -30,19 +33,7 @@ const StyledSpan = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const StyledReview = styled.div`
-  display: flex;
-  justify-content: stretch;
-  align-items: center;
-  div {
-    margin-right: 10px;
-  }
-`;
-const StyledImage = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-`;
+
 const StyledHost = styled.div`
   display: flex;
   justify-content: start;
@@ -50,6 +41,7 @@ const StyledHost = styled.div`
 
   p {
     margin-left: 20px;
+    line-height: 1.5;
   }
 
   & .hosted {
@@ -86,14 +78,25 @@ const StyledAboutText = styled.p`
   color: #717171;
   font-size: 16px;
   line-height: 1.5;
+  text-indent: 30px;
 `;
-const StyledShowMore = styled.div`
-  display: flex;
-  justify-content: stretch;
-  align-items: center;
-  color: black;
-  a {
-    color: black;
+const StyledAboutSeeMore = styled.p`
+  overflow: auto;
+  background-color: white;
+  width: 650px;
+  height: 600px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  padding: 2rem;
+  border-radius: 12px;
+  p {
+    font-size: 15px;
+    color: #717171;
+    margin: 1rem;
+    line-height: 1.5;
   }
 `;
 
@@ -108,6 +111,33 @@ const StyledAmentinies = styled.div`
   font-weight: 500;
   margin-bottom: 10px;
 `;
+const StyledSeeMore = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const StyledButtonSeeMore = styled.button`
+  background-color: white;
+  margin: 0.5rem 0;
+  border: none;
+  font-size: 14px;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  &:hover {
+    background-color: #dcdcdc;
+    border-radius: 3px;
+  }
+`;
+
+const formatDate = (dateObj) => {
+  const date = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+
+  return `${year}-${month < 10 ? "0" + month : month}-${
+    date < 10 ? "0" + date : date
+  }`;
+};
 const Information = ({
   data,
   value,
@@ -116,14 +146,16 @@ const Information = ({
   disabledBookDate,
 }) => {
   const { pageWidth } = useStateContext();
-  const readAverageStart = ReadAverageStart(data.id);
-  if (readAverageStart.isLoading) {
-    <Loading />;
-  }
-  if (readAverageStart.isError) {
-    <p>ksudfgruio</p>;
-  }
-
+  const [showSee, setShowSee] = useState(true);
+  const handleClickSeeMore = () => {
+    setShowSee(false);
+  };
+  const handleClickHide = () => {
+    setShowSee(true);
+  };
+  const handleDetailClick = (e) => {
+    e.stopPropagation();
+  };
   return (
     <StyledContainer>
       <StyledSection>
@@ -131,14 +163,6 @@ const Information = ({
           <span>
             {data.category.name} in {data.province.full_name}
           </span>
-          <StyledReview>
-            <div>
-              <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc00" }} />
-            </div>
-            {readAverageStart.isSuccess && (
-              <p> {readAverageStart.data.average}</p>
-            )}
-          </StyledReview>
         </StyledTitle>
         <StyledDetailInfor>
           <StyledSpan>
@@ -171,7 +195,7 @@ const Information = ({
             <p className="hosted">
               Hosted by {data.user.first_name} {data.user.last_name}
             </p>
-            <p> 11 year</p>
+            <p> Since {formatDate(new Date(data.user.created_at))}</p>
           </div>
         </StyledHost>
       </StyledSection>
@@ -191,7 +215,45 @@ const Information = ({
       <StyledSection>
         <StyledTitle>Description</StyledTitle>
         <StyledAboutText>{data.description}</StyledAboutText>
-        <StyledShowMore></StyledShowMore>
+        <StyledSeeMore>
+          {showSee ? (
+            <StyledButtonSeeMore onClick={handleClickSeeMore}>
+              {">>"} See more
+            </StyledButtonSeeMore>
+          ) : (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0, 0, 0, 0.5)",
+                zIndex: 1,
+              }}
+              onClick={handleClickHide}
+            >
+              <StyledAboutSeeMore onClick={handleDetailClick}>
+                <StyledTitle>Description</StyledTitle>
+                <p>{data.description}</p>
+                <StyledTitle>Place great for</StyledTitle>
+                <p>{data.place_great_for}</p>
+                <StyledTitle>Guest access</StyledTitle>
+                <p>{data.guest_access}</p>
+                <StyledTitle>Interaction guest</StyledTitle>
+                <p>{data.interaction_guest}</p>
+                <StyledTitle>Thing to note</StyledTitle>
+                <p>{data.thing_to_note}</p>
+                <StyledTitle>About place</StyledTitle>
+                <p>{data.about_place}</p>
+                <StyledTitle>Overview</StyledTitle>
+                <p>{data.overview}</p>
+                <StyledTitle>Getting around</StyledTitle>
+                <p>{data.getting_around}</p>
+              </StyledAboutSeeMore>
+            </div>
+          )}
+        </StyledSeeMore>
       </StyledSection>
       <StyledSection>
         <h2>Location's property</h2>
@@ -212,6 +274,14 @@ const Information = ({
           />
         )}
       </StyledSection>
+      <StyledSectionLast>
+        <div>
+          <StyledTitle>House's rules</StyledTitle>
+          <StyledP>Check-out after: 12PM </StyledP>
+          <StyledP>Check-out before: 14PM</StyledP>
+          <StyledP>{data.accomodates_count} guests maximum</StyledP>
+        </div>
+      </StyledSectionLast>
     </StyledContainer>
   );
 };

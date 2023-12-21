@@ -44,3 +44,23 @@ export const ReadAverageStart = (property_id) => {
   });
   return readAverage;
 };
+
+//read add start
+//read start
+const readStartAll = async (query) => {
+  const id = query.queryKey[1];
+  const page = query.queryKey[2];
+  const response = await axiosClient.get(
+    "/get-all-rating?property_id=" + id + "&currentPage=" + page
+  );
+  return response.data;
+};
+
+export const ReadStartAll = (property_id, page) => {
+  const query = useQuery({
+    queryKey: ["startAll", property_id, page],
+    queryFn: readStartAll,
+    retry: 1,
+  });
+  return query;
+};

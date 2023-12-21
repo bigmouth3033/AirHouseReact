@@ -7,9 +7,13 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import PaymentForm from "./PaymentForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarXmark, faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarXmark,
+  faCreditCard,
+} from "@fortawesome/free-solid-svg-icons";
 import BookingNotFound from "./BookingNotFound";
 import PaymentNotFound from "./PaymentNotFound";
+import Avatar from "react-avatar";
 
 const PaymentContainer = styled.div`
   display: grid;
@@ -30,9 +34,7 @@ const StyledNameProperty = styled.div`
   align-items: center;
   font-size: 1.4rem;
   font-weight: 500;
-  & div {
-    margin-left: 1rem;
-  }
+  column-gap: 1rem;
 `;
 const Styledimage = styled.img`
   width: 3rem;
@@ -114,29 +116,48 @@ const PaymentBooking = () => {
           <PaymentContainer>
             <StyledContainer>
               <StyledNameProperty>
-                <Styledimage src="https://i.pinimg.com/236x/c9/cc/33/c9cc33c894a3f9ab73b2674ff57d5138.jpg" alt="avatar..." />
+                <Avatar
+                  src={data.hostName.image}
+                  size="40px"
+                  textSizeRatio={2}
+                  round={true}
+                  name={data.hostName.first_name}
+                />
                 <div>{data.booking.property.name}</div>
               </StyledNameProperty>
               <StyledCheckBlock>
                 <StyledCheck>
                   <div>Check in day: </div>
-                  <span>{formatCreatedAt(data.booking.check_in_date)}, after 02:00 PM</span>
+                  <span>
+                    {formatCreatedAt(data.booking.check_in_date)}, after 02:00
+                    PM
+                  </span>
                 </StyledCheck>
                 <StyledCheck>
                   <div>Check out day:</div>
-                  <span>{formatCreatedAt(data.booking.check_out_date)}, before: 12:00 PM</span>
+                  <span>
+                    {formatCreatedAt(data.booking.check_out_date)}, before:
+                    12:00 PM
+                  </span>
                 </StyledCheck>
               </StyledCheckBlock>
               <StyledGuestBlock>
                 <StyledPropertyName>
                   <div>Property type:</div>
-                  <span>{data.PropertyName}</span>
+                  <span>{data.propertyType}</span>
+                </StyledPropertyName>
+                <StyledPropertyName>
+                  <div>Host Name:</div>
+                  <span>
+                    {data.hostName.first_name}
+                    <span> {data.hostName.last_name}</span>
+                  </span>
                 </StyledPropertyName>
                 <StyledPropertyName>
                   <div>Guest Name:</div>
                   <span>
-                    {data.userName.first_name}
-                    <span> {data.userName.last_name}</span>
+                    {data.renter.first_name}
+                    <span> {data.renter.last_name}</span>
                   </span>
                 </StyledPropertyName>
                 <StyledPropertyName>
