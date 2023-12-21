@@ -25,7 +25,7 @@ const Box = styled.div`
 `;
 function UserBooking() {
   const [userTitle, setUserTitle] = useState("");
-
+  console.log(userTitle);
   return (
     <Box>
       <div className="grid-container-user-booking">

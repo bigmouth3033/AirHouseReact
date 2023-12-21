@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocation, faLocationDot } from "@fortawesome/free-solid-svg-icons";
@@ -46,7 +46,7 @@ const Box = styled.div`
   }
 `;
 export default function BookingItem(props) {
-  // console.log(props.BookingItem)
+  const navigate = useNavigate();  
   return (
     <Box>
       <div className="booking-item">
@@ -68,10 +68,21 @@ export default function BookingItem(props) {
             <div className="item3-item">
               <img className="user-image" src={props.BookingItem.user_image} />
               <div className="name-user-property">
-                {props.BookingItem.first_name} {props.BookingItem.last_name}
+                {props.BookingItem.user_firstName } {props.BookingItem.user_lastName}
               </div>
               <div className="Link">
-                <Link to="/user/chat/:id">SendMessage</Link>
+                <button onClick={() => {
+                  navigate('/user/chat/', {
+                    replace: false,
+                    state: {
+                      user_Email: props.BookingItem.user_Email,
+                      first_Name: props.BookingItem.user_firstName,
+                      last_Name: props.BookingItem.user_lastName
+                    }
+                  })
+                }}>
+                  SendMessage
+                </button>
               </div>
             </div>
           </div>
