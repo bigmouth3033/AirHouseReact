@@ -24,7 +24,7 @@ export default function Content(props) {
   const [page, setPage] = useState([]);
   const [secletedPage,setSecletedPage] = useState();
   const fethCurrentPage = async (secletedPage) => {
-    const response = await axiosClient.get(`readCurrentPage?page=${secletedPage}`);
+    const response = await axiosClient.get(`getBookingByUser?page=${secletedPage}`);
     return response.data;
   }
 
@@ -41,10 +41,11 @@ export default function Content(props) {
     setSecletedPage(pageNumber)
   }
   const currentPageByUserQuery = CurrentPageByUserQuery(secletedPage);
-  console.log(currentPageByUserQuery.data);
+
 
   let totalPage = null;
   if (currentPageByUserQuery.isSuccess) {
+    console.log(currentPageByUserQuery.data);
     totalPage = Math.ceil(currentPageByUserQuery.data.total / 10);  
   }
   
@@ -60,6 +61,7 @@ export default function Content(props) {
             })}
           </div>
       }
+{/*       
       <div className="PageNumberContainer">
         {Array(totalPage).fill(0).map((_,index) => {
           const pageNumber = index + 1
@@ -69,7 +71,7 @@ export default function Content(props) {
             </span>
           )
         })}
-      </div>
+      </div> */}
 
     </StyledContainer>
   );

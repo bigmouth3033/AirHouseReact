@@ -21,15 +21,12 @@ export default function Message(props) {
     const [allMessagesAfterSub, setAllMessagesAfterSub] = useState([]);
     const [message, setMessage] = useState('');
 
-
-
     useEffect(() => {
-        // console.log(props.UserInfo.email);
         const formData = new FormData();
         formData.append('user_to_email', props.UserInfo.email);
         GetMessage(formData)
-            .then(result => {
-                setAllMessages(result);
+            .then(result => {                
+                setAllMessages(result);                        
             })
             .catch(error => {
                 console.error(error);
@@ -47,6 +44,7 @@ export default function Message(props) {
         });
 
         return () => {
+            setAllMessagesAfterSub([]);
             channel.unsubscribe(channel_name);
         }
     }, [props.UserInfo.email])
@@ -59,7 +57,10 @@ export default function Message(props) {
         sendMessageMutation.mutate(formData);
         setMessage('');
     }
-    console.log(allMessagesAfterSub);
+
+    const handleCallback = (item) => {
+        props.callback(item);
+    }
 
     return (
         <StyledBox>
@@ -76,7 +77,7 @@ export default function Message(props) {
                     allMessagesAfterSub.map((item, index) => {
                         return (
                             <div key={index}>
-                                {item.user1}: {item.message}
+                                {item.from_email}: {item.body}
                             </div>
                         )
                     })

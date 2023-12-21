@@ -15,7 +15,7 @@ const Box = styled.div`
     max-width: 1500px;
     margin: auto;
     margin-top: 2rem;
-		margin-bottom: 2rem;
+    margin-bottom: 2rem;
 
     > p:nth-of-type(1) {
       font-size: 20px;
@@ -25,19 +25,13 @@ const Box = styled.div`
 `;
 function UserBooking() {
   const [userTitle, setUserTitle] = useState("");
-  const statusBookingQuery = StatusBookingQuery(userTitle);
-  if (statusBookingQuery.isLoading) return <h1>Loading..</h1>;
-  
-
-
-
 
   return (
     <Box>
       <div className="grid-container-user-booking">
         <p>Booking</p> <p></p>
         <SideBar setUserTitle={setUserTitle} />
-        <Content allBooking={statusBookingQuery.data} />
+        <Content />
         {/* <button onClick={handleOnClick}>Click</button> */}
       </div>
     </Box>

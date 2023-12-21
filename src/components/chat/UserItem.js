@@ -10,11 +10,12 @@ const ChatBox = styled.div`
     }
 `
 export default function UserItem(props) {
+    console.log(props.UserInfo);
     return (
         <ChatBox>
             <div className='user-item-container'>
                     <div>{props.UserInfo.first_name} {props.UserInfo.last_name}</div>
-                    <div>{props.UserInfo.email}</div>
+                    <div>{props.UserInfo.email}</div>                    
             </div>
         </ChatBox>
     )
