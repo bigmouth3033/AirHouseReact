@@ -35,12 +35,15 @@ const PaymentSuccess = () => {
   const transactionID = searchParam.get("payment_intent");
   const booking_id = searchParam.get("booking_id");
   const booking_status = searchParam.get("booking_status");
+  const amount = searchParam.get("amount");
+  const site_fees = searchParam.get("site_fees");
   const formData = new FormData();
   const createSuccessBookingMutation = CreateSuccessBookingMutation();
   useEffect(() => {
     formData.append("payment_intent", transactionID);
     formData.append("booking_id", booking_id);
     formData.append("booking_status", booking_status);
+    formData.append("amount", amount);
 
     createSuccessBookingMutation.mutate(formData, {
       onSuccess: () => {
@@ -63,6 +66,7 @@ const PaymentSuccess = () => {
           <Description>
             <Title>Thank You!</Title>
             <p>Your payment was successful</p>
+            <img src="src/components/payment/R.png" alt="" />
           </Description>
         </ThankYouContainer>
       )}

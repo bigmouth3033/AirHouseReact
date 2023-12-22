@@ -404,7 +404,7 @@ const TotalBeforeTaxes = ({
         </StyledCountGuest>
       </StyledBooking>
 
-      <StyledButton onClick={onSubmit}>Continute</StyledButton>
+      <StyledButton onClick={onSubmit}>Continue</StyledButton>
       <StyledDetailText>
         You'll be able to review before paying.
       </StyledDetailText>
