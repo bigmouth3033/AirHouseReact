@@ -6,6 +6,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { isExpired, decodeToken } from "react-jwt";
 import { SignUpGoogleMutation } from "../../api/userApi";
 import { useGoogleLogin } from "@react-oauth/google";
+import Pusher from 'pusher-js';
 
 const StyledContainer = styled.div`
   border: 1px solid red;
@@ -142,7 +143,7 @@ const Login = ({ setShowLogin }) => {
     };
 
     loginMutation.mutate(payload, {
-      onSuccess: () => {
+      onSuccess: () => {        
         setShowLogin(false);
       },
       onError: () => {

@@ -5,6 +5,7 @@ import UserItem from "./UserItem";
 import { GetAllUser, GetAllUserQuery } from "api/chatApi";
 import Message from "./Message";
 import { useLocation, useParams } from "react-router-dom";
+import Pusher from 'pusher-js';
 
 
 const ChatBox = styled.div`
@@ -20,9 +21,29 @@ export default function Chat(props) {
   const getAllUserQuery = GetAllUserQuery();
   const [selectedUser, setSelectedUser] = useState(false);
   const [lastMessage, setLastMessage] = useState('none');
-  const [newUser, setNewUser] = useState(false);
-
+  const [newUser, setNewUser] = useState(false);  
   console.log('data.state',data.state);
+
+  useEffect(() => {
+    if (userQuery.isSuccess) {
+      var pusher = new Pusher('014b8eb7bfaf79153ac0', {
+        cluster: 'ap1'
+      });
+
+      // console.log(userQuery.data.user.email);
+      const channel_name = userQuery.data.user.email;
+      var channel = pusher.subscribe(channel_name);
+      channel.bind('my-event', function (data) {
+        alert(JSON.stringify(data));
+      });
+    }
+    return () =>{
+      const channel_name = userQuery.data.user.email;
+      pusher.unsubscribe(channel_name);
+    }
+  }, [userQuery.isSuccess])
+
+
 
   useEffect(() => {
     GetAllUser()

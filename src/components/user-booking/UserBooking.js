@@ -31,7 +31,7 @@ function UserBooking() {
       <div className="grid-container-user-booking">
         <p>Booking</p> <p></p>
         <SideBar setUserTitle={setUserTitle} />
-        <Content />
+        <Content UserTitle={userTitle}/>
         {/* <button onClick={handleOnClick}>Click</button> */}
       </div>
     </Box>

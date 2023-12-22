@@ -17,7 +17,7 @@ const StyledBox = styled.div`
   }
 `;
 export default function SideBar({ setUserTitle }) {
-  const [titleArray, setTitleArray] = useState(["All", "Current", "Upcoming", "Pending", "Completed", "Exprired"]);
+  const [titleArray, setTitleArray] = useState(["all", "accepted", "denied", "success","expired"]);
 
   const handleTitle = (item) => {
     setUserTitle(item);

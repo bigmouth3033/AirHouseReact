@@ -15,6 +15,7 @@ import { PropertyTypeQuery } from "api/property-typeApi";
 import { ProvinceQuery } from "api/locationApi";
 import Loading from "components/Loading";
 import { CategoryValueQuery } from "api/blogCategoryApi";
+import Pusher from 'pusher-js';
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
@@ -38,6 +39,26 @@ export default function DefaultLayout() {
   const categoryValueQuery = CategoryValueQuery();
   const location = useLocation();
 
+  useEffect(() => {
+    let channel_name = '';
+    if (userQuery.isSuccess) {
+      var pusher = new Pusher('014b8eb7bfaf79153ac0', {
+        cluster: 'ap1'
+      });
+      
+       channel_name = userQuery.data.user.email;
+      var channel = pusher.subscribe(channel_name);
+      channel.bind('my-event', function (data) {
+        console.log(JSON.stringify(data.from_email));
+        alert('get message from: ',JSON.stringify(data.from_email));
+      });
+    }
+
+    return () =>{
+      // const channel_name = userQuery.data.user.email;
+      // pusher.unsubscribe(channel_name);
+    }
+  }, [userQuery.isSuccess])
   if (
     provinceQuery.isLoading ||
     categoryQuery.isLoading ||

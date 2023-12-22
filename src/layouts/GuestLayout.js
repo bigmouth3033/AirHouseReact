@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserQuery } from "api/userApi";
 import { Navigate } from "react-router-dom";
@@ -12,6 +12,8 @@ import { AmenitiesQuery } from "api/amenitiesApi";
 import { PropertyTypeQuery } from "api/property-typeApi";
 import { ProvinceQuery } from "api/locationApi";
 import { CategoryValueQuery } from "../api/blogCategoryApi";
+import Pusher from 'pusher-js';
+
 
 const StyledMenu = styled.div`
   display: flex;
@@ -50,6 +52,8 @@ export default function GuestLayout() {
   const provinceQuery = ProvinceQuery();
   const categoryValueQuery = CategoryValueQuery();
 
+
+  
   if (
     userQuery.isLoading ||
     provinceQuery.isLoading ||
