@@ -18,12 +18,13 @@ const ChatBox = styled.div`
 export default function Chat(props) {
   let data = useLocation();
   const userQuery = UserQuery();
-  const getAllUserQuery = GetAllUserQuery();
+  const [render,setRender] = useState(false);
+  const getAllUserQuery = GetAllUserQuery(render);
   const [selectedUser, setSelectedUser] = useState(false);
   const [lastMessage, setLastMessage] = useState('none');
-  const [newUser, setNewUser] = useState(false);  
-  console.log('data.state',data.state);
-
+  const [newUser, setNewUser] = useState(false);
+  const [allUser,setAllUser] = useState([])  ;
+  
   useEffect(() => {
     if (userQuery.isSuccess) {
       var pusher = new Pusher('014b8eb7bfaf79153ac0', {
@@ -34,7 +35,8 @@ export default function Chat(props) {
       const channel_name = userQuery.data.user.email;
       var channel = pusher.subscribe(channel_name);
       channel.bind('my-event', function (data) {
-        alert(JSON.stringify(data));
+        // alert(JSON.stringify(data));
+        setRender(!render);
       });
     }
     return () =>{
@@ -82,7 +84,7 @@ export default function Chat(props) {
       .catch(error => {
         console.error(error);
       });
-  }, [getAllUserQuery.isSuccess])
+  }, [getAllUserQuery.isSuccess,render])
 
   const handleChildLastMessageState = (item) => {
     setLastMessage(item);
