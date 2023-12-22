@@ -18,124 +18,96 @@ const ChatBox = styled.div`
 export default function Chat(props) {
   let data = useLocation();
   const userQuery = UserQuery();
-  const [render,setRender] = useState(false);
-  const getAllUserQuery = GetAllUserQuery(render);
-  const [selectedUser, setSelectedUser] = useState(false);
-  const [lastMessage, setLastMessage] = useState('none');
-  const [newUser, setNewUser] = useState(false);
-  const [allUser,setAllUser] = useState([])  ;
-  
+  const [render, setRender] = useState('');
+  const getAllUserQuery = GetAllUserQuery();
+  const [allUser, setAllUSer] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(true);
+
+
+
+
+  ////////
   useEffect(() => {
-    if (userQuery.isSuccess) {
-      var pusher = new Pusher('014b8eb7bfaf79153ac0', {
-        cluster: 'ap1'
-      });
+    setAllUSer(getAllUserQuery.data);
 
-      // console.log(userQuery.data.user.email);
-      const channel_name = userQuery.data.user.email;
-      var channel = pusher.subscribe(channel_name);
-      channel.bind('my-event', function (data) {
-        // alert(JSON.stringify(data));
-        setRender(!render);
-      });
-    }
-    return () =>{
-      const channel_name = userQuery.data.user.email;
-      pusher.unsubscribe(channel_name);
-    }
-  }, [userQuery.isSuccess])
-
-
-
-  useEffect(() => {
-    GetAllUser()
-      .then(result => {
-        setSelectedUser(result[0]);
-
-        if (getAllUserQuery.isSuccess) {
-          console.log('user query succes', true);
-          if (data.state) {
-            console.log('co data.state');
-            const isIncluded = getAllUserQuery.data.some((item) => item.email == data.state.user_Email);
-            if (isIncluded) {
-              console.log('isIncluded', true);
-            } else {
-              console.log('Not Included and setState', data.state.user_Email)
-              const NewUser = {
-                email: data.state.user_Email,
-                first_name : data.state.first_Name,
-                last_name : data.state.last_Name                 
-              }
-              console.log(NewUser);
-              // setNewUser({ email: data.state.user_Email });
-              setNewUser(NewUser);
-              setSelectedUser(NewUser);
-            }
-          } else {
-            console.log('khong co data.state');
-          }
-
-        } else {
-          console.log('userquery faill', false);
+    if (getAllUserQuery.isSuccess && data.state) {
+      const isIncluded = getAllUserQuery.data.some((item) => item.email == data.state.user_Email);
+      if (isIncluded) {
+        console.log('true');
+      } else {
+        console.log('not true')
+        const NewUser = {
+          email: data.state.user_Email,
+          first_name: data.state.first_Name,
+          last_name: data.state.last_Name
         }
+        setAllUSer(pre => [NewUser, ...pre])
 
+        console.log('alluser', allUser);
+      }
+    }
+  }, [getAllUserQuery.isSuccess])
 
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [getAllUserQuery.isSuccess,render])
+  useEffect(() => {
+    if (allUser) {
+      console.log('alluser', allUser[0]);
+      setSelectedUser(allUser[0])
+    }
+  }, [allUser])
 
-  const handleChildLastMessageState = (item) => {
-    setLastMessage(item);
-  }
+  // useEffect(() => {
+  //   if (userQuery.isSuccess) {
+  //     var pusher = new Pusher('014b8eb7bfaf79153ac0', {
+  //       cluster: 'ap1'
+  //     });
 
+  //     // console.log(userQuery.data.user.email);
+  //     const channel_name = userQuery.data.user.email;
+  //     var channel = pusher.subscribe(channel_name);
+  //     channel.bind('my-event', function (data) {
+        
+        
+  //     });
+  //   }
+  //   return () =>{
+  //     const channel_name = userQuery.data.user.email;
+  //     pusher.unsubscribe(channel_name);
+  //   }
+  // }, [userQuery.isSuccess,render])
+  ///////
   const changeSelectedUser = (item) => {
     setSelectedUser(item);
   }
-  const checkIncluded = (emailFromState) => {
-    if (getAllUserQuery.isSuccess) {
-      console.log('user query succes', true);
-      // const isIncluded = getAllUserQuery.data.some((item) => item.email == data.state.user_Email);
-      const isIncluded = getAllUserQuery.data.some((item) => item.email == emailFromState);
-      if (isIncluded) {
-        console.log(true)
-      } else {
-        setNewUser(true);
-        console.log('userquery faill', false);
-      }
-    }
+  if (getAllUserQuery.isLoading) {
+    return <div>Loading...</div>;
   }
 
+  if (getAllUserQuery.isError) {
+    return <div>Error: </div>;
+  }
   return (
-    <ChatBox>
-      {getAllUserQuery.isLoading ? <div>Loading...</div> :
-        (
-          <div>
-            Message
-            <div className="grid-container">
-              <div className="item1">
-                {newUser && <span onClick={() => changeSelectedUser(newUser)}>
-                  <UserItem UserInfo={newUser} />
-                </span>}
-                {getAllUserQuery.data.map((item, index) => {
-                  return (
-                    <span key={index} onClick={() => changeSelectedUser(item)}>
-                      <UserItem UserInfo={item} lastMessage={lastMessage} />
-                    </span>
-                  )
-                })}
-              </div>
-              <div className="item2">
-                {
-                  selectedUser && <Message UserInfo={selectedUser} callback={handleChildLastMessageState} />
-                }
-              </div>
+    <ChatBox>      
+      <div className="grid-container">
+        <div className="item1">
+          {allUser && allUser.map((item, index) => {
+            return (
+              <span key={index} onClick={() => changeSelectedUser(item)}>
+                <UserItem UserInfo={item} />
+              </span>
+            )
+          })}
 
-            </div>
-          </div>
-        )
-      }
+        </div>
+        <div className="item2">
+          {
+            selectedUser && <Message UserInfo={selectedUser} />
+          }
+        </div>
+        <div className="item3">
+
+        </div>
+      </div>
+
 
     </ChatBox>
   );

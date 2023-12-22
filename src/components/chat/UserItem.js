@@ -9,8 +9,7 @@ const ChatBox = styled.div`
         border: solid thin black;
     }
 `
-export default function UserItem(props) {
-    console.log(props.UserInfo);
+export default function UserItem(props) {    
     return (
         <ChatBox>
             <div className='user-item-container'>

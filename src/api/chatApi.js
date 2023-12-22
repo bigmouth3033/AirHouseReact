@@ -20,9 +20,9 @@ export const GetAllUser = async () => {
   return response.data;
 };
 
-export const GetAllUserQuery = (render) =>{
+export const GetAllUserQuery = () =>{
   const AllUserQuery = useQuery({
-    queryKey: ['AllUser',render],
+    queryKey: ['AllUser'],
     queryFn: GetAllUser,
   });
   return AllUserQuery;
