@@ -273,6 +273,12 @@ const TotalBeforeTaxes = ({
         alert("success");
         navigate("/user/payment?booking_id=" + data.id);
       },
+      onError: (error) => {
+        const response = error.response;
+        if (response.status === 403) {
+          alert("please try again");
+        }
+      },
     });
   };
 

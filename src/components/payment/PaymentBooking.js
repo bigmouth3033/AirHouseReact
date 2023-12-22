@@ -36,11 +36,6 @@ const StyledNameProperty = styled.div`
   font-weight: 500;
   column-gap: 1rem;
 `;
-const Styledimage = styled.img`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-`;
 const StyledCheckBlock = styled.div`
   padding: 1.5rem 0;
   border-bottom: 1px #dddddd solid;

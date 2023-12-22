@@ -14,6 +14,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { ReadAverageStart, ReadStartAll } from "api/startApi";
 import Avatar from "react-avatar";
 import RatingStart from "components/Rating/RatingStart";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledContainer = styled.div`
   max-width: 1150px;
@@ -58,7 +59,7 @@ const StyledContainerAll = styled.div`
   grid-template-columns: repeat(2, 1fr);
   line-height: 2rem;
   margin-top: 1rem;
-  gap: 1rem;
+  gap: 2rem;
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -77,7 +78,6 @@ const StyledStart = styled.span`
   column-gap: 0.5rem;
 `;
 const StyledMessage = styled.div`
-  padding-left: 40px;
   color: #717171;
   min-height: 4rem;
   text-indent: 30px;
@@ -138,13 +138,17 @@ const listDate = (start, end) => {
 const ViewProperty = () => {
   const [serachParam, setserachParam] = useSearchParams();
   const [page, setPage] = useState(1);
+  //Cac queries
   const propertyQuery = PropertyQueryId(serachParam.get("id"));
   const readAverageStart = ReadAverageStart(serachParam.get("id"));
   const readAllStart = ReadStartAll(serachParam.get("id"), page);
+  //
   const property_id = serachParam.get("id");
   const [showSee, setShowSee] = useState(true);
   const [showSeeTotal, setShowSeeTotal] = useState(false);
   const [value, setValue] = useState(null);
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (readAllStart.isSuccess && readAllStart.data.total < 4) {
       setShowSee(false);
@@ -153,6 +157,7 @@ const ViewProperty = () => {
       setShowSeeTotal(true);
     }
   }, [readAllStart.status]);
+
   if (
     propertyQuery.isLoading ||
     readAverageStart.isLoading ||
@@ -234,7 +239,12 @@ const ViewProperty = () => {
         selectedArr.length < propertyQuery.data.minimum_stay ||
         selectedArr.length > propertyQuery.data.maximum_stay
       ) {
-        alert("wrong");
+        alert(
+          "Range booke date from " +
+            propertyQuery.data.minimum_stay +
+            " to " +
+            propertyQuery.data.maximum_stay
+        );
         setValue([null, null]);
         return;
       }
@@ -300,7 +310,7 @@ const ViewProperty = () => {
             </StyledContainerReview>
           )}
           <StyledRating>
-            <RatingStart property_id={property_id} />
+            <RatingStart property_id={property_id} page={page} />
           </StyledRating>
           <StyledContainerAll>
             {readAllStart.isSuccess &&

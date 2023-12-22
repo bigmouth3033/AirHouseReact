@@ -33,12 +33,12 @@ const StyledButtunVote = styled.button`
     background-color: #ff0000;
   }
 `;
-const RatingStart = ({ property_id }) => {
+const RatingStart = ({ property_id, page }) => {
   const createStart = CreateStart(property_id);
   const readStart = ReadStart(property_id);
   const preview = useRef(null);
   const [show, setShow] = useState(true);
-
+  const queryClientRead = useQueryClient();
   // Sử dụng useEffect để cập nhật giá trị đánh giá từ server khi có dữ liệu
   useEffect(() => {
     if (readStart.isSuccess) {
@@ -57,6 +57,7 @@ const RatingStart = ({ property_id }) => {
     setRating(rate);
     setShow(true);
   };
+
   const StyledMessage = styled.div`
     color: #717171;
     font-size: 14px;
@@ -83,6 +84,14 @@ const RatingStart = ({ property_id }) => {
           alert("success!");
           queryClient.invalidateQueries({
             queryKey: ["start", property_id],
+          });
+          queryClientRead.invalidateQueries({
+            queryKey: ["startAll", property_id, page],
+            exact: true,
+          });
+          queryClientRead.invalidateQueries({
+            queryKey: ["readAverageStart", property_id],
+            exact: true,
           });
           setShow(false);
           preview.current.value = "";

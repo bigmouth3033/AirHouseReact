@@ -83,7 +83,7 @@ const StyledAboutText = styled.p`
 const StyledAboutSeeMore = styled.p`
   overflow: auto;
   background-color: white;
-  width: 650px;
+  width: 700px;
   height: 600px;
   position: fixed;
   left: 50%;
@@ -91,7 +91,6 @@ const StyledAboutSeeMore = styled.p`
   transform: translate(-50%, -50%);
   z-index: 1;
   padding: 2rem;
-  border-radius: 12px;
   p {
     font-size: 15px;
     color: #717171;
@@ -128,15 +127,29 @@ const StyledButtonSeeMore = styled.button`
     border-radius: 3px;
   }
 `;
-
+const StyledSince = styled.span`
+  font-weight: 600;
+`;
 const formatDate = (dateObj) => {
-  const date = dateObj.getDate();
-  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames[dateObj.getMonth()];
   const year = dateObj.getFullYear();
 
-  return `${year}-${month < 10 ? "0" + month : month}-${
-    date < 10 ? "0" + date : date
-  }`;
+  return `${month} , ${year}`;
 };
 const Information = ({
   data,
@@ -195,7 +208,13 @@ const Information = ({
             <p className="hosted">
               Hosted by {data.user.first_name} {data.user.last_name}
             </p>
-            <p> Since {formatDate(new Date(data.user.created_at))}</p>
+            <p>
+              Since
+              <StyledSince>
+                {" "}
+                {formatDate(new Date(data.user.created_at))}
+              </StyledSince>
+            </p>
           </div>
         </StyledHost>
       </StyledSection>

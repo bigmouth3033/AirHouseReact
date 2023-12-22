@@ -23,7 +23,11 @@ const queryClient = new QueryClient({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ContextProvider>
-    <GoogleOAuthProvider clientId={"226922731987-fis2kgm2cmj7h8l57bs4tds2ph2e702b.apps.googleusercontent.com"}>
+    <GoogleOAuthProvider
+      clientId={
+        "226922731987-fis2kgm2cmj7h8l57bs4tds2ph2e702b.apps.googleusercontent.com"
+      }
+    >
       <QueryClientProvider client={queryClient} contextSharing={true}>
         <Suspense fallback={<Loading />}>
           <RouterProvider router={router} />
