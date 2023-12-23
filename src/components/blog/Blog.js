@@ -12,6 +12,8 @@ import axios from "axios";
 import axiosClient from "api/axiosClient";
 import { css } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { AllBlogQuery } from "api/blogApi";
+import Loading from "components/Loading";
 
 const StyledSearchInput = styled.input`
   margin-top: 2rem;
@@ -140,6 +142,10 @@ export default function Blog() {
     }
   };
 
+  const allBlogQuery = AllBlogQuery();
+  if(allBlogQuery.isLoading){
+    return <Loading/>
+  }
   return (
     <div>
       <div>

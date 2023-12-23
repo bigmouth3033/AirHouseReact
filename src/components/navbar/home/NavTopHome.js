@@ -51,8 +51,6 @@ const StyledPopUp = styled.div`
 const ACTIONS = {
   TO_CLICK: "toClick",
   NOT_SCROLL_TOP: "notSCROLLTOP",
-  CLICK_STAY: "clickStay",
-  CLICK_EX: "clickEx",
   OUT_OF_FOCUS: "outOfFocus",
 };
 
@@ -64,12 +62,6 @@ function reducer(state, action) {
     case ACTIONS.NOT_SCROLL_TOP:
       return { ...state, isShow: false };
 
-    case ACTIONS.CLICK_STAY:
-      return { isShow: true, isStay: true };
-
-    case ACTIONS.CLICK_EX:
-      return { isShow: true, isStay: false };
-
     case ACTIONS.OUT_OF_FOCUS:
       return { ...state, isShow: false };
   }
@@ -78,16 +70,7 @@ function reducer(state, action) {
 export default function NavTopHome() {
   const [state, dispatch] = useReducer(reducer, {
     isShow: false,
-    isStay: true,
   });
-
-  function clickStay() {
-    dispatch({ type: ACTIONS.CLICK_STAY });
-  }
-
-  function clickEx() {
-    dispatch({ type: ACTIONS.CLICK_EX });
-  }
 
   function clickShow() {
     dispatch({ type: ACTIONS.TO_CLICK });
@@ -112,17 +95,13 @@ export default function NavTopHome() {
       <NavBarContainer zIndex={5} variant={"home"}>
         {pageWidth >= 800 ? <NavLogo /> : <></>}
         <AnimatePresence>{state.isShow || <NavTopCenterHome click={clickShow} />}</AnimatePresence>
-        <AnimatePresence>
-          {state.isShow && <AfterEffectNavCenterHome isStay={state.isStay} clickStay={clickStay} clickEx={clickEx} />}
-        </AnimatePresence>
+        <AnimatePresence>{state.isShow && <AfterEffectNavCenterHome isStay={state.isShow} />}</AnimatePresence>
         {pageWidth >= 800 ? <NavUser /> : <FilterButton />}
       </NavBarContainer>
       {state.isShow && <StyledOverlay onClick={clickOut} />}
 
       <StyledPopUp $height={state.isShow}>
-        <AnimatePresence>{state.isShow && <NavExperiencesHome isShow={state.isStay} />}</AnimatePresence>
-        <StyledBreak></StyledBreak>
-        <AnimatePresence>{state.isShow && <NavStayHome isShow={!state.isStay} />}</AnimatePresence>
+        <AnimatePresence>{state.isShow && <NavStayHome isShow={state.isShow} />}</AnimatePresence>
       </StyledPopUp>
     </>
   );

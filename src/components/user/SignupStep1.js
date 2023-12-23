@@ -137,7 +137,6 @@ const SignupStep1 = ({ state, dispatch }) => {
           </StyledError>
         </StyledFormContainer>
         <StyledButtonSubmit onClick={validateForm}>Continute</StyledButtonSubmit>
-        <StyledWith>Sign up with</StyledWith>
       </StyledForm>
     </StyledContainer>
   );

@@ -11,6 +11,7 @@ import { faAngleUp, faChevronDown, faPlus, faSubtract } from "@fortawesome/free-
 import { CreateBookingMutation } from "api/userBookingApi";
 import { CreateTransactionMutation } from "api/transactionApi";
 import { useNavigate } from "react-router-dom";
+import { UserQuery } from "api/userApi";
 
 const StyledContainer = styled.div`
   position: relative;
@@ -24,9 +25,6 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  @media (max-width: 992px) {
-    width: 470px;
-  }
 `;
 const StyledPrice = styled.span`
   font-size: 19px;
@@ -201,6 +199,7 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
   const [adult, setAdult] = useState(1);
   const [children, setChildren] = useState(0);
   const [infant, setInfant] = useState(1);
+  const userQuery = UserQuery();
 
   const handleClickDropdown = () => {
     setShowText((prevShowText) => !prevShowText);
@@ -252,7 +251,6 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
     formData.append("check_out_date", formatDate(new Date(value[1])));
     formData.append("base_price", data.base_price);
     const bookedLength = calBookedLength(new Date(value[0]), new Date(value[1]));
-    alert(bookedLength);
     formData.append("total", data.base_price * bookedLength);
     formData.append("site_fees", (data.base_price * bookedLength * 0.06).toFixed(2));
     formData.append("booking_date", formatDate(new Date()));
@@ -262,12 +260,7 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
         alert("success");
         navigate("/user/payment?booking_id=" + data.id);
       },
-      onError: (error) => {
-        const response = error.response;
-        if (response.status == 401) {
-          alert("Please login first");
-        }
-      },
+      onError: (error) => {},
     });
   };
 
@@ -310,7 +303,7 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
               selectRange={true}
               returnValue={"range"}
               view={"month"}
-              minDate={new Date(start_date)}
+              minDate={new Date(start_date) - new Date() > 0 ? new Date(start_date) : new Date()}
               maxDate={new Date(end_date)}
               maxDetail={"month"}
               value={value}
@@ -408,7 +401,8 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
           <p>{guest} Guest</p>
         </StyledCountGuest>
       </StyledBooking>
-      <StyledButton disabled={!value?.[1]} onClick={onSubmit}>
+      {userQuery.isError && <p>Please login first</p>}
+      <StyledButton disabled={!value?.[1] || userQuery.isError} onClick={onSubmit}>
         Continute
       </StyledButton>
       <StyledDetailText>You'll be able to review before paying.</StyledDetailText>

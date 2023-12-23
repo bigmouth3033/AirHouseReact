@@ -6,7 +6,6 @@ const Box = styled.div`
   & .ContentContainer {
     border: solid 1px #dee2e6;
 
-
     & label {
       font-size: 14px;
       font-weight: 300;
@@ -95,7 +94,7 @@ export default function Content(props) {
 
   const handlePhoneNumber = (e) => {
     setPhoneNumber(e.target.value);
-    const regPhone = /^(\+\d{1,2})\s\d{1,9}$/;
+    const regPhone = /^\d{1,9}$/;
     if (!regPhone.test(e.target.value)) {
       setIsValidPhone(true);
     } else {
@@ -127,7 +126,7 @@ export default function Content(props) {
     };
     updateMutation.mutate(payload);
 
-    alert("cap nhat thong tin thanh cong");
+    alert("Update success");
   };
 
   return (
@@ -154,16 +153,6 @@ export default function Content(props) {
                 <input type="text" value={lastName} onChange={(e) => handleLastName(e)} />
               </li>
               {isValidLN && <li className="error">Last Name cannot be blank</li>}
-            </ul>
-          </div>
-          <div>
-            <ul>
-              <li>
-                <label>Display Name</label>
-              </li>
-              <li>
-                <input type="text" />
-              </li>
             </ul>
           </div>
           <div>
@@ -211,6 +200,7 @@ export default function Content(props) {
               </li>
             </ul>
           </div>
+
           <div>
             <ul>
               <li>
@@ -221,6 +211,7 @@ export default function Content(props) {
               </li>
             </ul>
           </div>
+          <div></div>
           {isValidFN || isValidLN || isValidPhone ? (
             <input type="submit" className="submitInput" disabled />
           ) : (

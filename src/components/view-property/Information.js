@@ -1,14 +1,8 @@
-import { faAngleRight, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
 import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
-import { useStateContext } from "contexts/ContextProvider";
-import { ReadAverageStart } from "api/startApi";
-import RatingStart from "./RatingStart";
-import { ReadStartAllQuery } from "api/startApi";
 import Avatar from "react-avatar";
-import { Rating } from "react-simple-star-rating";
+import { useStateContext } from "contexts/ContextProvider";
+import { useEffect, useState } from "react";
 
 const StyledContainer = styled.div``;
 const StyledSection = styled.div`
@@ -18,6 +12,25 @@ const StyledSection = styled.div`
   gap: 10px;
   text-align: justify;
   padding: 1.5rem 0;
+`;
+const StyledSectionLast = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: justify;
+  padding: 1.5rem 0;
+`;
+const StyledSectionTow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  line-height: 1.5;
+  text-align: justify;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #dddddd;
+`;
+const StyledHouse = styled.div`
+  margin-top: 1rem;
 `;
 const StyledDetailInfor = styled.div`
   display: flex;
@@ -31,19 +44,7 @@ const StyledSpan = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const StyledReview = styled.div`
-  display: flex;
-  justify-content: stretch;
-  align-items: center;
-  div {
-    margin-right: 10px;
-  }
-`;
-const StyledImage = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-`;
+
 const StyledHost = styled.div`
   display: flex;
   justify-content: start;
@@ -51,6 +52,7 @@ const StyledHost = styled.div`
 
   p {
     margin-left: 20px;
+    line-height: 1.5;
   }
 
   & .hosted {
@@ -87,14 +89,24 @@ const StyledAboutText = styled.p`
   color: #717171;
   font-size: 16px;
   line-height: 1.5;
+  text-indent: 30px;
 `;
-const StyledShowMore = styled.div`
-  display: flex;
-  justify-content: stretch;
-  align-items: center;
-  color: black;
-  a {
-    color: black;
+const StyledAboutSeeMore = styled.p`
+  overflow: auto;
+  background-color: white;
+  width: 700px;
+  height: 600px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  padding: 2rem;
+  p {
+    font-size: 15px;
+    color: #717171;
+    margin: 1rem;
+    line-height: 1.5;
   }
 `;
 
@@ -109,11 +121,96 @@ const StyledAmentinies = styled.div`
   font-weight: 500;
   margin-bottom: 10px;
 `;
+const StyledSeeMore = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const StyledButtonSeeMore = styled.button`
+  background-color: white;
+  margin: 0.5rem 0;
+  border: none;
+  font-size: 14px;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background-color: #dcdcdc;
+    border-radius: 3px;
+  }
+`;
+const StyledSince = styled.span`
+  font-weight: 600;
+`;
+const StyledA = styled.a`
+  display: block;
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+  /* line-height: 2rem; */
+  font-size: 18px;
+  margin-top: 1rem;
+`;
+const formatDate = (dateObj) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+
+  return `${month} , ${year}`;
+};
 const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
   const { pageWidth } = useStateContext();
-  const readStartQuery = ReadStartAllQuery(data.id);
-  const readAverageStart = ReadAverageStart(data.id);
+  const [showSee, setShowSee] = useState(true);
+  //khuc này thêm vào
+  // Hàm mở popup và ngăn chặn cuộn (scroll) của body
+  const openPopup = () => {
+    setShowSee(false);
+    document.body.style.overflow = "hidden";
+  };
 
+  // Hàm đóng popup và cho phép cuộn (scroll) của body trở lại bình thường
+  const closePopup = () => {
+    setShowSee(true);
+    document.body.style.overflow = "";
+  };
+
+  const handleClickSeeMore = () => {
+    openPopup();
+  };
+
+  const handleClickHide = () => {
+    closePopup();
+  };
+  //toi khúc nay
+  const handleDetailClick = (e) => {
+    e.stopPropagation();
+  };
+
+  // useEffect để theo dõi thay đổi của trạng thái popup và khôi phục trạng thái cuộn (scroll) của body khi component unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+  //video them vao
+  function extractVideoId(url) {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return match && match[1];
+  }
+  //toi đây
   return (
     <StyledContainer>
       <StyledSection>
@@ -121,12 +218,6 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
           <span>
             {data.category.name} in {data.province.full_name}
           </span>
-          <StyledReview>
-            <div>
-              <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc00" }} />
-            </div>
-            {readAverageStart.isSuccess && <p> {readAverageStart.data.average}</p>}
-          </StyledReview>
         </StyledTitle>
         <StyledDetailInfor>
           <StyledSpan>
@@ -153,7 +244,10 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
             <p className="hosted">
               Hosted by {data.user.first_name} {data.user.last_name}
             </p>
-            <p> 11 year</p>
+            <p>
+              Since
+              <StyledSince>{formatDate(new Date(data.user.created_at))}</StyledSince>
+            </p>
           </div>
         </StyledHost>
       </StyledSection>
@@ -162,7 +256,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         <StyledDesign>
           {data.amenities.map((obamenities, index) => {
             return (
-              <StyledGroupIcon key={index}>
+              <StyledGroupIcon>
                 <StyledImageIcon src={obamenities.icon_image} alt={index} />
                 <div>{obamenities.name}</div>
               </StyledGroupIcon>
@@ -173,7 +267,57 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
       <StyledSection>
         <StyledTitle>Description</StyledTitle>
         <StyledAboutText>{data.description}</StyledAboutText>
-        <StyledShowMore></StyledShowMore>
+        <StyledSeeMore>
+          {showSee ? (
+            <StyledButtonSeeMore onClick={handleClickSeeMore}>{">>"} See more</StyledButtonSeeMore>
+          ) : (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0, 0, 0, 0.5)",
+                zIndex: 1,
+              }}
+              onClick={handleClickHide}
+            >
+              <StyledAboutSeeMore onClick={handleDetailClick}>
+                <StyledTitle>Description</StyledTitle>
+                <p>{data.description}</p>
+                <StyledTitle>Place great for</StyledTitle>
+                <p>{data.place_great_for}</p>
+                <StyledTitle>Guest access</StyledTitle>
+                <p>{data.guest_access}</p>
+                <StyledTitle>Interaction guest</StyledTitle>
+                <p>{data.interaction_guest}</p>
+                <StyledTitle>Thing to note</StyledTitle>
+                <p>{data.thing_to_note}</p>
+                <StyledTitle>About place</StyledTitle>
+                <p>{data.about_place}</p>
+                <StyledTitle>Overview</StyledTitle>
+                <p>{data.overview}</p>
+                <StyledTitle>Getting around</StyledTitle>
+                <p>{data.getting_around}</p>
+              </StyledAboutSeeMore>
+            </div>
+          )}
+        </StyledSeeMore>
+        {/* video khúc nayf */}
+        <div>
+          <iframe
+            width="100%"
+            height="400"
+            src={`https://www.youtube.com/embed/${extractVideoId(data.video)}`}
+            allowFullScreen
+            title={data.name}
+          ></iframe>
+          <StyledA href={data.video} target="_blank" rel="noopener noreferrer">
+            Welcome to the Extraordinary Moments at Our Property!
+          </StyledA>
+        </div>
+        {/* tới đây  */}
       </StyledSection>
       <StyledSection>
         <h2>Location's property</h2>
@@ -181,7 +325,26 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
           {data.province.name_en}, {data.district.name_en} {data.address}
         </StyledP>
       </StyledSection>
-      <StyledSection>
+      {/* khúc này sửa lai */}
+      <StyledHouse>
+        <StyledTitle>House's rules</StyledTitle>
+        <StyledSectionTow>
+          <div>
+            <StyledP>Check-out after: 12PM </StyledP>
+            <StyledP>Check-out before: 14PM</StyledP>
+          </div>
+          <div>
+            <StyledP>Minimum stay: {data.minimum_stay}</StyledP>
+            <StyledP>Maximum stay: {data.maximum_stay}</StyledP>
+          </div>
+          <div>
+            <StyledP>{data.accomodates_count} guests maximum</StyledP>
+          </div>
+        </StyledSectionTow>
+      </StyledHouse>
+      {/* //tới đây  */}
+      {/* Lưu ý session cuối  */}
+      <StyledSectionLast>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
         {pageWidth <= 900 || (
@@ -193,24 +356,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
             data={data}
           />
         )}
-      </StyledSection>
-      <div>
-        <RatingStart id={data.id} />
-      </div>
-      <div>
-        {readStartQuery.isSuccess &&
-          readStartQuery.data.map((rating) => {
-            return (
-              <div>
-                <div>
-                  <Avatar src={rating.user.image} size="30px" textSizeRatio={2} round={true} name={rating.user.first_name} />
-                  <Rating start={rating.start} />
-                </div>
-                <p>{rating.message}</p>
-              </div>
-            );
-          })}
-      </div>
+      </StyledSectionLast>
     </StyledContainer>
   );
 };

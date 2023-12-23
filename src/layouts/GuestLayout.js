@@ -73,11 +73,10 @@ export default function GuestLayout() {
         <button>Dashboard</button>
         <button onClick={() => navigate("/user/profile/detail")}>Profile</button>
         <button onClick={() => navigate("/user/listing")}>My Listing</button>
-        <button>My Bookings</button>
-        <button>My Trips</button>
+        <button onClick={() => navigate("/user/view-all-host-bookings")}>My Bookings</button>
+        <button onClick={() => navigate("/user/booking-list")}>My Trips</button>
         <button>Wishlist</button>
         <button>Messages</button>
-        <button>Payment & Account</button>
       </StyledMenu>
       <Outlet />
       <FooterIndex />

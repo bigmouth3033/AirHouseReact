@@ -7,7 +7,7 @@ const Container = styled(motion.div)`
   border: 0;
   gap: 10px;
   background-color: white;
-  width: 21rem;
+  width: 10rem;
 
   & button {
     flex-grow: 1;
@@ -75,16 +75,10 @@ const transition = {
   duration: 0.2,
 };
 
-export default function AfterEffectNavCenterHome({ clickStay, clickEx, isStay }) {
+export default function AfterEffectNavCenterHome({ clickStay, isStay }) {
   return (
     <Container exit={exit} initial={initial} animate={animate} transition={transition} $fontWeight={isStay}>
-      <button className="stay" onClick={clickStay}>
-        Stays
-      </button>
-      <button className="ex" onClick={clickEx}>
-        Experiences
-      </button>
-      <button>Online Experiences</button>
+      <button className="stay">AirHouse Stays</button>
     </Container>
   );
 }

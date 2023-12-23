@@ -90,7 +90,7 @@ const StyledResizeNavTop = styled(StyledButtonContainer)`
   }
 `;
 
-export default function NavTopCenterHome({ click, clickStay, clickEx }) {
+export default function NavTopCenterHome({ click }) {
   const { pageWidth } = useStateContext();
 
   const exit = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0, transition: { duration: 0.01 } };
@@ -103,13 +103,9 @@ export default function NavTopCenterHome({ click, clickStay, clickEx }) {
   return (
     <>
       {pageWidth >= 800 ? (
-        <StyledContainer exit={exit} initial={initial} animate={animate} transition={transition}>
-          <button className="item anywhere" onClick={click}>
-            Anywhere
-          </button>
-          <button className="item anyweek" onClick={click}>
-            Any week
-          </button>
+        <StyledContainer onClick={click} exit={exit} initial={initial} animate={animate} transition={transition}>
+          <button className="item anywhere">Anywhere</button>
+          <button className="item anyweek">Any week</button>
           <button className="item addguest">
             <span>Add guests</span>
             <FontAwesomeIcon className="icon" icon={faMagnifyingGlass}></FontAwesomeIcon>

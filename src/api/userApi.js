@@ -36,6 +36,8 @@ export const createAdmin = async (payload) => {
 
 // react-query
 export const UserQuery = () => {
+  const queryClient = useQueryClient();
+
   const userQuery = useQuery({
     queryKey: ["user"],
     queryFn: getUser,

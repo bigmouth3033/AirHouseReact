@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
-import BookingDetail from "components/property-booking-detail/BookingDetail";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -38,8 +37,6 @@ const Booking = lazy(() => import("components/host-creation/Booking"));
 
 // chat
 
-const Chat = lazy(() => import("components/chat/Chat"));
-
 // const ChatComponent = lazy(() => import("components/chat/ChatLayout"));
 
 // profile
@@ -75,8 +72,10 @@ const PaymentNotFound = lazy(() => import("components/payment/PaymentNotFound"))
 const BlogPage = lazy(() => import("components/blog/BlogPage"));
 const BlogSearch = lazy(() => import("components/blog/BlogSearch"));
 
+const BookingDetail = lazy(() => import("components/property-booking-detail/BookingDetail"));
+const Chat = lazy(() => import("components/chat/Chat"));
 
-const BookDetail = lazy(() => import("components/property-booking-detail/BookingDetail"))
+const ViewHostAllBooking = lazy(() => import("components/view-host-booking/ViewHostBooking"));
 
 const router = createBrowserRouter([
   {
@@ -181,9 +180,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/booking-detail",
-        element: <BookingDetail/>,
-        exact: true
-      }
+        element: <BookingDetail />,
+        exact: true,
+      },
+      {
+        path: "/user/view-all-host-bookings",
+        element: <ViewHostAllBooking />,
+        exact: true,
+      },
     ],
   },
   {

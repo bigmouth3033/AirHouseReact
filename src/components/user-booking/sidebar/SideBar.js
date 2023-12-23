@@ -17,7 +17,7 @@ const StyledBox = styled.div`
   }
 `;
 export default function SideBar({ setUserTitle }) {
-  const [titleArray, setTitleArray] = useState(["All", "Current", "Upcoming", "Pending", "Completed", "Exprired"]);
+  const [titleArray, setTitleArray] = useState(["all", "accepted", "denied", "success", "waiting"]);
 
   const handleTitle = (item) => {
     setUserTitle(item);
@@ -29,7 +29,7 @@ export default function SideBar({ setUserTitle }) {
         {titleArray.map((item, index) => {
           return (
             <li key={index} onClick={(e) => handleTitle(item)}>
-              <Knot title={item} />
+              <Knot title={item.charAt(0).toUpperCase() + item.slice(1)} />
             </li>
           );
         })}

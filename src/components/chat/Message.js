@@ -1,154 +1,127 @@
+import { GetMessage, GetMessageQuery, SendMessageMutation } from "api/chatApi";
+import { UserQuery } from "api/userApi";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import Pusher from "pusher-js";
-import { GetMessageQuery } from "api/chatApi";
-import axiosClient from "api/axiosClient";
+import styled, { css } from "styled-components";
 
-const Box = styled.div``;
+const StyledBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
+  & form {
+    width: 100%;
+
+    & input {
+      width: 100%;
+      height: 3rem;
+      border-radius: 5px;
+      padding: 10px;
+    }
+  }
+
+  & .Message-Container {
+    
+    overflow: scroll;
+    border: solid thin black;
+    height: 500px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 2rem;
+  }
+`;
+
+const StyledMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & p:nth-of-type(1) {
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+  ${(props) => {
+    if (props.$right == true) {
+      return css`
+        align-items: flex-end;
+      `;
+    }
+  }}
+`;
 export default function Message(props) {
-  const user1 = props.info.from_email;
-  const user2 = props.info.to_email;
-  const [messages, setMessages] = useState([]);
-  const [allMessages, setAllMessages] = useState([]);
-  const [message, setMessage] = useState();
-
-  const setNewMessage = (data) => {
-    // console.log(data);
-    setMessages(data);
-  };
-
-  const setNewAllMessages = (data) => {
-    setAllMessages(data);
-  };
+  const userQuery = UserQuery();
+  const sendMessageMutation = SendMessageMutation();
+  const [AllMessages, setAllMessages] = useState([]);
+  const [allMessagesAfterSub, setAllMessagesAfterSub] = useState([]);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // fetchData();
-    getMessage({ user1, user2 });
-    setAllMessages([]);
+    const formData = new FormData();
+    formData.append("user_to_email", props.UserInfo.email);
+    GetMessage(formData)
+      .then((result) => {
+        setAllMessages(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-    let name = [user1, user2].sort().join("-");
-    console.log(name);
-
+    //Pusher
     var pusher = new Pusher("014b8eb7bfaf79153ac0", {
       cluster: "ap1",
     });
 
-    var channel = pusher.subscribe(name);
+    const channel_name = [userQuery.data.user.email, props.UserInfo.email].sort().join("-");
+    var channel = pusher.subscribe(channel_name);
     channel.bind("my-event", function (data) {
-      JSON.stringify(data);
-      // setNewMessage(data);
-      let convertData = {
-        from_email: data.user1,
-        to_email: data.user2,
-        body: data.message,
-      };
-      setAllMessages((pre) => [...pre, convertData]);
-      // setNewAllMessages(convertData);
-      console.log("chay lan n");
+      setAllMessagesAfterSub((pre) => [...pre, data]);
     });
-  }, [user2]);
 
-  // const getMessageQuery = GetMessageQuery(user1, user2);
-
-  // useEffect(() => {
-  //   if (getMessageQuery.isSuccess) {
-  //     setMessages(getMessageQuery.data);
-  //   }
-  // }, [getMessageQuery.status]);
-
-  let name = [user1, user2].sort().join("-");
-  console.log(name);
-
-  var pusher = new Pusher("014b8eb7bfaf79153ac0", {
-    cluster: "ap1",
-  });
-
-  var channel = pusher.subscribe(name);
-  channel.bind("my-event", function (data) {
-    JSON.stringify(data);
-    // setNewMessage(data);
-    let convertData = {
-      from_email: data.user1,
-      to_email: data.user2,
-      body: data.message,
+    return () => {
+      setAllMessagesAfterSub([]);
+      channel.unsubscribe(channel_name);
     };
-    setAllMessages((pre) => [...pre, convertData]);
-    // setNewAllMessages(convertData);
-    console.log("chay lan n");
-  });
+  }, [props.UserInfo.email]);
 
-  const fetchData = async () => {
-    try {
-      const response = fetch("http://127.0.0.1:8000/api/getMessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user1,
-          user2,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => setNewMessage(data));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getMessage = async (payload) => {
-    let response = await axiosClient.get("getMessage", {
-      params: { user1: payload.user1, user2: payload.user2, message: payload.message },
-    });
-    setNewMessage(response.data);
-    return response.data;
-  };
-
-  const clearMessages = () => {
-    setMessages([]); // Xóa toàn bộ giá trị trong state messages
-  };
-
-  const sendMessage = async (payload) => {
-    let response = await axiosClient.post("sendMessage", payload);
-    // console.log(response.data);
-    return response.data;
-  };
-
-  const handleSubmit = (e) => {
+  const handleMessage = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("user1", user1);
-    formData.append("user2", user2);
+    formData.append("user_to_email", props.UserInfo.email);
     formData.append("message", message);
-    let rs = sendMessage(formData);
-    // console.log(rs);
+    sendMessageMutation.mutate(formData);
     setMessage("");
   };
+
+  const handleCallback = (item) => {
+    props.callback(item);
+  };
+
   return (
-    <Box>
-      <div>{props.info.to_email}</div>
-      <div>
-        {messages.map((item, index) => {
+    <StyledBox>
+      <div className="Message-Container">
+        {AllMessages.map((item, index) => {
           return (
-            <div key={index}>
-              {item.from_email} ===={item.body}
-            </div>
+            <StyledMessage $right={userQuery.data.user.email == item.from_email} key={index}>
+              <p>{item.from_email}</p>
+              <p>{item.body}</p>
+            </StyledMessage>
+          );
+        })}
+        {allMessagesAfterSub.map((item, index) => {
+          return (
+            <StyledMessage $right={userQuery.data.user.email == item.from_email} key={index}>
+              <p>{item.from_email}</p>
+              <p>{item.body}</p>
+            </StyledMessage>
           );
         })}
       </div>
-      <div>
-        {allMessages.map((item, index) => {
-          return (
-            <div key={index}>
-              {item.from_email} ===={item.body}
-            </div>
-          );
-        })}
-      </div>
-      <div>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-        </form>
-      </div>
-    </Box>
+      <form onSubmit={(e) => handleMessage(e)}>
+        <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
+      </form>
+    </StyledBox>
   );
 }

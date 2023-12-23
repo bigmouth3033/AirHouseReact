@@ -31,11 +31,11 @@ export const ReadStart = (property_id) => {
 //read average start
 const readAverageStart = async (query) => {
   const property_id = query.queryKey[1];
-  const response = await axiosClient.get("/readAverageStart?property_id=" + property_id);
+  const response = await axiosClient.get(
+    "/readAverageStart?property_id=" + property_id
+  );
   return response.data;
 };
-
-
 export const ReadAverageStart = (property_id) => {
   const readAverage = useQuery({
     queryKey: ["readAverageStart", property_id],
@@ -45,19 +45,22 @@ export const ReadAverageStart = (property_id) => {
   return readAverage;
 };
 
+//read add start
+//read start
 const readStartAll = async (query) => {
   const id = query.queryKey[1];
-  const response = await axiosClient.get("/get-all-rating?property_id=" + id);
+  const page = query.queryKey[2];
+  const response = await axiosClient.get(
+    "/get-all-rating?property_id=" + id + "&currentPage=" + page
+  );
   return response.data;
 };
 
-export const ReadStartAllQuery = (property_id) => {
+export const ReadStartAll = (property_id, page) => {
   const query = useQuery({
-    queryKey: ["startAll", property_id],
+    queryKey: ["startAll", property_id, page],
     queryFn: readStartAll,
     retry: 1,
   });
   return query;
 };
-
-

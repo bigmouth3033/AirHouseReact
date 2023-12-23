@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import PopUpContainer from "ui/PopUpContainer";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Avatar from "react-avatar";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -126,7 +127,7 @@ const StyledThird = styled.div`
   }
 `;
 
-export const ListingItemSkeleton = () => {
+export const BookingItemSkeleton = () => {
   return (
     <StyledContainer>
       <StyledFirst>
@@ -182,7 +183,7 @@ const StyledDisplayNone = styled.div`
   display: none;
 `;
 
-export default function ListingItem({ data }) {
+export default function ViewHostBookingItem({ data }) {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
 
@@ -208,48 +209,33 @@ export default function ListingItem({ data }) {
     <>
       <StyledContainer>
         <StyledFirst className="first">
-          <img src={data.images[0].image} />
+          <img src={data.property.images[0].image} />
         </StyledFirst>
         <StyledSecond>
-          <h3>
-            {data.category.name} in {data.province.full_name}
-          </h3>
+          <h3>{data.property.name}</h3>
           <div>
             <p>
               <FontAwesomeIcon className="icon" icon={faAddressBook} />
-              {data.province.full_name}, {data.district.full_name}, {data.address}
-            </p>
-            <p>
-              <span className="span">
-                <FontAwesomeIcon className="icon" icon={faPerson} /> {data.accomodates_count} <span>guest</span>
-              </span>
-              <span className="span">
-                <FontAwesomeIcon className="icon" icon={faBed} /> {data.bedroom_count} <span>Beds</span>
-              </span>
-              <span className="span">
-                <FontAwesomeIcon className="icon" icon={faBath} /> {data.bathroom_count} <span>Bathrooms</span>
-              </span>
+              {data.user.address}
             </p>
           </div>
           <div>
             <p>
-              <FontAwesomeIcon className="icon" icon={faCalendar} /> From {data.start_date} <span className="to">to</span> {data.end_date}
+              <FontAwesomeIcon className="icon" icon={faCalendar} /> From {data.check_in_date} <span className="to">to</span>
+              {data.check_out_date}
             </p>
             <p>
               <FontAwesomeIcon className="icon" icon={faDollar} />
-              <span className="dollar">{data.base_price}</span>{" "}
+              <span className="dollar">{data.price_for_stay}</span>{" "}
             </p>
           </div>
         </StyledSecond>
         <StyledThird className="third">
-          <div>
-            {data.acception_status == "accept" && <p>Approved</p>}
-            {data.acception_status == "waiting" && <p>Awaiting for approve</p>}
-            {data.acception_status == "deny" && <p>Disapprove</p>}
-          </div>
-          <button onClick={() => onClickUpdate(data.id)}>Edit</button>
-          {data.admin_message && <button onClick={onClickShowMessage}>Show Admin Message</button>}
-          <button onClick={onShowBooking}>Show Booking</button>
+          <Avatar src={data.user.image} size="50px" textSizeRatio={3} round={true} name={data.user.first_name} />
+          {data.booking_status == "waiting" && <button>Accept</button>}
+          {data.booking_status == "waiting" && <button>Deny</button>}
+          {(data.booking_status == "accepted" || data.booking_status == "success") && <button>Payment Detail</button>}
+          <button>Send Message</button>
         </StyledThird>
       </StyledContainer>
       {showMessage ? (

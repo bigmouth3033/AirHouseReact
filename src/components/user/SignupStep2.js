@@ -128,7 +128,7 @@ const SignupStep2 = ({ state, dispatch, setShowSignUp }) => {
       setLastNameError(false);
     }
 
-    if (state.date_of_birth == null) {
+    if (!state.date_of_birth) {
       setDOBError(true);
       isError = true;
     } else {
@@ -219,8 +219,6 @@ const SignupStep2 = ({ state, dispatch, setShowSignUp }) => {
         <StyledButtonSubmit type="submit" onClick={validateForm}>
           Finish
         </StyledButtonSubmit>
-
-        <StyledWith>Sign up with</StyledWith>
       </StyledForm>
     </StyledContainer>
   );

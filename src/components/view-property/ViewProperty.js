@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import NavViewhost from "./NavViewhost";
 import Images from "./Images";
@@ -9,6 +9,12 @@ import { PropertyQueryId } from "api/propertyApi";
 import Loading from "components/Loading";
 import PropertyNotFound from "components/PropertyNotFound";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { ReadAverageStart, ReadStartAll } from "api/startApi";
+import Avatar from "react-avatar";
+import RatingStart from "./RatingStart";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledContainer = styled.div`
   max-width: 1150px;
@@ -39,7 +45,72 @@ const StyledInformation = styled.div`
     }
   }
 `;
-
+const StyledContainerReview = styled.div`
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: 500;
+  border-top: 1px solid #dddddd;
+`;
+const StyledContainerAll = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  line-height: 2rem;
+  margin-top: 1rem;
+  gap: 2rem;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+const StyledName = styled.span`
+  font-weight: 500;
+  font-size: 18px;
+  padding-left: 10px;
+`;
+const StyledStart = styled.span`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 12px;
+  column-gap: 0.5rem;
+`;
+const StyledMessage = styled.div`
+  color: #717171;
+  min-height: 4rem;
+  text-indent: 30px;
+  font-size: 14px;
+`;
+const StyledText = styled.div`
+  text-align: center;
+  line-height: 1.5;
+`;
+const StyledImage = styled.img`
+  width: 8rem;
+`;
+const StyledRating = styled.div`
+  text-align: center;
+`;
+const StyledSeeMore = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const StyledButtonSeeMore = styled.button`
+  background-color: white;
+  margin: 0.5rem 0;
+  border: none;
+  font-size: 14px;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background-color: #dcdcdc;
+    border-radius: 3px;
+  }
+`;
 const formatDate = (dateObj) => {
   const date = dateObj.getDate();
   const month = dateObj.getMonth() + 1;
@@ -65,26 +136,64 @@ const listDate = (start, end) => {
 
 const ViewProperty = () => {
   const [serachParam, setserachParam] = useSearchParams();
+  const [page, setPage] = useState(1);
+  //Cac queries
   const propertyQuery = PropertyQueryId(serachParam.get("id"));
+  const readAverageStart = ReadAverageStart(serachParam.get("id"));
+  const readAllStart = ReadStartAll(serachParam.get("id"), page);
+  //
+  const property_id = serachParam.get("id");
+  const [showSee, setShowSee] = useState(true);
+  const [showSeeTotal, setShowSeeTotal] = useState(false);
   const [value, setValue] = useState(null);
+  const queryClient = useQueryClient();
 
-  if (propertyQuery.isLoading) {
+  useEffect(() => {
+    if (readAllStart.isSuccess && readAllStart.data.total < 4) {
+      setShowSee(false);
+      setShowSeeTotal(false);
+    } else {
+      setShowSeeTotal(true);
+    }
+  }, [readAllStart.status]);
+
+  if (propertyQuery.isLoading || readAverageStart.isLoading || readAllStart.isLoading) {
     return <Loading />;
   }
 
   if (propertyQuery.isError) {
     return <PropertyNotFound />;
   }
+
+  const handleClickSeeMore = () => {
+    const currentpage = page + 1;
+    setPage(currentpage);
+    if (page === Math.ceil(readAllStart.data.total / 4) - 1) {
+      setShowSee(false);
+    }
+  };
+  console.log(readAllStart.data.total);
+  const handleClickHide = () => {
+    setPage(1);
+    setShowSee(true);
+  };
+
   const bookedDate = [];
 
   for (let i = 0; i < propertyQuery.data.booking.length; i++) {
-    if (propertyQuery.data.booking[i].booking_status == "success" || propertyQuery.data.booking[i].booking_status == "accepted") {
-      bookedDate.push({ start: propertyQuery.data.booking[i].check_in_date, end: propertyQuery.data.booking[i].check_out_date });
+    if (propertyQuery.data.booking[i].booking_status === "success") {
+      bookedDate.push({
+        start: propertyQuery.data.booking[i].check_in_date,
+        end: propertyQuery.data.booking[i].check_out_date,
+      });
     }
   }
 
   for (let i = 0; i < propertyQuery.data.exception_date.length; i++) {
-    bookedDate.push({ start: propertyQuery.data.exception_date[i].start_date, end: propertyQuery.data.exception_date[i].end_date });
+    bookedDate.push({
+      start: propertyQuery.data.exception_date[i].start_date,
+      end: propertyQuery.data.exception_date[i].end_date,
+    });
   }
 
   let arrBookedDate = [];
@@ -94,7 +203,7 @@ const ViewProperty = () => {
 
   const disabledBookDate = ({ activeStartDate, date, view }) => {
     const isDisabled = arrBookedDate.some((bookedDate) => {
-      return bookedDate == formatDate(new Date(date));
+      return bookedDate === formatDate(new Date(date));
     });
 
     return isDisabled;
@@ -109,7 +218,7 @@ const ViewProperty = () => {
       selectedArr = [...listDate(formatDate(new Date(date[0])), formatDate(new Date(date[1])))];
 
       if (selectedArr.length < propertyQuery.data.minimum_stay || selectedArr.length > propertyQuery.data.maximum_stay) {
-        alert("wrong");
+        alert("Range booke date from " + propertyQuery.data.minimum_stay + " to " + propertyQuery.data.maximum_stay);
         setValue([null, null]);
         return;
       }
@@ -154,6 +263,58 @@ const ViewProperty = () => {
               data={propertyQuery.data}
             />
           </StyledInformation>
+          {readAverageStart.isSuccess && (
+            <StyledContainerReview>
+              <StyledImage src="https://a0.muscache.com/pictures/ec500a26-609d-440f-b5d0-9e5f92afd478.jpg" alt="" />
+              <StyledText>
+                <div>
+                  <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc00" }} />
+                </div>
+                <div>
+                  <div> {readAverageStart.data.average}</div>
+                </div>
+              </StyledText>
+              <StyledImage src="	https://a0.muscache.com/pictures/65bb2a6c-0bdf-42fc-8e1c-38cec04b2fa5.jpg" alt="" />
+            </StyledContainerReview>
+          )}
+          <StyledRating>
+            <RatingStart property_id={property_id} page={page} />
+          </StyledRating>
+          <StyledContainerAll>
+            {readAllStart.isSuccess &&
+              readAllStart.data.ratings.data.map((item) => (
+                <div>
+                  <Avatar src={item.user.image} size="40px" textSizeRatio={2} round={true} name={item.user.first_name} />
+                  <StyledName>
+                    {item.user.first_name} {item.user.last_name}
+                  </StyledName>
+                  <StyledStart>
+                    <div>
+                      {[...Array(5)].map((_, index) => (
+                        <FontAwesomeIcon
+                          key={index}
+                          icon={faStar}
+                          style={{
+                            color: index < item.start ? "#ffcc00" : "#c0c0c0",
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <div> {formatDate(new Date(item.updated_at))}</div>
+                  </StyledStart>
+                  <StyledMessage>{item.message}</StyledMessage>
+                </div>
+              ))}
+          </StyledContainerAll>
+          {readAverageStart.isSuccess && (
+            <StyledSeeMore>
+              {showSee ? (
+                <StyledButtonSeeMore onClick={handleClickSeeMore}>{">>"} See more</StyledButtonSeeMore>
+              ) : (
+                <div>{showSeeTotal ? <StyledButtonSeeMore onClick={handleClickHide}>{"<<"} Hide</StyledButtonSeeMore> : null}</div>
+              )}
+            </StyledSeeMore>
+          )}
         </StyledContainer>
       </div>
     </div>

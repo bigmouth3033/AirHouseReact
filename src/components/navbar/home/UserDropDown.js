@@ -9,6 +9,7 @@ import SignupStep1 from "components/user/SignupStep1";
 import SignUpContainer from "components/user/SignUpContainer";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "contexts/ContextProvider";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledDropDownContainer = styled(StyledBoxContainer)`
   width: 15rem;
@@ -44,6 +45,7 @@ const StyledOverlay = styled(Overlay)`
 const StyledContainer = styled.div``;
 
 function UserDropDown({ blur, showDropDown }) {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -97,6 +99,11 @@ function UserDropDown({ blur, showDropDown }) {
     blur();
   };
 
+  const onTripHandler = () => {
+    navigate("/user/booking-list");
+    blur();
+  };
+
   return (
     <StyledContainer>
       {showDropDown && (
@@ -105,6 +112,7 @@ function UserDropDown({ blur, showDropDown }) {
           {userQuery.isSuccess || <button onClick={onShowLoginHandler}>Log in</button>}
           {userQuery.isSuccess && <button onClick={onLogoutHandler}>Log out</button>}
           {userQuery.isSuccess && <button onClick={onListingHandler}>Listing</button>}
+          {userQuery.isSuccess && <button onClick={onTripHandler}>My Trips</button>}
           <button>AirHouse your home</button>
           <button onClick={() => alert("ngo dinh tan")}>Help Center</button>
         </StyledDropDownContainer>

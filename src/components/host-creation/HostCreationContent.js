@@ -104,7 +104,6 @@ export default function HostCreationContent() {
         <StyledOptionChoice $disabled={!available[8]} disabled={!available[8]} $active={active[8]}>
           Calendar
         </StyledOptionChoice>
-        <button onClick={() => console.log(state)}>click</button>
       </StyledOption>
       <Suspense fallback={<Loading />}>
         <Outlet context={[state, dispatch, ACTIONS, onSetActive, onSetAvailable]} />

@@ -229,14 +229,14 @@ export default function HostCreationIndex() {
     setAvailable(newArr);
   };
 
-  // useBeforeunload(() => "You’ll lose your data!");
+  useBeforeunload(() => "You’ll lose your data!");
 
   let location = useLocation();
 
   useEffect(() => {
-    // if (JSON.stringify(initialArr) === JSON.stringify(available)) {
-    //   navigate("/user/host-creation/become-host");
-    // }
+    if (JSON.stringify(initialArr) === JSON.stringify(available)) {
+      navigate("/user/host-creation/become-host");
+    }
   }, []);
 
   return (
