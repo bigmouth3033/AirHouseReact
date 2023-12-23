@@ -55,25 +55,43 @@ export default function Chat(props) {
     }
   }, [allUser])
 
-  // useEffect(() => {
-  //   if (userQuery.isSuccess) {
-  //     var pusher = new Pusher('014b8eb7bfaf79153ac0', {
-  //       cluster: 'ap1'
-  //     });
+  useEffect(() => {
+    if (userQuery.isSuccess) {
+      var pusher = new Pusher('014b8eb7bfaf79153ac0', {
+        cluster: 'ap1'
+      });
 
-  //     // console.log(userQuery.data.user.email);
-  //     const channel_name = userQuery.data.user.email;
-  //     var channel = pusher.subscribe(channel_name);
-  //     channel.bind('my-event', function (data) {
-        
-        
-  //     });
-  //   }
-  //   return () =>{
-  //     const channel_name = userQuery.data.user.email;
-  //     pusher.unsubscribe(channel_name);
-  //   }
-  // }, [userQuery.isSuccess,render])
+      // console.log(userQuery.data.user.email);
+      const channel_name = userQuery.data.user.email;
+      var channel = pusher.subscribe(channel_name);
+      channel.bind('my-event', function (data) { 
+        setRender('haha')
+        const NewUser = {
+          email: data.from_email,
+          first_name: '',
+          last_name: ''
+        }        
+        console.log(NewUser);
+        if (NewUser && allUser) {
+          const isIncluded = allUser.some((item) => item.email == NewUser.email);
+            if (isIncluded) {
+              console.log('true');
+            }else{
+              console.log('false');
+              setAllUSer(pre => [NewUser, ...pre])
+            }
+
+        }
+      });
+    }
+    return () =>{
+      const channel_name = userQuery.data.user.email;
+      pusher.unsubscribe(channel_name);
+    }
+  }, [userQuery.isSuccess,allUser])
+
+
+
   ///////
   const changeSelectedUser = (item) => {
     setSelectedUser(item);
@@ -87,6 +105,7 @@ export default function Chat(props) {
   }
   return (
     <ChatBox>      
+      {render}
       <div className="grid-container">
         <div className="item1">
           {allUser && allUser.map((item, index) => {
