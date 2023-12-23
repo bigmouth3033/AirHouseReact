@@ -28,9 +28,9 @@ const StyledButtunVote = styled.button`
   border: none;
   color: white;
   font-size: 14px;
-  background-color: #ff0011;
+  background-color: rgba(255, 0, 17, 0.7);
   &:hover {
-    background-color: #ff0000;
+    background-color: rgba(255, 0, 17, 1);
   }
 `;
 const RatingStart = ({ property_id, page }) => {
@@ -39,6 +39,15 @@ const RatingStart = ({ property_id, page }) => {
   const preview = useRef(null);
   const [show, setShow] = useState(true);
   const queryClientRead = useQueryClient();
+
+  const StyledMessage = styled.div`
+    color: #717171;
+    font-size: 14px;
+    line-height: 1.5;
+    width: 500px;
+    margin: 0 auto;
+    padding: 1rem 0;
+  `;
   // Sử dụng useEffect để cập nhật giá trị đánh giá từ server khi có dữ liệu
   useEffect(() => {
     if (readStart.isSuccess) {
@@ -57,15 +66,11 @@ const RatingStart = ({ property_id, page }) => {
     setRating(rate);
     setShow(true);
   };
-
-  const StyledMessage = styled.div`
-    color: #717171;
-    font-size: 14px;
-    line-height: 1.5;
-    width: 500px;
-    margin: 0 auto;
-    padding: 1rem 0;
-  `;
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleVote();
+    }
+  };
   const queryClient = useQueryClient();
   const handleVote = () => {
     const formData = new FormData();
@@ -99,7 +104,7 @@ const RatingStart = ({ property_id, page }) => {
         onError: (error) => {
           const response = error.response;
           if ((response.status = 404)) {
-            alert("chua booking");
+            alert("Not yet rented");
           }
         },
       });
@@ -122,6 +127,7 @@ const RatingStart = ({ property_id, page }) => {
               ref={preview}
               type="text"
               placeholder="What is your problem?"
+              onKeyDownCapture={handleKeyPress}
             />
             <StyledButtunVote onClick={handleVote}>Vote</StyledButtunVote>
           </StyledGroupVote>

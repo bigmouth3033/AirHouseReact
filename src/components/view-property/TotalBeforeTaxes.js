@@ -1,6 +1,6 @@
 import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import Calendar from "react-calendar";
@@ -102,13 +102,13 @@ const StyledButton = styled.button`
   font-size: 15px;
   font-weight: 600;
   color: white;
-  background-color: #e51d50;
+  background-color: rgba(229, 29, 80, 0.7);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(229, 29, 80, 01);
   }
 `;
 const StyledText = styled.p`
@@ -203,9 +203,8 @@ const TotalBeforeTaxes = ({
 }) => {
   const navigate = useNavigate();
   const createBooking = CreateBookingMutation();
-  const createTransaction = CreateTransactionMutation();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [showText, setShowText] = useState(false);
   const [icon, setIcon] = useState(true);
   const [guest, setGuest] = useState(1);
@@ -219,18 +218,34 @@ const TotalBeforeTaxes = ({
   };
 
   const { start_date, end_date, minimum_stay, maximum_stay } = data;
+  //khuc nay sua lai
+  const openPopup = () => {
+    setIsOpen(false);
+    document.body.style.overflow = "hidden";
+  };
+
+  // Hàm đóng popup và cho phép cuộn (scroll) của body trở lại bình thường
+  const closePopup = () => {
+    setIsOpen(true);
+    document.body.style.overflow = "";
+  };
 
   const handleClick = () => {
-    setIsOpen(!isOpen);
+    openPopup();
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    closePopup();
   };
-
+  // den khúc này
   const handleCalendarClick = (e) => {
     e.stopPropagation();
   };
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   function formatDate(date) {
     var d = new Date(date),
@@ -277,6 +292,8 @@ const TotalBeforeTaxes = ({
         const response = error.response;
         if (response.status === 403) {
           alert("please try again");
+        } else {
+          alert("Login for booking ");
         }
       },
     });
@@ -284,7 +301,7 @@ const TotalBeforeTaxes = ({
 
   return (
     <StyledContainer>
-      {isOpen && (
+      {!isOpen && (
         <div
           style={{
             position: "fixed",

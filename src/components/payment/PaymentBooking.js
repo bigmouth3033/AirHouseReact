@@ -1,8 +1,6 @@
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import { UserReadBooking } from "api/userBookingApi";
 import Loading from "components/Loading";
-import React, { useState } from "react";
+import React from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import PaymentForm from "./PaymentForm";
@@ -96,14 +94,23 @@ const PaymentBooking = () => {
   if (queryBooking.isLoading) {
     return <Loading />;
   }
-
+  //đoạn này
+  //
+  //
+  //
   if (queryBooking.isError) {
-    return <BookingNotFound />;
+    if (queryBooking.error.response.data.status === 403) {
+      return <BookingNotFound />;
+    } else if (queryBooking.error.response.data.status === 404) {
+      return <PaymentNotFound />;
+    }
   }
+  // console.log("abc", queryBooking.error.response.data.status);
+  //đây
+  //
+  //
+  //
   const data = queryBooking.data;
-  if (data.booking.booking_status === "success") {
-    return <PaymentNotFound />;
-  }
   return (
     <div>
       <div>

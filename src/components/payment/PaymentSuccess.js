@@ -49,6 +49,12 @@ const PaymentSuccess = () => {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["booking", booking_id] });
       },
+      onError: (error) => {
+        const response = error.response;
+        if (response.status === 403) {
+          alert("Booking fail");
+        }
+      },
     });
   }, [transactionID]);
 
@@ -57,7 +63,7 @@ const PaymentSuccess = () => {
     <Loading />;
   }
   if (readSuccess.isError) {
-    <p>Chua thanh toan duoc</p>;
+    <p></p>;
   }
   return (
     <div>

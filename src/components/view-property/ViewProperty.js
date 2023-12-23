@@ -105,6 +105,7 @@ const StyledButtonSeeMore = styled.button`
   font-size: 14px;
   padding: 0.4rem 1rem;
   font-weight: 600;
+  cursor: pointer;
   &:hover {
     background-color: #dcdcdc;
     border-radius: 3px;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
 import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledContainer = styled.div``;
 const StyledSection = styled.div`
@@ -17,9 +17,20 @@ const StyledSectionLast = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  text-align: justify;
+  padding: 1.5rem 0;
+`;
+const StyledSectionTow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
   line-height: 1.5;
   text-align: justify;
   padding: 1.5rem 0;
+  border-bottom: 1px solid #dddddd;
+`;
+const StyledHouse = styled.div`
+  margin-top: 1rem;
 `;
 const StyledDetailInfor = styled.div`
   display: flex;
@@ -122,6 +133,7 @@ const StyledButtonSeeMore = styled.button`
   font-size: 14px;
   padding: 0.4rem 1rem;
   font-weight: 600;
+  cursor: pointer;
   &:hover {
     background-color: #dcdcdc;
     border-radius: 3px;
@@ -130,8 +142,16 @@ const StyledButtonSeeMore = styled.button`
 const StyledSince = styled.span`
   font-weight: 600;
 `;
+const StyledA = styled.a`
+  display: block;
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+  /* line-height: 2rem; */
+  font-size: 18px;
+  margin-top: 1rem;
+`;
 const formatDate = (dateObj) => {
-  const day = dateObj.getDate();
   const monthNames = [
     "January",
     "February",
@@ -160,15 +180,45 @@ const Information = ({
 }) => {
   const { pageWidth } = useStateContext();
   const [showSee, setShowSee] = useState(true);
-  const handleClickSeeMore = () => {
+  //khuc này thêm vào
+  // Hàm mở popup và ngăn chặn cuộn (scroll) của body
+  const openPopup = () => {
     setShowSee(false);
+    document.body.style.overflow = "hidden";
   };
-  const handleClickHide = () => {
+
+  // Hàm đóng popup và cho phép cuộn (scroll) của body trở lại bình thường
+  const closePopup = () => {
     setShowSee(true);
+    document.body.style.overflow = "";
   };
+
+  const handleClickSeeMore = () => {
+    openPopup();
+  };
+
+  const handleClickHide = () => {
+    closePopup();
+  };
+  //toi khúc nay
   const handleDetailClick = (e) => {
     e.stopPropagation();
   };
+
+  // useEffect để theo dõi thay đổi của trạng thái popup và khôi phục trạng thái cuộn (scroll) của body khi component unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+  //video them vao
+  function extractVideoId(url) {
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    );
+    return match && match[1];
+  }
+  //toi đây
   return (
     <StyledContainer>
       <StyledSection>
@@ -211,7 +261,6 @@ const Information = ({
             <p>
               Since
               <StyledSince>
-                {" "}
                 {formatDate(new Date(data.user.created_at))}
               </StyledSince>
             </p>
@@ -273,6 +322,20 @@ const Information = ({
             </div>
           )}
         </StyledSeeMore>
+        {/* video khúc nayf */}
+        <div>
+          <iframe
+            width="100%"
+            height="400"
+            src={`https://www.youtube.com/embed/${extractVideoId(data.video)}`}
+            allowFullScreen
+            title={data.name}
+          ></iframe>
+          <StyledA href={data.video} target="_blank" rel="noopener noreferrer">
+            Welcome to the Extraordinary Moments at Our Property!
+          </StyledA>
+        </div>
+        {/* tới đây  */}
       </StyledSection>
       <StyledSection>
         <h2>Location's property</h2>
@@ -280,7 +343,26 @@ const Information = ({
           {data.province.name_en}, {data.district.name_en} {data.address}
         </StyledP>
       </StyledSection>
-      <StyledSection>
+      {/* khúc này sửa lai */}
+      <StyledHouse>
+        <StyledTitle>House's rules</StyledTitle>
+        <StyledSectionTow>
+          <div>
+            <StyledP>Check-out after: 12PM </StyledP>
+            <StyledP>Check-out before: 14PM</StyledP>
+          </div>
+          <div>
+            <StyledP>Minimum stay: {data.minimum_stay}</StyledP>
+            <StyledP>Maximum stay: {data.maximum_stay}</StyledP>
+          </div>
+          <div>
+            <StyledP>{data.accomodates_count} guests maximum</StyledP>
+          </div>
+        </StyledSectionTow>
+      </StyledHouse>
+      {/* //tới đây  */}
+      {/* Lưu ý session cuối  */}
+      <StyledSectionLast>
         <h2>Select check-in date</h2>
         <StyledP>Add your travel dates for exact pricing</StyledP>
         {pageWidth <= 900 || (
@@ -292,14 +374,6 @@ const Information = ({
             data={data}
           />
         )}
-      </StyledSection>
-      <StyledSectionLast>
-        <div>
-          <StyledTitle>House's rules</StyledTitle>
-          <StyledP>Check-out after: 12PM </StyledP>
-          <StyledP>Check-out before: 14PM</StyledP>
-          <StyledP>{data.accomodates_count} guests maximum</StyledP>
-        </div>
       </StyledSectionLast>
     </StyledContainer>
   );

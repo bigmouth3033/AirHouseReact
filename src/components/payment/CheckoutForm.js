@@ -81,7 +81,8 @@ export default function CheckoutForm({ data }) {
         },
       });
     } catch (error) {
-      return navigate("/paymentError");
+      //dong nay
+      alert("Someone hired on the day you choose. Booking again please");
     }
 
     setIsProcessing(false);

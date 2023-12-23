@@ -6,8 +6,7 @@ import styled from "styled-components";
 import PopUpContainer from "ui/PopUpContainer";
 import { useStateContext } from "contexts/ContextProvider";
 
-const StyledContainer = styled.div`
-`;
+const StyledContainer = styled.div``;
 
 const StyledImageGroup = styled.div`
   display: grid;
@@ -71,7 +70,6 @@ const StyledPopupContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   & .imagePopup {
-    /* max-height: 50rem; */
     background-color: blue;
   }
   & img {
@@ -133,7 +131,10 @@ const Images = ({ data }) => {
         {data.images.map((imageUrl, index) => {
           if (index < number) {
             return (
-              <StyledImageContainer className={index === 0 ? "fisrtimage" : ""} onClick={() => setclickImage(true)}>
+              <StyledImageContainer
+                className={index === 0 ? "fisrtimage" : ""}
+                onClick={() => setclickImage(true)}
+              >
                 <StyledImage key={index} src={imageUrl} />
                 <StyledOverlay />
               </StyledImageContainer>
