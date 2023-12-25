@@ -4,10 +4,9 @@ import BodyItem from "./BodyItem";
 import StyledHomePageContainer from "../../../ui/StyledHomePageContainer";
 import { PropertyIndexQuery } from "api/hostApi";
 import { useStateContext } from "contexts/ContextProvider";
-import Loading from "components/Loading";
 import { BodyItemSkeleton } from "./BodyItem";
 import { useNavigate } from "react-router-dom";
-import NavUser from "components/navbar/home/NavUser";
+import FilterBody from "./FilterBody";
 
 const StyledBody = styled.div``;
 
@@ -40,15 +39,20 @@ const StyledContainer = styled(StyledHomePageContainer)`
 `;
 
 function HomeBody() {
-  const { chosenProperty } = useStateContext();
-  const propertyQuery = PropertyIndexQuery(chosenProperty);
+  const { chosenProperty, state, clickFilter, setClickFilter } = useStateContext();
+  const filterObj = {
+    province: state.province,
+    checkIn: state.checkIn,
+    checkOut: state.checkOut,
+    guest_count: state.accommodate,
+  };
+
+  const propertyQuery = PropertyIndexQuery(chosenProperty, filterObj);
   const navigate = useNavigate();
 
   const onClickProperty = (id) => {
-    navigate({
-      pathname: "property",
-      search: `?id=${id}`,
-    });
+    const newTab = window.open("", "_blank");
+    newTab.location.href = `property?id=${id}`;
   };
 
   if (propertyQuery.isLoading) {
@@ -75,6 +79,7 @@ function HomeBody() {
 
   return (
     <StyledBody>
+      {clickFilter && <FilterBody setShowPopUp={setClickFilter} />}
       <StyledContainer>
         {propertyQuery.isSuccess &&
           propertyQuery.data.map((item, index) => <BodyItem key={index} click={onClickProperty} data={item} className="item" />)}

@@ -7,6 +7,7 @@ import NavBarContainer from "../../../ui/NavBarContainer";
 import FilterButton from "./FIlterButton";
 import NavCarouselHome from "./NavCarouselHome";
 import { useStateContext } from "../../../contexts/ContextProvider";
+import PopUpContainer from "ui/PopUpContainer";
 
 const StyledTaxButton = styled(StyledBoxContainer)`
   padding: 12px 1rem;
@@ -25,15 +26,18 @@ const StyledNavBarContainer = styled(NavBarContainer)`
   padding: 5px 0 0 0;
 `;
 
+const StyledPopUpContainer = styled(PopUpContainer)``;
+
 export default function NavBottom() {
-  const { pageWidth } = useStateContext();
+  const { pageWidth, clickFilter, setClickFilter } = useStateContext();
 
   return (
     <StyledNavBarContainer variant={"home"} gap={1}>
       <NavCarouselHome />
       {pageWidth >= 800 ? (
         <>
-          <FilterButton />
+          <FilterButton setClickFilter={setClickFilter} />
+        
           <StyledTaxButton>
             <p>Display total before taxes</p>
             <div className="toggle-switch">

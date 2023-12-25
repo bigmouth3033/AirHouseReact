@@ -120,7 +120,8 @@ const StyledInfoBox = styled.div`
   }
 
   & .second-box {
-    font-size: 13px;
+    font-size: 15px;
+    font-weight: 600;
 
     & .start {
       color: rgba(255, 0, 0, 0.4);
@@ -144,6 +145,18 @@ const StyledImgContainer = styled.div`
 
 function BodyItem({ data, click }) {
   const [loaded, setLoaded] = useState(false);
+
+  const calRating = (ratings) => {
+    let count = 0;
+    let total = 0;
+
+    for (let i = 0; i < ratings.length; i++) {
+      total = total + ratings[i].start;
+      count = count + 1;
+    }
+
+    return total / count ? (total / count).toFixed(1) : null;
+  };
 
   return (
     <StyledItemContainer>
@@ -176,7 +189,8 @@ function BodyItem({ data, click }) {
           </p>
         </div>
         <p className="second-box">
-          5 <FontAwesomeIcon className="start" icon={faStar} />
+          {calRating(data.rating) || ''} <FontAwesomeIcon className="start" icon={faStar} />
+
         </p>
       </StyledInfoBox>
     </StyledItemContainer>

@@ -104,13 +104,21 @@ export const DenyPropertyMutation = () => {
 
 const readPropertyIndex = async (query) => {
   const category = query.queryKey[1];
-  const response = await axiosClient.get("show-property-index", { params: { category: category } });
+  const filterObj = query.queryKey[2];
+  const province = filterObj.province;
+  const checkIn = filterObj.checkIn;
+  const checkOut = filterObj.checkOut;
+  const accommodate = filterObj.guest_count;
+
+  const response = await axiosClient.get("show-property-index", {
+    params: { category: category, province: province, checkInFilter: checkIn, checkOutFilter: checkOut, guest_count: accommodate },
+  });
   return response.data;
 };
 
-export const PropertyIndexQuery = (category) => {
+export const PropertyIndexQuery = (category, filterObj) => {
   const propertyQuery = useQuery({
-    queryKey: ["property-index", category],
+    queryKey: ["property-index", category, filterObj],
     queryFn: readPropertyIndex,
   });
 

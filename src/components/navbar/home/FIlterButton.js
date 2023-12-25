@@ -19,19 +19,18 @@ const StyledResizeFilterButton = styled.div`
   margin-left: 10px;
 `;
 
-function FilterButton() {
-
-  const {pageWidth} = useStateContext();
+function FilterButton({ setClickFilter }) {
+  const { pageWidth } = useStateContext();
 
   return (
     <>
       {pageWidth >= 800 ? (
-        <StyledFilterButton>
+        <StyledFilterButton onClick={() => setClickFilter(true)}>
           <FontAwesomeIcon icon={faSliders} />
           <p>Filters</p>
         </StyledFilterButton>
       ) : (
-        <StyledResizeFilterButton>
+        <StyledResizeFilterButton onClick={() => setClickFilter(true)}>
           <FontAwesomeIcon icon={faSliders} />
         </StyledResizeFilterButton>
       )}

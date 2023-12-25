@@ -4,14 +4,13 @@ import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "../../../contexts/ContextProvider";
-
-// import component
-
 import StyledButtonBoxContainer from "../../../ui/StyledButtonBoxContainer";
 import StyledButtonContainer from "../../../ui/StyledButtonContainer";
+import { ProvinceQuery } from "api/locationApi";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const StyledContainer = styled(StyledButtonBoxContainer)`
-  width: 22rem;
+  min-width: 22rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,7 +29,7 @@ const StyledContainer = styled(StyledButtonBoxContainer)`
     flex-grow: 1;
     border: 0;
     height: 1.3rem;
-    font-size: 14px;
+    font-size: 13px;
     background-color: rgba(0, 0, 0, 0);
     cursor: pointer;
   }
@@ -59,6 +58,16 @@ const StyledContainer = styled(StyledButtonBoxContainer)`
       border-radius: 50%;
       padding: 0.4rem;
       font-weight: 900;
+      &:hover {
+        box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+          rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+      }
+    }
+
+    & button {
+      border: none;
+      background-color: white;
+      cursor: pointer;
     }
   }
 
@@ -90,8 +99,31 @@ const StyledResizeNavTop = styled(StyledButtonContainer)`
   }
 `;
 
+const formatDate = (dateObj) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+  const date = dateObj.getDate();
+
+  return `${month} ${date}, ${year}`;
+};
+
 export default function NavTopCenterHome({ click }) {
-  const { pageWidth } = useStateContext();
+  const { pageWidth, state, dispatch, ACTIONS } = useStateContext();
+  const provinceQuery = ProvinceQuery();
 
   const exit = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0, transition: { duration: 0.01 } };
   const initial = { x: pageWidth > 1000 ? "-50%" : "0", opacity: 0 };
@@ -100,15 +132,47 @@ export default function NavTopCenterHome({ click }) {
     ease: "easeInOut",
   };
 
+  const onClearFilter = (ev) => {
+    ev.stopPropagation();
+
+    dispatch({ type: ACTIONS.CHANGE_PROVINCE, next: "none" });
+    dispatch({ type: ACTIONS.CHANGE_CHECK_IN, next: null });
+
+    dispatch({ type: ACTIONS.CHANGE_CHECK_OUT, next: null });
+    dispatch({ type: ACTIONS.CHANGE_ACCOMMODATE, next: null });
+  };
+
+  
+
   return (
     <>
       {pageWidth >= 800 ? (
         <StyledContainer onClick={click} exit={exit} initial={initial} animate={animate} transition={transition}>
-          <button className="item anywhere">Anywhere</button>
-          <button className="item anyweek">Any week</button>
+          {state.province == "none" && <button className="item anywhere">Anywhere</button>}
+          {state.province != "none" && (
+            <button className="item anywhere">
+              {provinceQuery.data.find((provinceItem) => provinceItem.code == state.province).full_name}
+            </button>
+          )}
+          {!state.checkIn && <button className="item anyweek">Any week</button>}
+          {state.checkIn && (
+            <button className="item anyweek">
+              {formatDate(state.checkIn)} - {formatDate(state.checkOut)}
+            </button>
+          )}
           <button className="item addguest">
-            <span>Add guests</span>
-            <FontAwesomeIcon className="icon" icon={faMagnifyingGlass}></FontAwesomeIcon>
+            {!state.accommodate && <span>Add guests</span>}
+            {state.accommodate && <span>{state.accommodate} guests</span>}
+            {(state.province != "none" || state.checkIn || state.checkOut || state.accommodate) && (
+              <button onClick={onClearFilter}>
+                <FontAwesomeIcon className="icon" icon={faTimes}></FontAwesomeIcon>
+              </button>
+            )}
+            {state.province == "none" && !state.checkIn && !state.checkOut && !state.accommodate && (
+              <button>
+                <FontAwesomeIcon className="icon" icon={faMagnifyingGlass}></FontAwesomeIcon>
+              </button>
+            )}
           </button>
         </StyledContainer>
       ) : (

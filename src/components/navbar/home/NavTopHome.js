@@ -13,6 +13,7 @@ import NavExperiencesHome from "./NavExperiencesHome";
 import NavStayHome from "./NavStayHome";
 import AfterEffectNavCenterHome from "./AfterEffectNavCenterHome";
 import Overlay from "../../../ui/Overlay";
+import PopUpContainer from "ui/PopUpContainer";
 
 const StyledOverlay = styled(Overlay)`
   z-index: 19;
@@ -47,6 +48,8 @@ const StyledPopUp = styled.div`
     }
   }}
 `;
+
+const StyledFilterPopUp = styled(PopUpContainer)``;
 
 const ACTIONS = {
   TO_CLICK: "toClick",
@@ -88,7 +91,7 @@ export default function NavTopHome() {
     };
   });
 
-  const { pageWidth } = useStateContext();
+  const { pageWidth, setClickFilter, clickFilter } = useStateContext();
 
   return (
     <>
@@ -96,10 +99,9 @@ export default function NavTopHome() {
         {pageWidth >= 800 ? <NavLogo /> : <></>}
         <AnimatePresence>{state.isShow || <NavTopCenterHome click={clickShow} />}</AnimatePresence>
         <AnimatePresence>{state.isShow && <AfterEffectNavCenterHome isStay={state.isShow} />}</AnimatePresence>
-        {pageWidth >= 800 ? <NavUser /> : <FilterButton />}
+        {pageWidth >= 800 ? <NavUser /> : <FilterButton setClickFilter={setClickFilter} />}
       </NavBarContainer>
       {state.isShow && <StyledOverlay onClick={clickOut} />}
-
       <StyledPopUp $height={state.isShow}>
         <AnimatePresence>{state.isShow && <NavStayHome isShow={state.isShow} />}</AnimatePresence>
       </StyledPopUp>
