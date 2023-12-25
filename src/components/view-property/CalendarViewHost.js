@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "./calendar.css";
 
-const bookedDate = [{ start: "2023-12-12", end: "2023-12-15" }];
-
 const formatDate = (dateObj) => {
   const date = dateObj.getDate();
   const month = dateObj.getMonth() + 1;
   const year = dateObj.getFullYear();
 
-  return `${year}-${month < 10 ? "0" + month : month}-${date < 10 ? "0" + date : date}`;
+  return `${year}-${month < 10 ? "0" + month : month}-${
+    date < 10 ? "0" + date : date
+  }`;
 };
 
 const listDate = (start, end) => {
@@ -27,7 +27,13 @@ const listDate = (start, end) => {
   return allDatesInRange;
 };
 
-const CalendarViewHost = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+const CalendarViewHost = ({
+  data,
+  value,
+  setValue,
+  onHandleChange,
+  disabledBookDate,
+}) => {
   const { start_date, end_date, minimum_stay, maximum_stay } = data;
 
   return (

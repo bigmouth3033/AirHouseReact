@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy } from "react";
 import RatingStart from "components/Rating/RatingStart";
 import Comment from "components/Comment/Comment";
+import ViewHostBooking from "components/view-host-booking/ViewHostBooking";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
@@ -178,6 +179,11 @@ const router = createBrowserRouter([
       {
         path: "listing",
         element: <Listing />,
+        exact: true,
+      },
+      {
+        path: "/user/view-all-host-bookings",
+        element: <ViewHostBooking />,
         exact: true,
       },
       {

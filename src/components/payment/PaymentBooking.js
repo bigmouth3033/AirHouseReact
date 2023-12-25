@@ -88,16 +88,16 @@ const formatCreatedAt = (createdAt) => {
 
   return formattedDate;
 };
+const calc = (a, b) => {
+  return parseFloat(a) + parseFloat(b);
+};
 const PaymentBooking = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const queryBooking = UserReadBooking(searchParam.get("booking_id"));
   if (queryBooking.isLoading) {
     return <Loading />;
   }
-  //đoạn này
-  //
-  //
-  //
+
   if (queryBooking.isError) {
     if (queryBooking.error.response.data.status === 403) {
       return <BookingNotFound />;
@@ -105,12 +105,8 @@ const PaymentBooking = () => {
       return <PaymentNotFound />;
     }
   }
-  // console.log("abc", queryBooking.error.response.data.status);
-  //đây
-  //
-  //
-  //
   const data = queryBooking.data;
+
   return (
     <div>
       <div>
@@ -166,19 +162,25 @@ const PaymentBooking = () => {
                   <div>Total guest:</div>
                   <span>{data.booking.total_person}</span>
                 </StyledPropertyName>
+                <StyledPropertyName>
+                  <div>Amount</div>
+                  <span>
+                    {calc(data.booking.price_for_stay, data.booking.site_fees)}
+                  </span>
+                </StyledPropertyName>
               </StyledGuestBlock>
               <StyledFixedBlock>
                 <StyledRefund>
                   <div>
                     <FontAwesomeIcon icon={faCalendarXmark} />
                   </div>
-                  <span>Không đổi lịch</span>
+                  <span>Unscheduled</span>
                 </StyledRefund>
                 <StyledRefund>
                   <div>
                     <FontAwesomeIcon icon={faCreditCard} />
                   </div>
-                  <span>Không hoàn tiền</span>
+                  <span>Unspeakable</span>
                 </StyledRefund>
               </StyledFixedBlock>
             </StyledContainer>

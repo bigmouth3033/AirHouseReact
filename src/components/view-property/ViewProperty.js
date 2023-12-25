@@ -148,7 +148,6 @@ const ViewProperty = () => {
   const [showSee, setShowSee] = useState(true);
   const [showSeeTotal, setShowSeeTotal] = useState(false);
   const [value, setValue] = useState(null);
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (readAllStart.isSuccess && readAllStart.data.total < 4) {

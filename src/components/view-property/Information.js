@@ -180,8 +180,6 @@ const Information = ({
 }) => {
   const { pageWidth } = useStateContext();
   const [showSee, setShowSee] = useState(true);
-  //khuc này thêm vào
-  // Hàm mở popup và ngăn chặn cuộn (scroll) của body
   const openPopup = () => {
     setShowSee(false);
     document.body.style.overflow = "hidden";

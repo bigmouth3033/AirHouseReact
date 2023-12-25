@@ -7,7 +7,6 @@ import Calendar from "react-calendar";
 import "./calendar.css";
 import { faPlus, faSubtract } from "@fortawesome/free-solid-svg-icons";
 import { CreateBookingMutation } from "api/userBookingApi";
-import { CreateTransactionMutation } from "api/transactionApi";
 import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
@@ -210,6 +209,7 @@ const TotalBeforeTaxes = ({
   const [guest, setGuest] = useState(1);
   const [adult, setAdult] = useState(1);
   const [children, setChildren] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [infant, setInfant] = useState(1);
 
   const handleClickDropdown = () => {
@@ -258,19 +258,22 @@ const TotalBeforeTaxes = ({
 
     return [year, month, day].join("-");
   }
-
+  //sua chổ này
   const calBookedLength = (start, end) => {
-    return new Date(end).getDate() - new Date(start).getDate() + 1;
+    const result = new Date(end).getDate() - new Date(start).getDate() + 1;
+    return Math.abs(result);
   };
 
   const onSubmit = (ev) => {
     ev.preventDefault();
-
-    if (value[0] == null || value[1] == null) {
+    if (!value) {
       alert("Please choose checkin and checkout day");
       return;
+    } else if (value[0] == null || value[1] == null) {
+      alert("Please checkout day");
+      return;
     }
-
+    setIsProcessing(true);
     const formData = new FormData();
     formData.append("property_id", data.id);
     formData.append("check_in_date", formatDate(new Date(value[0])));
@@ -278,7 +281,7 @@ const TotalBeforeTaxes = ({
 
     const bookedLength =
       new Date(value[1]).getDate() - new Date(value[0]).getDate();
-    const siteFees = formData.append("base_price", data.base_price);
+    formData.append("base_price", data.base_price);
     formData.append("total", data.base_price * bookedLength);
     formData.append("site_fees", data.base_price * bookedLength * 0.06);
     formData.append("booking_date", formatDate(new Date()));
@@ -421,7 +424,9 @@ const TotalBeforeTaxes = ({
         </StyledCountGuest>
       </StyledBooking>
 
-      <StyledButton onClick={onSubmit}>Continue</StyledButton>
+      <StyledButton onClick={onSubmit}>
+        {isProcessing ? "Booking ... " : "Continue"}
+      </StyledButton>
       <StyledDetailText>
         You'll be able to review before paying.
       </StyledDetailText>
@@ -445,7 +450,12 @@ const TotalBeforeTaxes = ({
             <div className="content">
               <span>Site fees</span>
               <span>
-                $ {data.base_price * calBookedLength(value[0], value[1]) * 0.06}{" "}
+                $
+                {(
+                  data.base_price *
+                  calBookedLength(value[0], value[1]) *
+                  0.06
+                ).toFixed(2)}
               </span>
             </div>
           </div>
