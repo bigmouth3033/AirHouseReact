@@ -134,7 +134,9 @@ export const UserIdQuery = (id) => {
 };
 
 const checkEmailUnique = async (email) => {
-  const response = await axiosClient.get("check-email-unique", { params: { email: email } });
+  const response = await axiosClient.get("check-email-unique", {
+    params: { email: email },
+  });
   return response.data;
 };
 
@@ -198,4 +200,38 @@ export const UpdateImageMutation = () => {
   });
 
   return mutation;
+};
+
+export const UserDashboardQuery = () => {
+  const queryClient = useQueryClient();
+};
+
+const getFullInfoUserById = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("/profile/dashboard/" + id);
+
+  return response.data;
+};
+
+export const DefaultViewUserQuery = (id) => {
+  const userQuery = useQuery({
+    queryKey: ["user", id],
+    queryFn: getFullInfoUserById,
+  });
+
+  return userQuery;
+};
+
+const selfDashboardGetUser = async () => {
+  let response = await axiosClient.get("/profile/your-dashboard");
+  return response.data;
+};
+
+export const GuestViewUserQuery = () => {
+  const userQuery = useQuery({
+    queryKey: ["user"],
+    queryFn: selfDashboardGetUser,
+  });
+
+  return userQuery;
 };
