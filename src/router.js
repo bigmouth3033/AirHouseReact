@@ -15,7 +15,7 @@ const AdminLogin = lazy(() => import("views/pages/login/Login"));
 const AdminRegister = lazy(() => import("views/pages/register/Register"));
 
 const DefaultViewDashboard = lazy(() =>
-  import("components/inforDashboard/DefaultViewDashboard")
+  import("components/inforDashboard/DefaultViewDashBoard")
 );
 
 // admin custom import

@@ -223,13 +223,13 @@ export const DefaultViewUserQuery = (id) => {
 };
 
 const selfDashboardGetUser = async () => {
-  let response = await axiosClient.get("/profile/your-dashboard");
+  let response = await axiosClient.get("user/profile/your-dashboard");
   return response.data;
 };
 
 export const GuestViewUserQuery = () => {
   const userQuery = useQuery({
-    queryKey: ["user"],
+    queryKey: ["selfDashboard"],
     queryFn: selfDashboardGetUser,
   });
 

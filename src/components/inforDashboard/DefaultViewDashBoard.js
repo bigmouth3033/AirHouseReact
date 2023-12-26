@@ -71,7 +71,7 @@ const StyleTabButton = styled.button`
 `;
 
 const StyleTabBody = styled.div`
-  max-height: 50rem;
+  max-height: 20rem;
   overflow-y: scroll;
   margin: 2rem 0;
   font-size: 1.1rem;
@@ -155,7 +155,7 @@ const StyleCmt = styled.div`
 
 export default function DefaultViewDashboard() {
   const { id } = useParams();
-  // const fullUserQuery = DefaultViewUserQuery(id);
+
   const { data, isSuccess } = DefaultViewUserQuery(id);
   if (isSuccess) {
     console.log(data.user.ratings);
@@ -217,12 +217,7 @@ export default function DefaultViewDashboard() {
               </p>
               <hr style={{ borderColor: "lightgrey", opacity: "0.3" }} />
             </div>
-            {/* <div>
-              <p className="bold" style={{ fontSize: "1.7rem" }}>
-                About
-              </p>
-              <p style={{ fontSize: "1rem" }}>{data.about}</p>
-            </div> */}
+            
             <StyledReview>Review ({data.user.ratings.length})</StyledReview>
             <div>
               <StyleCateBlock>

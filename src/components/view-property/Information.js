@@ -3,6 +3,7 @@ import CalendarViewHost from "./CalendarViewHost";
 import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div``;
 const StyledSection = styled.div`
@@ -49,6 +50,7 @@ const StyledHost = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+  cursor: pointer;
 
   p {
     margin-left: 20px;
@@ -171,7 +173,13 @@ const formatDate = (dateObj) => {
 
   return `${month} , ${year}`;
 };
-const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+const Information = ({
+  data,
+  value,
+  setValue,
+  onHandleChange,
+  disabledBookDate,
+}) => {
   const { pageWidth } = useStateContext();
   const [showSee, setShowSee] = useState(true);
   //khuc này thêm vào
@@ -207,10 +215,14 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
   }, []);
   //video them vao
   function extractVideoId(url) {
-    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    );
     return match && match[1];
   }
   //toi đây
+
+  const navigate = useNavigate();
   return (
     <StyledContainer>
       <StyledSection>
@@ -236,18 +248,23 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         </StyledDetailInfor>
       </StyledSection>
       <StyledSection>
-        <StyledHost>
+        <StyledHost
+          onClick={() => navigate(`/profile/dashboard/${data.user.id}`)}
+        >
           <div>
-            <Avatar src={data.user.image} size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
+            <Avatar
+              src={data.user.image}
+              size="40px"
+              textSizeRatio={2}
+              round={true}
+              name={data.user.first_name}
+            />
           </div>
           <div className="host-container">
             <p className="hosted">
               Hosted by {data.user.first_name} {data.user.last_name}
             </p>
-            <p>
-              Since
-              <StyledSince>{formatDate(new Date(data.user.created_at))}</StyledSince>
-            </p>
+            <p> 11 year</p>
           </div>
         </StyledHost>
       </StyledSection>
@@ -269,7 +286,9 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         <StyledAboutText>{data.description}</StyledAboutText>
         <StyledSeeMore>
           {showSee ? (
-            <StyledButtonSeeMore onClick={handleClickSeeMore}>{">>"} See more</StyledButtonSeeMore>
+            <StyledButtonSeeMore onClick={handleClickSeeMore}>
+              {">>"} See more
+            </StyledButtonSeeMore>
           ) : (
             <div
               style={{
