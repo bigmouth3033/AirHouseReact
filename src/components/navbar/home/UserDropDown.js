@@ -62,7 +62,11 @@ function UserDropDown({ blur, showDropDown }) {
     useEffect(() => {
       function handleClickOutside(event) {
         const dropDownButton = document.querySelector(".navbar-dropdown");
-        if (ref.current && !ref.current.contains(event.target) && !dropDownButton.contains(event.target)) {
+        if (
+          ref.current &&
+          !ref.current.contains(event.target) &&
+          !dropDownButton.contains(event.target)
+        ) {
           blur();
         }
       }
@@ -95,15 +99,30 @@ function UserDropDown({ blur, showDropDown }) {
     navigate("/user/listing");
     blur();
   };
+  const onDashboardHandler = () => {
+    navigate("/user/profile/your-dashboard");
+    blur();
+  };
 
   return (
     <StyledContainer>
       {showDropDown && (
         <StyledDropDownContainer ref={wrapperRef}>
-          {userQuery.isSuccess || <button onClick={onShowSignUpHandler}>Signup</button>}
-          {userQuery.isSuccess || <button onClick={onShowLoginHandler}>Log in</button>}
-          {userQuery.isSuccess && <button onClick={onLogoutHandler}>Log out</button>}
-          {userQuery.isSuccess && <button onClick={onListingHandler}>Listing</button>}
+          {userQuery.isSuccess || (
+            <button onClick={onShowSignUpHandler}>Signup</button>
+          )}
+          {userQuery.isSuccess || (
+            <button onClick={onShowLoginHandler}>Log in</button>
+          )}
+          {userQuery.isSuccess && (
+            <button onClick={onLogoutHandler}>Log out</button>
+          )}
+          {userQuery.isSuccess && (
+            <button onClick={onListingHandler}>Listing</button>
+          )}
+          {userQuery.isSuccess && (
+            <button onClick={onDashboardHandler}>Dashboard</button>
+          )}
           <button>AirHouse your home</button>
           <button onClick={() => alert("ngo dinh tan")}>Help Center</button>
         </StyledDropDownContainer>

@@ -5,10 +5,9 @@ import styled from "styled-components";
 import CalendarViewHost from "./CalendarViewHost";
 import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
 
-const StyledContainer = styled.div`
-
-`;
+const StyledContainer = styled.div``;
 const StyledSection = styled.div`
   border-bottom: 1px solid #dddddd;
   display: flex;
@@ -46,6 +45,7 @@ const StyledHost = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+  cursor: pointer;
 
   p {
     margin-left: 20px;
@@ -107,9 +107,16 @@ const StyledAmentinies = styled.div`
   font-weight: 500;
   margin-bottom: 10px;
 `;
-const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+const Information = ({
+  data,
+  value,
+  setValue,
+  onHandleChange,
+  disabledBookDate,
+}) => {
   const { pageWidth } = useStateContext();
 
+  const navigate = useNavigate();
   return (
     <StyledContainer>
       <StyledSection>
@@ -141,9 +148,17 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         </StyledDetailInfor>
       </StyledSection>
       <StyledSection>
-        <StyledHost>
+        <StyledHost
+          onClick={() => navigate(`/profile/dashboard/${data.user.id}`)}
+        >
           <div>
-            <Avatar src={data.user.image} size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
+            <Avatar
+              src={data.user.image}
+              size="40px"
+              textSizeRatio={2}
+              round={true}
+              name={data.user.first_name}
+            />
           </div>
           <div className="host-container">
             <p className="hosted">

@@ -165,7 +165,7 @@ export default function Categories() {
                 return (
                   tab === "All" ||
                   (isCategoriesArray &&
-                    item.categories.some((category) => category.id === tab))
+                    item.categories.some((category) => category.id === tab))   //some trả về boolean, ktra xem mảng này có ít nhất 1 phần tử trùng vs tab hay k
                 );
               })
               .slice(0, viewMore)

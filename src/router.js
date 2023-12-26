@@ -3,7 +3,9 @@ import { lazy } from "react";
 
 const Home = lazy(() => import("./pages/Home"));
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
-const AircoverForHosts = lazy(() => import("./components/body/AirCoverForHost/AircoverForHosts"));
+const AircoverForHosts = lazy(() =>
+  import("./components/body/AirCoverForHost/AircoverForHosts")
+);
 const BestHost = lazy(() => import("./components/body/BestHost/BestHost"));
 
 const AdminLayout = lazy(() => import("layouts/AdminLayout"));
@@ -12,21 +14,33 @@ const Dashboard = lazy(() => import("./views/dashboard/Dashboard"));
 const AdminLogin = lazy(() => import("views/pages/login/Login"));
 const AdminRegister = lazy(() => import("views/pages/register/Register"));
 
+const DefaultViewDashboard = lazy(() =>
+  import("components/inforDashboard/DefaultViewDashboard")
+);
+
 // admin custom import
 const Amenities = lazy(() => import("views/type/amenities/Amenities"));
-const PropertyType = lazy(() => import("views/type/property_type/PropertyType"));
+const PropertyType = lazy(() =>
+  import("views/type/property_type/PropertyType")
+);
 const Category = lazy(() => import("views/type/category/Category"));
 const RoomType = lazy(() => import("views/type/room_type/RoomType"));
 
 // guest
 
 const GuestLayout = lazy(() => import("layouts/GuestLayout"));
-const HostCreationIndex = lazy(() => import("components/host-creation/HostCreationIndex"));
-const HostUpdateIndex = lazy(() => import("components/host-creation/HostUpdateIndex"));
+const HostCreationIndex = lazy(() =>
+  import("components/host-creation/HostCreationIndex")
+);
+const HostUpdateIndex = lazy(() =>
+  import("components/host-creation/HostUpdateIndex")
+);
 const BecomeHost = lazy(() => import("components/host-creation/BecomeHost"));
 const Basic = lazy(() => import("components/host-creation/Basic"));
 const Description = lazy(() => import("components/host-creation/Description"));
-const HostCreationContent = lazy(() => import("components/host-creation/HostCreationContent"));
+const HostCreationContent = lazy(() =>
+  import("components/host-creation/HostCreationContent")
+);
 const Detail = lazy(() => import("components/host-creation/Details"));
 const Amenitiess = lazy(() => import("components/host-creation/Amenities"));
 const Photos = lazy(() => import("components/host-creation/Photos"));
@@ -34,6 +48,9 @@ const Pricing = lazy(() => import("components/host-creation/Pricing"));
 const Location = lazy(() => import("components/host-creation/Location"));
 const Calendar = lazy(() => import("components/host-creation/Calendar"));
 const Booking = lazy(() => import("components/host-creation/Booking"));
+const HostViewDashBoard = lazy(() =>
+  import("components/inforDashboard/HostViewDashBoard")
+);
 
 // chat
 
@@ -44,14 +61,20 @@ const Chat = lazy(() => import("components/chat/Chat"));
 // profile
 
 const ProfileLayout = lazy(() => import("components/Profile/UserLayout"));
-const EditProfile = lazy(() => import("components/Profile/EditProfile/EditProflie"));
-const ProfilePhoto = lazy(() => import("components/Profile/ProfilePhoto/ProfilePhoto"));
+const EditProfile = lazy(() =>
+  import("components/Profile/EditProfile/EditProflie")
+);
+const ProfilePhoto = lazy(() =>
+  import("components/Profile/ProfilePhoto/ProfilePhoto")
+);
 
 // properties_status
 const Status = lazy(() => import("views/status/Status"));
 
 // view property
-const ViewProperty = lazy(() => import("components/view-property/ViewProperty"));
+const ViewProperty = lazy(() =>
+  import("components/view-property/ViewProperty")
+);
 
 // blog
 const CreateBlog = lazy(() => import("views/blog/CreateBlog"));
@@ -69,7 +92,9 @@ const Listing = lazy(() => import("components/listing/ListingIndex"));
 
 const PaymentBooking = lazy(() => import("components/payment/PaymentBooking"));
 const PaymentSuccess = lazy(() => import("components/payment/PaymentSuccess"));
-const PaymentNotFound = lazy(() => import("components/payment/PaymentNotFound"));
+const PaymentNotFound = lazy(() =>
+  import("components/payment/PaymentNotFound")
+);
 
 const BlogPage = lazy(() => import("components/blog/BlogPage"));
 const BlogSearch = lazy(() => import("components/blog/BlogSearch"));
@@ -98,6 +123,11 @@ const router = createBrowserRouter([
           {
             path: "media",
             element: <ProfilePhoto />,
+            exact: true,
+          },
+          {
+            path: "your-dashboard",
+            element: <HostViewDashBoard />,
             exact: true,
           },
         ],
@@ -217,6 +247,11 @@ const router = createBrowserRouter([
         element: <BlogSearch />,
         exact: true,
       },
+      {
+        path: "/profile/dashboard/:id",
+        element: <DefaultViewDashboard />,
+        exact: true,
+      },
     ],
   },
   {
@@ -228,14 +263,48 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       { path: "/admin", name: "Dashboard", element: <Dashboard /> },
-      { path: "/admin/register", name: "AdminRegister", element: <AdminRegister /> },
-      { path: "/admin/type/amenities", name: "Amenities", element: <Amenities />, exact: true },
-      { path: "/admin/type/property_type", name: "Property Type", element: <PropertyType />, exact: true },
-      { path: "/admin/type/category", name: "Category", element: <Category />, exact: true },
-      { path: "/admin/type/room_type", name: "Room Type", element: <RoomType />, exact: true },
+      {
+        path: "/admin/register",
+        name: "AdminRegister",
+        element: <AdminRegister />,
+      },
+      {
+        path: "/admin/type/amenities",
+        name: "Amenities",
+        element: <Amenities />,
+        exact: true,
+      },
+      {
+        path: "/admin/type/property_type",
+        name: "Property Type",
+        element: <PropertyType />,
+        exact: true,
+      },
+      {
+        path: "/admin/type/category",
+        name: "Category",
+        element: <Category />,
+        exact: true,
+      },
+      {
+        path: "/admin/type/room_type",
+        name: "Room Type",
+        element: <RoomType />,
+        exact: true,
+      },
       { path: "/admin/properties_status", name: "status", element: <Status /> },
-      { path: "/admin/blog/create-blog", name: "create blog", element: <CreateBlog />, exact: true },
-      { path: "/admin/blog/blog-list", name: "create blog", element: <BlogList />, exact: true },
+      {
+        path: "/admin/blog/create-blog",
+        name: "create blog",
+        element: <CreateBlog />,
+        exact: true,
+      },
+      {
+        path: "/admin/blog/blog-list",
+        name: "create blog",
+        element: <BlogList />,
+        exact: true,
+      },
       {
         path: "/admin/blog/create-blog",
         name: "CreateBlog",
