@@ -87,17 +87,7 @@ const StyleTabBody = styled.div`
   }
 `;
 
-const StyleViewMore = styled.button`
-  display: block;
 
-  border: solid 0.8px black;
-  border-radius: 10px;
-  padding: 0.7rem 1.5rem;
-  font-weight: bolder;
-  font-size: 0.8rem;
-  background-color: white;
-  cursor: pointer;
-`;
 
 //phần trên là css từ file categories
 
@@ -156,11 +146,9 @@ export default function HostViewDashBoard() {
   const tripsCount = data?.user?.bookings?.length || 0;
   console.log(data);
   const [tab, setTab] = useState(1);
-  const [viewMore, setViewMore] = useState(4);
 
-  function viewMoreHandle() {
-    setViewMore((prevViewMore) => prevViewMore + 4);
-  }
+
+
 
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
@@ -247,7 +235,7 @@ export default function HostViewDashBoard() {
                   {isSuccess && data ? (
                     <>
                       {data?.user?.ratings
-                        ?.slice(0, viewMore)
+                        ?.slice(0, 4)
                         .map((item, index) => {
                           return (
                             <StyleCmt key={index}>
@@ -276,14 +264,6 @@ export default function HostViewDashBoard() {
                     <Skeleton />
                   )}
                 </StyleTabBody>
-
-                {isSuccess && data?.user?.ratings?.length > viewMore ? (
-                  <StyleViewMore onClick={viewMoreHandle}>
-                    View more
-                  </StyleViewMore>
-                ) : (
-                  <></>
-                )}
               </StyleCateBlock>
             </div>
           </StyledRight>

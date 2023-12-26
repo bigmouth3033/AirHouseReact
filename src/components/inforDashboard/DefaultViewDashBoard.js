@@ -89,18 +89,6 @@ const StyleTabBody = styled.div`
   }
 `;
 
-const StyleViewMore = styled.button`
-  display: block;
-
-  border: solid 0.8px black;
-  border-radius: 10px;
-  padding: 0.7rem 1.5rem;
-  font-weight: bolder;
-  font-size: 0.8rem;
-  background-color: white;
-  cursor: pointer;
-`;
-
 //phần trên là css từ file categories
 
 const StyledLayout = styled.div`
@@ -162,11 +150,6 @@ export default function DefaultViewDashboard() {
   }
 
   const [tab, setTab] = useState(1);
-  const [viewMore, setViewMore] = useState(4);
-
-  function viewMoreHandle() {
-    setViewMore((prevViewMore) => prevViewMore + 4);
-  }
 
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
@@ -217,7 +200,7 @@ export default function DefaultViewDashboard() {
               </p>
               <hr style={{ borderColor: "lightgrey", opacity: "0.3" }} />
             </div>
-            
+
             <StyledReview>Review ({data.user.ratings.length})</StyledReview>
             <div>
               <StyleCateBlock>
@@ -242,44 +225,34 @@ export default function DefaultViewDashboard() {
                 <StyleTabBody>
                   {isSuccess && data ? (
                     <>
-                      {data.user.ratings
-                        .slice(0, viewMore)
-                        .map((item, index) => {
-                          return (
-                            <StyleCmt key={index}>
-                              <p>{item.property.name}</p>
+                      {data.user.ratings.slice(0, 4).map((item, index) => {
+                        return (
+                          <StyleCmt key={index}>
+                            <p>{item.property.name}</p>
 
-                              <div>
-                                {[...Array(5)].map((_, index) => (
-                                  <FontAwesomeIcon
-                                    key={index}
-                                    icon={faStar}
-                                    style={{
-                                      color:
-                                        index < item.start
-                                          ? "#ffcc00"
-                                          : "#c0c0c0",
-                                    }}
-                                  />
-                                ))}
-                              </div>
-                              <div>{item.message}</div>
-                            </StyleCmt>
-                          );
-                        })}
+                            <div>
+                              {[...Array(5)].map((_, index) => (
+                                <FontAwesomeIcon
+                                  key={index}
+                                  icon={faStar}
+                                  style={{
+                                    color:
+                                      index < item.start
+                                        ? "#ffcc00"
+                                        : "#c0c0c0",
+                                  }}
+                                />
+                              ))}
+                            </div>
+                            <div>{item.message}</div>
+                          </StyleCmt>
+                        );
+                      })}
                     </>
                   ) : (
                     <Skeleton />
                   )}
                 </StyleTabBody>
-
-                {isSuccess && data && data.user.ratings.length > viewMore ? (
-                  <StyleViewMore onClick={viewMoreHandle}>
-                    View more
-                  </StyleViewMore>
-                ) : (
-                  <></>
-                )}
               </StyleCateBlock>
             </div>
           </StyledRight>
