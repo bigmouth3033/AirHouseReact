@@ -7,13 +7,13 @@ const Container = styled(motion.div)`
   border: 0;
   gap: 10px;
   background-color: white;
-  width: 21rem;
+  width: 10rem;
 
   & button {
     flex-grow: 1;
     border: 0;
     background-color: white;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid red;
     padding-bottom: 8px;
     font-size: 15px;
     font-weight: 300;
@@ -28,7 +28,7 @@ const Container = styled(motion.div)`
       return css`
         & .stay {
           font-weight: 600;
-          border-bottom: 3px solid black;
+          border-bottom: 3px solid red;
         }
 
         & .ex {
@@ -36,7 +36,7 @@ const Container = styled(motion.div)`
         }
 
         & .ex:hover {
-          border-bottom: 3px solid black;
+          border-bottom: 3px solid red;
           opacity: 0.5;
         }
       `;
@@ -47,13 +47,13 @@ const Container = styled(motion.div)`
         }
 
         & .stay:hover {
-          border-bottom: 3px solid black;
+          border-bottom: 3px solid red;
           opacity: 0.5;
         }
 
         & .ex {
           font-weight: 600;
-          border-bottom: 3px solid black;
+          border-bottom: 3px solid red;
         }
       `;
     }
@@ -75,16 +75,10 @@ const transition = {
   duration: 0.2,
 };
 
-export default function AfterEffectNavCenterHome({ clickStay, clickEx, isStay }) {
+export default function AfterEffectNavCenterHome({ clickStay, isStay }) {
   return (
     <Container exit={exit} initial={initial} animate={animate} transition={transition} $fontWeight={isStay}>
-      <button className="stay" onClick={clickStay}>
-        Stays
-      </button>
-      <button className="ex" onClick={clickEx}>
-        Experiences
-      </button>
-      <button>Online Experiences</button>
+      <button className="stay">AirHouse Stays</button>
     </Container>
   );
 }

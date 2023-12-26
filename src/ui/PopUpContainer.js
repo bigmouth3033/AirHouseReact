@@ -32,7 +32,7 @@ export default function PopUpContainer({ children, setShowPopUp, className }) {
 
   return (
     <>
-      <StyledOverlay onClick={() => setShowPopUp(false)} />
+      <StyledOverlay className="overlay" onClick={() => setShowPopUp(false)} />
       <StyledContainer className={className}>{children}</StyledContainer>
     </>
   );

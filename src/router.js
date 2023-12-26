@@ -47,8 +47,6 @@ const Booking = lazy(() => import("components/host-creation/Booking"));
 
 // chat
 
-const Chat = lazy(() => import("components/chat/Chat"));
-
 // const ChatComponent = lazy(() => import("components/chat/ChatLayout"));
 
 // profile
@@ -91,6 +89,11 @@ const PaymentNotFound = lazy(() =>
 
 const BlogPage = lazy(() => import("components/blog/BlogPage"));
 const BlogSearch = lazy(() => import("components/blog/BlogSearch"));
+
+const BookingDetail = lazy(() => import("components/property-booking-detail/BookingDetail"));
+const Chat = lazy(() => import("components/chat/Chat"));
+
+const ViewHostAllBooking = lazy(() => import("components/view-host-booking/ViewHostBooking"));
 
 const router = createBrowserRouter([
   {
@@ -191,6 +194,16 @@ const router = createBrowserRouter([
       {
         path: "/user/sucsessPayment",
         element: <PaymentSuccess />,
+        exact: true,
+      },
+      {
+        path: "/user/booking-detail",
+        element: <BookingDetail />,
+        exact: true,
+      },
+      {
+        path: "/user/view-all-host-bookings",
+        element: <ViewHostAllBooking />,
         exact: true,
       },
     ],

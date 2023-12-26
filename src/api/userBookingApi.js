@@ -62,3 +62,70 @@ export const UserReadSuccess = (payment_id) => {
 
   return paymentSuccessQuery;
 };
+
+const viepPropertyBooking = async (query) => {
+  const propertyId = query.queryKey[1];
+  const status = query.queryKey[2];
+  const startDate = query.queryKey[3];
+  const endDate = query.queryKey[4];
+  const currentPage = query.queryKey[5];
+
+  const response = await axiosClient.get("view-property-booking", {
+    params: { property_id: propertyId, startDate: startDate, endDate: endDate, booking_status: status, page: currentPage },
+  });
+  return response.data;
+};
+
+export const PropertyBookingQuery = (propertyId, bookingStatus, startDate, endDate, currentPage) => {
+  const query = useQuery({
+    queryKey: ["property-booking", propertyId, bookingStatus, startDate, endDate, currentPage],
+    queryFn: viepPropertyBooking,
+    retry: 1,
+  });
+
+  return query;
+};
+
+const denyBooking = async (payload) => {
+  const response = axiosClient.post("deny-booking", payload);
+  return (await response).data;
+};
+
+export const DenyBookingMutation = () => {
+  const mutation = useMutation({
+    mutationFn: denyBooking,
+  });
+
+  return mutation;
+};
+
+const acceptBooking = async (payload) => {
+  const response = await axiosClient.post("accept-booking", payload);
+  return response.data;
+};
+
+export const AcceptBookingMutation = () => {
+  const mutation = useMutation({
+    mutationFn: acceptBooking,
+  });
+
+  return mutation;
+};
+
+const viewAllHostBooking = async (query) => {
+  const status = query.queryKey[2];
+  const page = query.queryKey[3];
+
+  const response = await axiosClient.get("get-all-bookings-of-host", { params: { status: status, page: page } });
+  return response.data;
+};
+
+export const AllHostBookingQuery = (status, page) => {
+  const query = useQuery({
+    queryKey: ["all", "bookings", status, page],
+    queryFn: viewAllHostBooking,
+    retry: 1,
+  });
+
+  return query;
+};

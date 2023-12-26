@@ -11,7 +11,7 @@ const StyledNav = styled.div`
   ${(props) => {
     if (props.$zIndex === 5) {
       return css`
-        z-index: 999;
+        z-index: 99;
       `;
     }
   }}

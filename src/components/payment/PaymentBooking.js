@@ -1,8 +1,6 @@
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import { UserReadBooking } from "api/userBookingApi";
 import Loading from "components/Loading";
-import React, { useState } from "react";
+import React from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import PaymentForm from "./PaymentForm";
@@ -10,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarXmark, faCreditCard } from "@fortawesome/free-solid-svg-icons";
 import BookingNotFound from "./BookingNotFound";
 import PaymentNotFound from "./PaymentNotFound";
+import Avatar from "react-avatar";
 
 const PaymentContainer = styled.div`
   display: grid;
@@ -30,14 +29,7 @@ const StyledNameProperty = styled.div`
   align-items: center;
   font-size: 1.4rem;
   font-weight: 500;
-  & div {
-    margin-left: 1rem;
-  }
-`;
-const Styledimage = styled.img`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
+  column-gap: 1rem;
 `;
 const StyledCheckBlock = styled.div`
   padding: 1.5rem 0;
@@ -99,14 +91,23 @@ const PaymentBooking = () => {
   if (queryBooking.isLoading) {
     return <Loading />;
   }
-
+  //đoạn này
+  //
+  //
+  //
   if (queryBooking.isError) {
-    return <BookingNotFound />;
+    if (queryBooking.error.response.data.status === 403) {
+      return <BookingNotFound />;
+    } else if (queryBooking.error.response.data.status === 404) {
+      return <PaymentNotFound />;
+    }
   }
+  // console.log("abc", queryBooking.error.response.data.status);
+  //đây
+  //
+  //
+  //
   const data = queryBooking.data;
-  if (data.booking.booking_status === "success") {
-    return <PaymentNotFound />;
-  }
   return (
     <div>
       <div>
@@ -114,7 +115,7 @@ const PaymentBooking = () => {
           <PaymentContainer>
             <StyledContainer>
               <StyledNameProperty>
-                <Styledimage src="https://i.pinimg.com/236x/c9/cc/33/c9cc33c894a3f9ab73b2674ff57d5138.jpg" alt="avatar..." />
+                <Avatar src={data.hostName.image} size="40px" textSizeRatio={2} round={true} name={data.hostName.first_name} />
                 <div>{data.booking.property.name}</div>
               </StyledNameProperty>
               <StyledCheckBlock>
@@ -130,13 +131,20 @@ const PaymentBooking = () => {
               <StyledGuestBlock>
                 <StyledPropertyName>
                   <div>Property type:</div>
-                  <span>{data.PropertyName}</span>
+                  <span>{data.propertyType}</span>
+                </StyledPropertyName>
+                <StyledPropertyName>
+                  <div>Host Name:</div>
+                  <span>
+                    {data.hostName.first_name}
+                    <span> {data.hostName.last_name}</span>
+                  </span>
                 </StyledPropertyName>
                 <StyledPropertyName>
                   <div>Guest Name:</div>
                   <span>
-                    {data.userName.first_name}
-                    <span> {data.userName.last_name}</span>
+                    {data.renter.first_name}
+                    <span> {data.renter.last_name}</span>
                   </span>
                 </StyledPropertyName>
                 <StyledPropertyName>

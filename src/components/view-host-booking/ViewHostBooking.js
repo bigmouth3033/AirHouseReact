@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import ListingSideBar from "./ListingSideBar";
-import ListingContent from "./ListingContent";
+import ViewHostBookingContent from "./ViewHostBookingContent";
+import ViewHostBookingSideBar from "./ViewHostBookingSideBar";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -19,20 +19,19 @@ const StyledContainer = styled.div`
     font-weight: 600;
   }
 
-
-  @media (max-width: 750px){
+  @media (max-width: 750px) {
     grid-template-columns: 1fr;
   }
 `;
 
-export default function ListingIndex() {
+export default function ViewHostBooking() {
   const [choice, setChoice] = useState("all");
 
   return (
     <StyledContainer>
-      <h3>My Listing</h3> <h3></h3>
-      <ListingSideBar choice={choice} setChoice={setChoice} />
-      <ListingContent choice={choice} />
+      <h3>My Bookings</h3> <h3></h3>
+      <ViewHostBookingSideBar choice={choice} setChoice={setChoice} />
+      <ViewHostBookingContent choice={choice} />
     </StyledContainer>
   );
 }

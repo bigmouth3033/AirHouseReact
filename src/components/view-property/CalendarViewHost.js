@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import Calendar from "react-calendar";
 import "./calendar.css";
+import { useStateContext } from "contexts/ContextProvider";
+
+const StyledCalendar = styled(Calendar)`
+  & .react-calendar__tile {
+    height: 50px;
+  }
+`;
 
 const bookedDate = [{ start: "2023-12-12", end: "2023-12-15" }];
 
@@ -28,10 +36,12 @@ const listDate = (start, end) => {
 };
 
 const CalendarViewHost = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+  const {pageWidth} = useStateContext();
+
   const { start_date, end_date, minimum_stay, maximum_stay } = data;
 
   return (
-    <Calendar
+    <StyledCalendar
       onChange={onHandleChange}
       tileDisabled={disabledBookDate}
       allowPartialRange={true}
@@ -41,7 +51,7 @@ const CalendarViewHost = ({ data, value, setValue, onHandleChange, disabledBookD
       minDate={new Date(start_date)}
       maxDate={new Date(end_date)}
       maxDetail={"month"}
-      showDoubleView={true}
+      showDoubleView={pageWidth >= 1050 ? true : false }
       value={value}
     />
   );

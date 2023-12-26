@@ -131,7 +131,7 @@ export default function BlogTop() {
 
   const queryClient = useQueryClient();
   const allBlogQuery = AllBlogQuery();
-  console.log(allBlogQuery.data);
+
 
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
@@ -140,6 +140,10 @@ export default function BlogTop() {
 
     return formattedDate;
   };
+
+  
+
+
   return (
     <a href="" onClick={handleItemClick} style={{ textDecoration: "none" }}>
       {allBlogQuery.isSuccess &&

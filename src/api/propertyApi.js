@@ -64,3 +64,20 @@ export const UpdatePropertyMutation = () => {
 
   return updateMutation;
 };
+
+const propertyQuery = async (query) => {
+  const id = query.queryKey[2];
+
+  const response = await axiosClient("read-property-to-view-booking", { params: { id: id } });
+  return response.data;
+};
+
+export const PropertyQuery = (id) => {
+  const query = useQuery({
+    queryKey: ["property", "booking", id],
+    queryFn: propertyQuery,
+    retry:1,
+  });
+
+  return query;
+};

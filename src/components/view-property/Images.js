@@ -119,7 +119,7 @@ const Images = ({ data }) => {
             <div className="containerImage">
               {data.images.map((imageUrl, index) => {
                 return (
-                  <div className="imagePopup">
+                  <div key={index} className="imagePopup">
                     <img src={imageUrl} alt="" />
                   </div>
                 );
@@ -133,7 +133,7 @@ const Images = ({ data }) => {
         {data.images.map((imageUrl, index) => {
           if (index < number) {
             return (
-              <StyledImageContainer className={index === 0 ? "fisrtimage" : ""} onClick={() => setclickImage(true)}>
+              <StyledImageContainer key={index} className={index === 0 ? "fisrtimage" : ""} onClick={() => setclickImage(true)}>
                 <StyledImage key={index} src={imageUrl} />
                 <StyledOverlay />
               </StyledImageContainer>

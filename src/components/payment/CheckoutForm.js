@@ -1,10 +1,8 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-import { CreateSuccessBookingMutation } from "api/userBookingApi";
 import styled from "styled-components";
 import axiosClient from "api/axiosClient";
-import PropertyNotFound from "components/PropertyNotFound";
 import { useNavigate } from "react-router-dom";
 const StyledButton = styled.button`
   margin-top: 1rem;
@@ -32,7 +30,8 @@ export default function CheckoutForm({ data }) {
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
-  const amount = 2000;
+
+  const amount = data.booking.price_for_stay;
   const booking_id = data.booking.id;
   const booking_status = data.booking.booking_status;
 
@@ -69,11 +68,18 @@ export default function CheckoutForm({ data }) {
         clientSecret: clientSecret,
         elements,
         confirmParams: {
-          return_url: "http://localhost:3000/user/sucsessPayment?booking_id=" + booking_id + "&booking_status=" + booking_status,
+          return_url:
+            "http://localhost:3000/user/sucsessPayment?booking_id=" +
+            booking_id +
+            "&booking_status=" +
+            booking_status +
+            "&amount=" +
+            amount,
         },
       });
     } catch (error) {
-      return navigate("/paymentError");
+      //dong nay
+      alert("Someone hired on the day you choose. Booking again please");
     }
 
     setIsProcessing(false);
