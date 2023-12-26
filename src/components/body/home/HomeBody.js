@@ -47,7 +47,15 @@ function HomeBody() {
     guest_count: state.accommodate,
   };
 
-  const propertyQuery = PropertyIndexQuery(chosenProperty, filterObj);
+  const secondObj = {
+    roomType: state.roomType,
+    bed: state.bedRoom,
+    bath: state.bathRoom,
+    propertyType: state.propertyType,
+    amenities: state.amenities,
+  };
+
+  const propertyQuery = PropertyIndexQuery(chosenProperty, filterObj, secondObj);
   const navigate = useNavigate();
 
   const onClickProperty = (id) => {

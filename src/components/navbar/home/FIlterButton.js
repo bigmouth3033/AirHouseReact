@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "../../../contexts/ContextProvider";
@@ -10,6 +10,25 @@ const StyledFilterButton = styled(StyledBoxContainer)`
   display: flex;
   gap: 5px;
   cursor: pointer;
+  position: relative;
+  
+
+  ${(props) => {
+    if (props.$count != 0) {
+      let str = String(props.$count);
+      return css`
+        border: 2px solid black;
+        &::after {
+          content: "${str}";
+          position: absolute;
+          transform: translate(4rem, -1.5rem);
+          background-color: white;
+          font-size: 600;
+          font-size: 17px;
+        }
+      `;
+    }
+  }}
 `;
 
 const StyledResizeFilterButton = styled.div`
@@ -20,12 +39,34 @@ const StyledResizeFilterButton = styled.div`
 `;
 
 function FilterButton({ setClickFilter }) {
-  const { pageWidth } = useStateContext();
+  const { pageWidth, state } = useStateContext();
+
+  let count = 0;
+
+  if (state.roomType != "any") {
+    count++;
+  }
+
+  if (state.bathRoom != "any") {
+    count++;
+  }
+
+  if (state.bedRoom != "any") {
+    count++;
+  }
+
+  if (state.amenities.length != 0) {
+    count++;
+  }
+
+  if (state.propertyType != "any") {
+    count++;
+  }
 
   return (
     <>
       {pageWidth >= 800 ? (
-        <StyledFilterButton onClick={() => setClickFilter(true)}>
+        <StyledFilterButton $count={count} onClick={() => setClickFilter(true)}>
           <FontAwesomeIcon icon={faSliders} />
           <p>Filters</p>
         </StyledFilterButton>

@@ -37,14 +37,6 @@ export default function NavBottom() {
       {pageWidth >= 800 ? (
         <>
           <FilterButton setClickFilter={setClickFilter} />
-        
-          <StyledTaxButton>
-            <p>Display total before taxes</p>
-            <div className="toggle-switch">
-              <input className="toggle-input" id="toggle" type="checkbox" />
-              <label className="toggle-label" htmlFor="toggle"></label>
-            </div>
-          </StyledTaxButton>
         </>
       ) : (
         <></>

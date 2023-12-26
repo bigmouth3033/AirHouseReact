@@ -29,6 +29,7 @@ const ACTIONS = {
   CHANGE_PROPERTY_TYPE: "CHANGE_PROPERTY_TYPE",
   CHANGE_AMENTITIES: "CHANGE_AMENTITIES",
   CHANGE_BOOK_OPTION: "CHANGE_BOOK_OPTION",
+  CHANGE_RANGE: "CHANGE_RANGE",
 };
 
 function reducer(state, action) {
@@ -51,9 +52,6 @@ function reducer(state, action) {
     case ACTIONS.CHANGE_ROOM_TYPE:
       return { ...state, roomType: action.next };
 
-    case ACTIONS.CHANGE_PRICE_RANGE:
-      return { ...state, priceRange: action.next };
-
     case ACTIONS.CHANGE_BED_ROOM:
       return { ...state, bedRoom: action.next };
 
@@ -65,9 +63,6 @@ function reducer(state, action) {
 
     case ACTIONS.CHANGE_AMENTITIES:
       return { ...state, amenities: action.next };
-
-    case ACTIONS.CHANGE_BOOK_OPTION:
-      return { ...state, bookOption: action.next };
   }
 }
 
@@ -79,14 +74,12 @@ export const ContextProvider = ({ children }) => {
     province: "none",
     checkIn: null,
     checkOut: null,
-    accommodate: "",
-    roomType: "",
-    priceRange: "",
-    bedRoom: "",
-    bathRoom: "",
-    propertyType: "",
+    accommodate: null,
+    roomType: "any",
+    bedRoom: "any",
+    bathRoom: "any",
+    propertyType: "any",
     amenities: [],
-    bookOption: "",
   });
 
   useEffect(() => {
