@@ -61,7 +61,7 @@ const filterByCategoryID = async (query) => {
 
 export const BlogQueryByCategoryId = (id) => {
   const blogQuery = useQuery({
-    queryKey: ["blog", id],
+    queryKey: ["BlogQueryByCategoryId", id],
     queryFn: filterByCategoryID,
   });
 
@@ -69,8 +69,9 @@ export const BlogQueryByCategoryId = (id) => {
 };
 export const BlogQueryId = (id) => {
   const blogQuery = useQuery({
-    queryKey: ["blog", id],
+    queryKey: ["BlogQueryId", id],
     queryFn: filterById,
+    
   });
 
   return blogQuery;
@@ -125,7 +126,7 @@ export const DeleteBlogMutation = () => {
 
 export const ReadBlogPageQuery = (page) => {
   const BlogQuery = useQuery({
-    queryKey: ["Blog", page],
+    queryKey: ["ReadBlogPage", page],
     queryFn: readBlog,
   });
 

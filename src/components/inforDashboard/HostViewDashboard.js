@@ -3,7 +3,13 @@ import styled from "styled-components";
 import { GuestViewUserQuery } from "../../api/userApi";
 import Skeleton from "react-loading-skeleton";
 import Avatar from "react-avatar";
-import { faStar, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faCheck,
+  faTimes,
+  faRectangleList,
+  faMoneyCheckDollar,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { css } from "styled-components";
 import { useState } from "react";
@@ -87,13 +93,33 @@ const StyleTabBody = styled.div`
   }
 `;
 
-
-
 //phần trên là css từ file categories
 
 const StyledLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
+`;
+const StyledTopCard = styled.div`
+  display: grid;
+  padding: 0 8rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  & div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & p {
+      font-weight: 500;
+      margin-bottom: 0.7rem;
+
+      & span {
+        font-weight: 400;
+      }
+    }
+  }
 `;
 const StyledLeft = styled.div`
   margin: 0;
@@ -147,9 +173,6 @@ export default function HostViewDashBoard() {
   console.log(data);
   const [tab, setTab] = useState(1);
 
-
-
-
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt);
     const options = { month: "long", year: "numeric" };
@@ -191,8 +214,27 @@ export default function HostViewDashBoard() {
             </div>
           </StyledLeft>
           <StyledRight>
-            <div>My Bookings {bookingsCount} </div>
-            <div>My Trips {tripsCount}</div>
+            <StyledTopCard>
+              <div>
+                <FontAwesomeIcon
+                  icon={faRectangleList}
+                  style={{ color: "violet", fontSize: "2.5rem" }}
+                />
+                <p>
+                  My Bookings <br /> <span>{bookingsCount}</span>
+                </p>
+              </div>
+              <div>
+                <FontAwesomeIcon
+                  icon={faMoneyCheckDollar}
+                  style={{ color: "lightgreen", fontSize: "2.9rem" }}
+                />
+                <p>
+                  My Rentings <br /> <span>{tripsCount}</span>
+                </p>
+              </div>
+            </StyledTopCard>
+
             <div className="bold">
               <p style={{ fontSize: "1.7rem" }}>
                 Hi, I'm {data.user.first_name} {data.user.last_name}
@@ -234,31 +276,29 @@ export default function HostViewDashBoard() {
                 <StyleTabBody>
                   {isSuccess && data ? (
                     <>
-                      {data?.user?.ratings
-                        ?.slice(0, 4)
-                        .map((item, index) => {
-                          return (
-                            <StyleCmt key={index}>
-                              <p>{item.property.name}</p>
+                      {data?.user?.ratings?.slice(0, 4).map((item, index) => {
+                        return (
+                          <StyleCmt key={index}>
+                            <p>{item.property.name}</p>
 
-                              <div>
-                                {[...Array(5)].map((_, index) => (
-                                  <FontAwesomeIcon
-                                    key={index}
-                                    icon={faStar}
-                                    style={{
-                                      color:
-                                        index < item.start
-                                          ? "#ffcc00"
-                                          : "#c0c0c0",
-                                    }}
-                                  />
-                                ))}
-                              </div>
-                              <div>{item.message}</div>
-                            </StyleCmt>
-                          );
-                        })}
+                            <div>
+                              {[...Array(5)].map((_, index) => (
+                                <FontAwesomeIcon
+                                  key={index}
+                                  icon={faStar}
+                                  style={{
+                                    color:
+                                      index < item.start
+                                        ? "#ffcc00"
+                                        : "#c0c0c0",
+                                  }}
+                                />
+                              ))}
+                            </div>
+                            <div>{item.message}</div>
+                          </StyleCmt>
+                        );
+                      })}
                     </>
                   ) : (
                     <Skeleton />

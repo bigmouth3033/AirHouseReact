@@ -31,7 +31,7 @@ export default function CheckoutForm({ data }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
 
-  const amount = data.booking.price_for_stay;
+  const amount = data.booking.price_for_stay + data.booking.site_fees;
   const booking_id = data.booking.id;
   const booking_status = data.booking.booking_status;
 
@@ -40,7 +40,10 @@ export default function CheckoutForm({ data }) {
     const formData = new FormData();
     formData.append("amount", amount);
     formData.append("booking_id", booking_id);
-    const response = await axiosClient.post("http://127.0.0.1:8000/api/create-payment-intent", formData);
+    const response = await axiosClient.post(
+      "http://127.0.0.1:8000/api/create-payment-intent",
+      formData
+    );
 
     const data = await response.data;
     return data.clientSecret;
@@ -89,7 +92,9 @@ export default function CheckoutForm({ data }) {
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
       <StyledButton disabled={isProcessing || !stripe || !elements} id="submit">
-        <span id="button-text">{isProcessing ? "Processing ... " : "Pay now"}</span>
+        <span id="button-text">
+          {isProcessing ? "Processing ... " : "Pay now"}
+        </span>
       </StyledButton>
       {message && <StyledMessage id="payment-message">{message}</StyledMessage>}
     </form>

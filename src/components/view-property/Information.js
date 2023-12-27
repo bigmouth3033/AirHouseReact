@@ -324,18 +324,27 @@ const Information = ({
           )}
         </StyledSeeMore>
         {/* video khúc nayf */}
-        <div>
-          <iframe
-            width="100%"
-            height="400"
-            src={`https://www.youtube.com/embed/${extractVideoId(data.video)}`}
-            allowFullScreen
-            title={data.name}
-          ></iframe>
-          <StyledA href={data.video} target="_blank" rel="noopener noreferrer">
-            Welcome to the Extraordinary Moments at Our Property!
-          </StyledA>
-        </div>
+        {data.video && (
+          <div>
+            <iframe
+              width="100%"
+              height="400"
+              src={`https://www.youtube.com/embed/${extractVideoId(
+                data.video
+              )}`}
+              allowFullScreen
+              title={data.name}
+            ></iframe>
+            <StyledA
+              href={data.video}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Welcome to the Extraordinary Moments at Our Property!
+            </StyledA>
+          </div>
+        )}
+
         {/* tới đây  */}
       </StyledSection>
       <StyledSection>

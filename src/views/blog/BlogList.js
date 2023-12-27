@@ -189,7 +189,7 @@ export default function BlogList() {
   // setChosenId(id);
   // alert(chosenId);
   const onUpdateEvent = (id) => {
-    alert(id);
+    // alert(id);ư
     setSearchParams({ id: id });
     navigate("/admin/blog/update-blog?id=" + Number(id));
   };
