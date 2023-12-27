@@ -28,8 +28,8 @@ const StyledItems = styled.div`
 `;
 
 export default function Content(props) {
-  const [secletedPage, setSecletedPage] = useState();
-
+  const [secletedPage, setSecletedPage] = useState('');
+  let totalPage = null;
   const fethCurrentPage = async (secletedPage, UserTitle) => {
     const response = await axiosClient.get(`getBookingByUser?page=${secletedPage}&status=${UserTitle}`);
     return response.data;
@@ -50,7 +50,14 @@ export default function Content(props) {
   };
   const currentPageByUserQuery = CurrentPageByUserQuery(secletedPage, props.UserTitle);
 
-  let totalPage = null;
+  useEffect(() => {
+    console.log(currentPageByUserQuery.data);
+
+  }, [currentPageByUserQuery.isSuccess, props.UserTitle]);
+
+
+
+
   if (currentPageByUserQuery.isSuccess) {
     totalPage = Math.ceil(currentPageByUserQuery.data.total / 10);
   }
@@ -76,7 +83,7 @@ export default function Content(props) {
   return (
     <StyledContainer>
       <StyledItems>
-        {currentPageByUserQuery.data.data.map((item, index) => {
+        {currentPageByUserQuery.data.data && currentPageByUserQuery.data.data.map((item, index) => {
           return <BookingItem key={index} BookingItem={item} />;
         })}
       </StyledItems>

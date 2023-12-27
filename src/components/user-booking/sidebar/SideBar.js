@@ -20,7 +20,7 @@ export default function SideBar({ setUserTitle }) {
   const [titleArray, setTitleArray] = useState(["all", "accepted", "denied", "success", "waiting"]);
 
   const handleTitle = (item) => {
-    setUserTitle(item);
+    setUserTitle(item);    
   };
 
   return (
