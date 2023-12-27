@@ -115,7 +115,7 @@ const listDate = (start, end) => {
   return allDatesInRange;
 };
 
-export default function StatusPopUp({ currentPage, chosenId, setShowPopUp }) {
+export default function StatusPopUp({ status, currentPage, chosenId, setShowPopUp }) {
   const propertyQuery = PropertyIdQuery(chosenId);
   const [isProperty, setIsProperty] = useState(true);
 
@@ -140,7 +140,7 @@ export default function StatusPopUp({ currentPage, chosenId, setShowPopUp }) {
                 Host
               </StyledHeaderButton>
             </StyledHeader>
-            {isProperty ? <PropertyBody currentPage={currentPage} data={propertyQuery.data} /> : <UserBody />}
+            {isProperty ? <PropertyBody status={status} currentPage={currentPage} data={propertyQuery.data} /> : <UserBody />}
           </StyledContent>
         )}
       </StyledBody>
@@ -253,7 +253,7 @@ const StyledImages = styled.div`
   }
 `;
 
-function PropertyBody({ data, currentPage }) {
+function PropertyBody({ data, currentPage, status }) {
   const queryClient = useQueryClient();
   const [message, setMessage] = useState(data.admin_message);
   const acceptMutation = AcceptPropertyMutation();
@@ -273,13 +273,13 @@ function PropertyBody({ data, currentPage }) {
       onSuccess: () => {
         alert("sucess");
         queryClient.invalidateQueries({ queryKey: ["property", data.id] });
-        queryClient.invalidateQueries({ queryKey: ["properties", "all", currentPage] });
+        queryClient.invalidateQueries({ queryKey: ["properties", status, currentPage] });
       },
     });
   };
 
   const onDeny = () => {
-    if (!message ) {
+    if (!message) {
       alert("Please leave a message to host");
       return;
     }
@@ -535,6 +535,6 @@ function PropertyBody({ data, currentPage }) {
   );
 }
 
-function UserBody(data) {
-  return <div>arstar</div>;
-}
+const UserBody = () => {
+  return <div></div>;
+};

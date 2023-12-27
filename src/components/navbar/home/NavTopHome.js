@@ -14,6 +14,7 @@ import NavStayHome from "./NavStayHome";
 import AfterEffectNavCenterHome from "./AfterEffectNavCenterHome";
 import Overlay from "../../../ui/Overlay";
 import PopUpContainer from "ui/PopUpContainer";
+import { ReponsiveNavUser } from "./NavUser";
 
 const StyledOverlay = styled(Overlay)`
   z-index: 19;
@@ -86,8 +87,11 @@ export default function NavTopHome() {
   useEffect(() => {
     window.addEventListener("scroll", clickOut);
 
+    window.addEventListener("resize", clickOut);
+
     return () => {
       window.removeEventListener("scroll", clickOut);
+      window.removeEventListener("resize", clickOut);
     };
   });
 
@@ -100,6 +104,8 @@ export default function NavTopHome() {
         <AnimatePresence>{state.isShow || <NavTopCenterHome click={clickShow} />}</AnimatePresence>
         <AnimatePresence>{state.isShow && <AfterEffectNavCenterHome isStay={state.isShow} />}</AnimatePresence>
         {pageWidth >= 800 ? <NavUser /> : <FilterButton setClickFilter={setClickFilter} />}
+
+        {pageWidth < 800 && <ReponsiveNavUser />}
       </NavBarContainer>
       {state.isShow && <StyledOverlay onClick={clickOut} />}
       <StyledPopUp $height={state.isShow}>

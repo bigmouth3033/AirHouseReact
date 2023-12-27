@@ -261,7 +261,7 @@ export default function StatusAll({ status, filterState }) {
             })}
         </tbody>
       </StyledTable>
-      {clickPopUp && <StatusPopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setClickPopUp} />}
+      {clickPopUp && <StatusPopUp status={status} currentPage={currentPage} chosenId={chosenId} setShowPopUp={setClickPopUp} />}
       <StyledPagination>
         <span>{totalItem} Total</span>
         <button onClick={onClickFirst} disabled={currentPage == 1}>

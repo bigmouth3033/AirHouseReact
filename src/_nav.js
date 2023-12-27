@@ -14,6 +14,7 @@ import {
   cilStar,
   cilRoom,
   cilHouse,
+  cilMenu,
 } from "@coreui/icons";
 import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
@@ -21,6 +22,12 @@ const _nav = [
   {
     component: CNavTitle,
     name: "Admin",
+  },
+  {
+    component: CNavItem,
+    name: "Dashboard",
+    to: "/admin",
+    icon: <CIcon icon={cilMenu} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,

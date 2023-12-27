@@ -18,10 +18,10 @@ import { CategoryValueQuery } from "api/blogCategoryApi";
 
 const StyledContainer = styled.div`
   font-family: "Poppins", sans-serif;
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
   justify-content: space-between;
   min-height: 100vh;
+  flex-direction: column; */
 `;
 
 const StyledBody = styled.div`

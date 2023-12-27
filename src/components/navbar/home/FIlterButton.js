@@ -11,7 +11,6 @@ const StyledFilterButton = styled(StyledBoxContainer)`
   gap: 5px;
   cursor: pointer;
   position: relative;
-  
 
   ${(props) => {
     if (props.$count != 0) {
@@ -36,6 +35,24 @@ const StyledResizeFilterButton = styled.div`
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   margin-left: 10px;
+  cursor: pointer;
+
+  ${(props) => {
+    if (props.$count != 0) {
+      let str = String(props.$count);
+      return css`
+        border: 2px solid black;
+        &::after {
+          content: "${str}";
+          position: absolute;
+          transform: translate(-10px, -1.3rem);
+          background-color: white;
+          font-size: 600;
+          font-size: 17px;
+        }
+      `;
+    }
+  }}
 `;
 
 function FilterButton({ setClickFilter }) {
@@ -71,7 +88,7 @@ function FilterButton({ setClickFilter }) {
           <p>Filters</p>
         </StyledFilterButton>
       ) : (
-        <StyledResizeFilterButton onClick={() => setClickFilter(true)}>
+        <StyledResizeFilterButton $count={count} onClick={() => setClickFilter(true)}>
           <FontAwesomeIcon icon={faSliders} />
         </StyledResizeFilterButton>
       )}

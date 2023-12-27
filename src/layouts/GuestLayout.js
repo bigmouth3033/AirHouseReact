@@ -70,13 +70,12 @@ export default function GuestLayout() {
     <StyledContainer>
       <NavTopHome />
       <StyledMenu>
-        <button>Dashboard</button>
+        <button onClick={() => navigate("/user/your-dashboard")}>Dashboard</button>
         <button onClick={() => navigate("/user/profile/detail")}>Profile</button>
         <button onClick={() => navigate("/user/listing")}>My Listing</button>
-        <button onClick={() => navigate("/user/view-all-host-bookings")}>My Bookings</button>
-        <button onClick={() => navigate("/user/booking-list")}>My Trips</button>
-        <button>Wishlist</button>
-        <button>Messages</button>
+        <button onClick={() => navigate("/user/view-all-host-bookings")}>My Renting</button>
+        <button onClick={() => navigate("/user/booking-list")}>My Bookings</button>
+        <button onClick={() => navigate("/user/chat")}>Messages</button>
       </StyledMenu>
       <Outlet />
       <FooterIndex />

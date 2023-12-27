@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
+import { useStateContext } from "contexts/ContextProvider";
 
 const Container = styled(motion.div)`
   display: flex;
@@ -67,15 +68,17 @@ const Container = styled(motion.div)`
   }
 `;
 
-const exit = { y: "-300%", x: "-50%", scale: 0.5 };
-const initial = { y: "-300%", x: "-50%", scale: 0.5 };
-const animate = { y: "0%", x: "-50%", scale: 1 };
-const transition = {
-  ease: "easeInOut",
-  duration: 0.2,
-};
-
 export default function AfterEffectNavCenterHome({ clickStay, isStay }) {
+  const { pageWidth } = useStateContext();
+
+  const exit = { y: "-300%", x: pageWidth > 850 ? "-50%" : "", scale: 0.5 };
+  const initial = { y: "-300%", x: pageWidth > 850 ? "-50%" : "", scale: 0.5 };
+  const animate = { y: "0%", x: pageWidth > 850 ? "-50%" : "", scale: 1 };
+  const transition = {
+    ease: "easeInOut",
+    duration: 0.2,
+  };
+
   return (
     <Container exit={exit} initial={initial} animate={animate} transition={transition} $fontWeight={isStay}>
       <button className="stay">AirHouse Stays</button>

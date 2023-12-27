@@ -77,12 +77,20 @@ const Chat = lazy(() => import("components/chat/Chat"));
 
 const ViewHostAllBooking = lazy(() => import("components/view-host-booking/ViewHostBooking"));
 
+const DefaultViewDashboard = lazy(() => import("components/inforDashboard/DefaultViewDashBoard"));
+const HostViewDashBoard = lazy(() => import("components/inforDashboard/HostViewDashboard"));
+
 const router = createBrowserRouter([
   {
     path: "/user",
     element: <GuestLayout />,
     exact: true,
     children: [
+      {
+        path: "your-dashboard",
+        element: <HostViewDashBoard />,
+        exact: true,
+      },
       {
         path: "chat",
         element: <Chat />,
@@ -195,6 +203,11 @@ const router = createBrowserRouter([
     element: <DefaultLayout />,
     exact: true,
     children: [
+      {
+        path: "/profile/dashboard/:id",
+        element: <DefaultViewDashboard />,
+        exact: true,
+      },
       {
         path: "/",
         element: <Home />,

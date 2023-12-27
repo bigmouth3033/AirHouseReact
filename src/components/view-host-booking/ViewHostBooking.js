@@ -29,7 +29,7 @@ export default function ViewHostBooking() {
 
   return (
     <StyledContainer>
-      <h3>My Bookings</h3> <h3></h3>
+      <h3>My Rentings</h3> <h3></h3>
       <ViewHostBookingSideBar choice={choice} setChoice={setChoice} />
       <ViewHostBookingContent choice={choice} />
     </StyledContainer>

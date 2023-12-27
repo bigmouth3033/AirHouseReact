@@ -160,11 +160,14 @@ export default function UpdateCategoryPopUp({ currentPage, chosenId, setShowPopU
     ev.preventDefault();
 
     const imgExtension = ["jpg", "png", "svg", "jpeg", "webp"];
-    const imgArr = imgUploadRef.current.files[0].name.split(".");
 
-    if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
-      alert("only accept img with format of jpg, png, svg, jpeg, webp");
-      return;
+    if (imgUploadRef.current.files[0]) {
+      const imgArr = imgUploadRef.current.files[0].name.split(".");
+
+      if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
+        alert("only accept img with format of jpg, png, svg, jpeg, webp");
+        return;
+      }
     }
 
     const formData = new FormData();

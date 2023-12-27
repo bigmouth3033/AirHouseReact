@@ -74,7 +74,7 @@ export default function FooterBarCreation() {
       <StyledFooter>
         <StyledContainer>
           <StyledLeftContent>
-            <p>&#169; 2023 Airbnb, Inc.</p>
+            <p>&#169; 2023 Airhouse, Inc.</p>
             <span>&#183;</span>
             <StyledLink>Terms</StyledLink>
             <span>&#183;</span>

@@ -51,7 +51,7 @@ const CalendarViewHost = ({ data, value, setValue, onHandleChange, disabledBookD
       minDate={new Date(start_date)}
       maxDate={new Date(end_date)}
       maxDetail={"month"}
-      showDoubleView={pageWidth >= 1050 ? true : false }
+      showDoubleView={false}
       value={value}
     />
   );

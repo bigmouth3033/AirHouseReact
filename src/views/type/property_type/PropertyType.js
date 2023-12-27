@@ -208,6 +208,12 @@ export default function PropertyType() {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["propertyType", "page", currentPage] });
           },
+          onError: (error) => {
+            const response = error.response;
+            if (response.status == 403) {
+              alert("Cant delete property type that has property using it");
+            }
+          },
         }
       );
     }
@@ -261,9 +267,6 @@ export default function PropertyType() {
         {showUpdatePopUp && <UpdatePropertyTypePopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
       </StyledHeader>
       <StyledContainer>
-        <StyledSearchContainer>
-          <StyledSearchInput type="search" placeholder="Search" />
-        </StyledSearchContainer>
         <StyledTable className="table table-responsive table-hover">
           <thead>
             <tr>

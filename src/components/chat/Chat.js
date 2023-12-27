@@ -39,7 +39,6 @@ export default function Chat(props) {
   const [allUser, setAllUSer] = useState([]);
   const [selectedUser, setSelectedUser] = useState(true);
 
-  ////////
   useEffect(() => {
     setAllUSer(getAllUserQuery.data);
 

@@ -403,7 +403,7 @@ const TotalBeforeTaxes = ({ data, value, setValue, onHandleChange, disabledBookD
       </StyledBooking>
       {userQuery.isError && <p>Please login first</p>}
       <StyledButton disabled={!value?.[1] || userQuery.isError} onClick={onSubmit}>
-        Continute
+        Continue
       </StyledButton>
       <StyledDetailText>You'll be able to review before paying.</StyledDetailText>
       <StyledDetailContent>

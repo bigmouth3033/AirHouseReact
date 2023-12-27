@@ -142,8 +142,6 @@ export default function NavTopCenterHome({ click }) {
     dispatch({ type: ACTIONS.CHANGE_ACCOMMODATE, next: null });
   };
 
-  
-
   return (
     <>
       {pageWidth >= 800 ? (
@@ -176,14 +174,29 @@ export default function NavTopCenterHome({ click }) {
           </button>
         </StyledContainer>
       ) : (
-        <StyledResizeNavTop>
-          <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
+        <StyledResizeNavTop onClick={click}>
+          {/* <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
+          <FontAwesomeIcon className="icon" icon={faTimes} /> */}
+
+          {(state.province != "none" || state.checkIn || state.checkOut || state.accommodate) && (
+            <FontAwesomeIcon onClick={onClearFilter} className="icon" icon={faTimes} />
+          )}
+          {state.province == "none" && !state.checkIn && !state.checkOut && !state.accommodate && (
+            <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
+          )}
           <div>
-            <p>Anywhere</p>
+            {state.province == "none" && <p>Anywhere</p>}
+            {state.province != "none" && <p>{provinceQuery.data.find((provinceItem) => provinceItem.code == state.province).full_name}</p>}
             <div className="flex-container">
-              <p>Any week</p>
+              {!state.checkIn && <p>Any week</p>}
+              {state.checkIn && (
+                <p>
+                  {formatDate(state.checkIn)} - {formatDate(state.checkOut)}
+                </p>
+              )}
               <p>-</p>
-              <p>Add guests</p>
+              {!state.accommodate && <p>Add guests</p>}
+              {state.accommodate && <p>{state.accommodate} guests</p>}
             </div>
           </div>
         </StyledResizeNavTop>

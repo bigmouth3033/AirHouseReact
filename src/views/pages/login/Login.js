@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   CButton,
   CCard,
@@ -14,6 +15,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import styled from "styled-components";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 import { useRef } from "react";
 import { onLogin } from "api/userApi";
@@ -23,13 +25,20 @@ import { LoginAdminMutation } from "api/userApi";
 
 import "scss/style.scss";
 
+const StyledError = styled.div`
+  color: red;
+`;
+
 const Login = () => {
   const loginMutation = LoginAdminMutation();
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
+  const [accountError, setAccountError] = useState(false);
 
   function clickLogin() {
+    setAccountError(false);
+
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
@@ -37,7 +46,11 @@ const Login = () => {
 
     console.log(payload);
 
-    loginMutation.mutate(payload);
+    loginMutation.mutate(payload, {
+      onError: () => {
+        setAccountError(true);
+      },
+    });
   }
 
   return (
@@ -61,13 +74,9 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
-                      <CFormInput
-                        ref={passwordRef}
-                        type="password"
-                        placeholder="Password"
-                        autoComplete="current-password"
-                      />
+                      <CFormInput ref={passwordRef} type="password" placeholder="Password" autoComplete="current-password" />
                     </CInputGroup>
+                    {accountError && <StyledError>Wrong password or account</StyledError>}
                     <CRow>
                       <CCol xs={8}>
                         <CButton onClick={clickLogin} color="primary" className="px-4">

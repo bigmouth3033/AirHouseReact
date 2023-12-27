@@ -28,19 +28,20 @@ const StyledInformation = styled.div`
   gap: 30px;
 
   @media (max-width: 1050px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+
+    > div:nth-of-type(1) {
+    }
+
+    > div:nth-of-type(2) {
+      grid-row: 1/1;
+    }
   }
 
   @media (max-width: 692px) {
     grid-template-columns: repeat(1, 1fr);
 
     > div:nth-of-type(1) {
-      margin: auto;
-    }
-
-    > div:nth-of-type(2) {
-      grid-row: 1/1;
-
       margin: auto;
     }
   }

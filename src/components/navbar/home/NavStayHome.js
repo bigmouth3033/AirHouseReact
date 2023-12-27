@@ -70,6 +70,14 @@ const StyledContainer = styled(motion.div)`
       `;
     }
   }}
+
+  @media only screen and (max-width: 800px) {
+    grid-template-columns: 1fr !important;
+    border-radius: none;
+    & .button {
+      border-radius: none;
+    }
+  }
 `;
 
 const StyledWhere = styled(StyledButtonBoxContainer)`
@@ -174,6 +182,11 @@ const StyledWherePopUp = styled.div`
     font-weight: 600;
     font-size: 14px;
   }
+
+  @media only screen and (max-width: 800px) {
+    transform: translate(-1rem, 13.5rem);
+    border-radius: none;
+  }
 `;
 
 const StyledDatePopUp = styled.div`
@@ -181,6 +194,11 @@ const StyledDatePopUp = styled.div`
   top: 5rem;
   width: 100%;
   transform: translateX(-34%);
+
+  @media only screen and (max-width: 800px) {
+    transform: translate(-1rem, 13.5rem);
+    border-radius: none;
+  }
 `;
 
 const StyledOption = styled.div`
@@ -211,6 +229,12 @@ const StyledAccommodate = styled.div`
   width: 40%;
   background-color: white;
   border-radius: 15px;
+
+  @media only screen and (max-width: 800px) {
+    transform: translate(-1rem, 13.5rem);
+    border-radius: none;
+    width: 100%;
+  }
 `;
 
 const StyledGuest = styled.div`

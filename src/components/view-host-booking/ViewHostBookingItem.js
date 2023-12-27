@@ -212,14 +212,14 @@ export default function ViewHostBookingItem({ data }) {
           <img src={data.property.images[0].image} />
         </StyledFirst>
         <StyledSecond>
-          <h3>{data.property.name}</h3>
+          <h3>
+            {data.property.name} - {data.user.id}
+          </h3>
           <div>
             <p>
               <FontAwesomeIcon className="icon" icon={faAddressBook} />
-              {data.user.address}
+              {data.property.address}
             </p>
-          </div>
-          <div>
             <p>
               <FontAwesomeIcon className="icon" icon={faCalendar} /> From {data.check_in_date} <span className="to">to</span>
               {data.check_out_date}

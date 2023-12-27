@@ -45,6 +45,9 @@ export default function ViewHostBookingSideBar({ setChoice, choice }) {
       <StyledItem $choice={choice == "success" ? true : false} onClick={() => setChoice("success")}>
         Success
       </StyledItem>
+      <StyledItem $choice={choice == "expired" ? true : false} onClick={() => setChoice("expired")}>
+        Expired
+      </StyledItem>
     </StyledSideBar>
   );
 }

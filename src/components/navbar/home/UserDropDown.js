@@ -61,6 +61,11 @@ function UserDropDown({ blur, showDropDown }) {
     blur();
   }
 
+  const onDashboardHandler = () => {
+    navigate("/user/your-dashboard");
+    blur();
+  };
+
   function useOutsideAlerter(ref) {
     useEffect(() => {
       function handleClickOutside(event) {
@@ -109,6 +114,7 @@ function UserDropDown({ blur, showDropDown }) {
       {showDropDown && (
         <StyledDropDownContainer ref={wrapperRef}>
           {userQuery.isSuccess || <button onClick={onShowSignUpHandler}>Signup</button>}
+          {userQuery.isSuccess && <button onClick={onDashboardHandler}>Dashboard</button>}
           {userQuery.isSuccess || <button onClick={onShowLoginHandler}>Log in</button>}
           {userQuery.isSuccess && <button onClick={onLogoutHandler}>Log out</button>}
           {userQuery.isSuccess && <button onClick={onListingHandler}>Listing</button>}

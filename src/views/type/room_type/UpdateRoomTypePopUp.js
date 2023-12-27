@@ -147,12 +147,14 @@ export default function UpdateRoomTypePopUp({ currentPage, chosenId, setShowPopU
   const onUpdateEvent = (ev) => {
     ev.preventDefault();
 
-    const imgExtension = ["jpg", "png", "svg", "jpeg", "webp"];
-    const imgArr = imgUploadRef.current.files[0].name.split(".");
+    if (imgUploadRef.current.files[0]) {
+      const imgExtension = ["jpg", "png", "svg", "jpeg", "webp"];
+      const imgArr = imgUploadRef.current.files[0].name.split(".");
 
-    if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
-      alert("only accept img with format of jpg, png, svg, jpeg, webp");
-      return;
+      if (!imgExtension.includes(imgArr[imgArr.length - 1])) {
+        alert("only accept img with format of jpg, png, svg, jpeg, webp");
+        return;
+      }
     }
 
     const formData = new FormData();

@@ -323,6 +323,7 @@ const Calendar = () => {
     formData.append("check_out_before", state.checkOutBefore); //
     formData.append("minimum_stay", state.minimumStay);
     formData.append("maximum_stay", state.maximumStay);
+
     formData.append("property_status", state.property_status == "true" ? 1 : 0); //
     state.exceptionDate.forEach((exception) => {
       formData.append("exception[]", JSON.stringify(exception));

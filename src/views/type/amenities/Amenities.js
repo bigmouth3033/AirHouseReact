@@ -209,6 +209,12 @@ export default function Amenities() {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["amenity", "page", currentPage] });
           },
+          onError: (error) => {
+            const response = error.response;
+            if (response.status == 403) {
+              alert("Cant delete amenities that has property using it");
+            }
+          },
         }
       );
     }
@@ -262,9 +268,6 @@ export default function Amenities() {
         {showUpdatePopUp && <UpdateAmenityPopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
       </StyledHeader>
       <StyledContainer>
-        <StyledSearchContainer>
-          <StyledSearchInput type="search" placeholder="Search" />
-        </StyledSearchContainer>
         <StyledTable className="table table-responsive table-hover">
           <thead>
             <tr>

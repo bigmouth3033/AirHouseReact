@@ -24,8 +24,6 @@ import { RoomTypeQueryPage } from "api/room-typeApi";
 import CreateRoomTypePopUp from "./CreateRoomTypePopUp";
 import UpdateRoomTypePopUp from "./UpdateRoomTypePopUp";
 
-
-
 const StyledRoomType = styled.div``;
 
 const StyledContainer = styled.div`
@@ -208,6 +206,12 @@ export default function RoomType() {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["roomtype", "page", currentPage] });
           },
+          onError: (error) => {
+            const response = error.response;
+            if (response.status == 403) {
+              alert("Cant delete room type that has property using it");
+            }
+          },
         }
       );
     }
@@ -261,9 +265,6 @@ export default function RoomType() {
         {showUpdatePopUp && <UpdateRoomTypePopUp currentPage={currentPage} chosenId={chosenId} setShowPopUp={setshowUpdatePopUp} />}
       </StyledHeader>
       <StyledContainer>
-        <StyledSearchContainer>
-          <StyledSearchInput type="search" placeholder="Search" />
-        </StyledSearchContainer>
         <StyledTable className="table table-responsive table-hover">
           <thead>
             <tr>

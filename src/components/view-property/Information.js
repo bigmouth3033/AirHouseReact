@@ -3,6 +3,7 @@ import CalendarViewHost from "./CalendarViewHost";
 import Avatar from "react-avatar";
 import { useStateContext } from "contexts/ContextProvider";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div``;
 const StyledSection = styled.div`
@@ -28,6 +29,10 @@ const StyledSectionTow = styled.div`
   text-align: justify;
   padding: 1.5rem 0;
   border-bottom: 1px solid #dddddd;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
 const StyledHouse = styled.div`
   margin-top: 1rem;
@@ -49,6 +54,11 @@ const StyledHost = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+  cursor: pointer;
+
+  & .avatar {
+    cursor: pointer;
+  }
 
   p {
     margin-left: 20px;
@@ -172,6 +182,7 @@ const formatDate = (dateObj) => {
   return `${month} , ${year}`;
 };
 const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }) => {
+  const navigate = useNavigate();
   const { pageWidth } = useStateContext();
   const [showSee, setShowSee] = useState(true);
   //khuc này thêm vào
@@ -210,6 +221,7 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
     const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
     return match && match[1];
   }
+
   //toi đây
   return (
     <StyledContainer>
@@ -236,17 +248,16 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
         </StyledDetailInfor>
       </StyledSection>
       <StyledSection>
-        <StyledHost>
+        <StyledHost onClick={() => window.open(`/profile/dashboard/${data.user.id}`, "_blank")}>
           <div>
-            <Avatar src={data.user.image} size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
+            <Avatar className="avatar" src={data.user.image} size="40px" textSizeRatio={2} round={true} name={data.user.first_name} />
           </div>
           <div className="host-container">
             <p className="hosted">
               Hosted by {data.user.first_name} {data.user.last_name}
             </p>
             <p>
-              Since
-              <StyledSince>{formatDate(new Date(data.user.created_at))}</StyledSince>
+              Since <StyledSince>{formatDate(new Date(data.user.created_at))}</StyledSince>
             </p>
           </div>
         </StyledHost>
@@ -305,18 +316,20 @@ const Information = ({ data, value, setValue, onHandleChange, disabledBookDate }
           )}
         </StyledSeeMore>
         {/* video khúc nayf */}
-        <div>
-          <iframe
-            width="100%"
-            height="400"
-            src={`https://www.youtube.com/embed/${extractVideoId(data.video)}`}
-            allowFullScreen
-            title={data.name}
-          ></iframe>
-          <StyledA href={data.video} target="_blank" rel="noopener noreferrer">
-            Welcome to the Extraordinary Moments at Our Property!
-          </StyledA>
-        </div>
+        {data.video && (
+          <div>
+            <iframe
+              width="100%"
+              height="400"
+              src={`https://www.youtube.com/embed/${extractVideoId(data.video)}`}
+              allowFullScreen
+              title={data.name}
+            ></iframe>
+            <StyledA href={data.video} target="_blank" rel="noopener noreferrer">
+              Welcome to the Extraordinary Moments at Our Property!
+            </StyledA>
+          </div>
+        )}
         {/* tới đây  */}
       </StyledSection>
       <StyledSection>

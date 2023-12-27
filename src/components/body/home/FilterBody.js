@@ -8,17 +8,37 @@ import PopUpContainer from "ui/PopUpContainer";
 import { useStateContext } from "contexts/ContextProvider";
 import { FilterPreviewQuery } from "api/hostApi";
 
-
 const StyledPopUpContainer = styled(PopUpContainer)`
   background-color: white;
   position: fixed;
   top: 3%;
-  min-width: 10rem;
+  width: 50rem;
 
   & button {
     cursor: pointer;
   }
+
+  @media only screen and (max-width: 855px) {
+    width: 40rem;
+  }
+
+  @media only screen and (max-width: 710px) {
+    width: 35rem;
+  }
+
+  @media only screen and (max-width: 600px) {
+    width: 30rem;
+  }
+
+  @media only screen and (max-width: 530px) {
+    width: 25rem;
+  }
+
+
+
+
 `;
+
 
 const StyledAmenities = styled.div`
   display: grid;
@@ -87,6 +107,7 @@ const StyledRoomTypeButton = styled.button`
 const StyledRoomBedGroup = styled.div`
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 `;
 
 const StyledBedButton = styled.button`
@@ -302,7 +323,7 @@ export default function FilterBody({ setShowPopUp }) {
       let bedIndex = 0;
       arrRoomAndBeds.forEach((item, index) => {
         if (item == bed) {
-          bedIndex = index + 1;
+          bedIndex = index;
         }
       });
       onSetActiveBed(bedIndex);
@@ -312,7 +333,7 @@ export default function FilterBody({ setShowPopUp }) {
       let bathIndex = 0;
       arrRoomAndBeds.forEach((item, index) => {
         if (item == bath) {
-          bathIndex = index + 1;
+          bathIndex = index;
         }
       });
       onSetActiveBath(bathIndex);

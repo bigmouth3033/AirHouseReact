@@ -7,7 +7,7 @@ const StyledPropertyNotFound = styled.div`
   /* border-radius: 8px; */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 10px;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;

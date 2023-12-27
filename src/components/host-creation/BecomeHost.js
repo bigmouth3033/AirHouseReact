@@ -216,7 +216,7 @@ const BecomeHost = () => {
                 })}
             </StyledSelect>
             <StyledGroupButon>
-              <StyledLink onClick={onClickContinue}>Continute </StyledLink>
+              <StyledLink onClick={onClickContinue}>Continue </StyledLink>
             </StyledGroupButon>
           </StyledForm>
         )}

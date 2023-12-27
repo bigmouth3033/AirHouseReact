@@ -91,6 +91,10 @@ const Box = styled.div`
     }
   }
 `;
+
+const StyledAlert = styled.h4`
+  color: red;
+`;
 export default function BookingItem(props) {
   const navigate = useNavigate();
 
@@ -104,7 +108,9 @@ export default function BookingItem(props) {
         <img className="property-image" src={props.BookingItem.image} />
       </div>
       <div className="item2">
-        <p style={{ fontWeight: "bold" }}>{props.BookingItem.Property_Name}</p>
+        <p style={{ fontWeight: "bold" }}>
+          {props.BookingItem.id} - {props.BookingItem.Property_Name}
+        </p>
         <p>
           <FontAwesomeIcon className="bar" icon={faLocationDot} />
           {props.BookingItem.province}, {props.BookingItem.districts}, {props.BookingItem.Property_Address}
@@ -113,6 +119,9 @@ export default function BookingItem(props) {
           <FontAwesomeIcon className="bar" icon={faAddressBook} />
           {props.BookingItem.check_in_date} <span className="to">to</span> {props.BookingItem.check_out_date}
         </p>
+        {props.BookingItem.status == "accepted" && (
+          <StyledAlert>Booking will be expired after 24 hours from {props.BookingItem.created_at}</StyledAlert>
+        )}
       </div>
       <div className="item3">
         <div className="item3-item">
@@ -120,7 +129,9 @@ export default function BookingItem(props) {
           <p className="name-user-property">
             {props.BookingItem.user_firstName} {props.BookingItem.user_lastName}
           </p>
-          {props.BookingItem.status && <button onClick={() => onCompletePayment(props.BookingItem.id)}>Finish Payment</button>}
+          {props.BookingItem.status == "accepted" && (
+            <button onClick={() => onCompletePayment(props.BookingItem.id)}>Finish Payment</button>
+          )}
           <div className="Link">
             <button
               onClick={() => {

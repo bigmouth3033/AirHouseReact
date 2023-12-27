@@ -21,10 +21,6 @@ const StyledBox = styled.div`
   }
 
   & .Message-Container {
-    
-    overflow: scroll;
-    border: solid thin black;
-    height: 500px;
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
@@ -51,6 +47,15 @@ const StyledMessage = styled.div`
     }
   }}
 `;
+
+const StyledMessageContainer = styled.div`
+  overflow-y: scroll;
+  height: 500px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+`;
+
 export default function Message(props) {
   const userQuery = UserQuery();
   const sendMessageMutation = SendMessageMutation();
@@ -101,24 +106,26 @@ export default function Message(props) {
 
   return (
     <StyledBox>
-      <div className="Message-Container">
-        {AllMessages.map((item, index) => {
-          return (
-            <StyledMessage $right={userQuery.data.user.email == item.from_email} key={index}>
-              <p>{item.from_email}</p>
-              <p>{item.body}</p>
-            </StyledMessage>
-          );
-        })}
-        {allMessagesAfterSub.map((item, index) => {
-          return (
-            <StyledMessage $right={userQuery.data.user.email == item.from_email} key={index}>
-              <p>{item.from_email}</p>
-              <p>{item.body}</p>
-            </StyledMessage>
-          );
-        })}
-      </div>
+      <StyledMessageContainer>
+        <div className="Message-Container">
+          {AllMessages.map((item, index) => {
+            return (
+              <StyledMessage $right={userQuery.data.user.email == item.from_email} key={index}>
+                <p>{item.from_email}</p>
+                <p>{item.body}</p>
+              </StyledMessage>
+            );
+          })}
+          {allMessagesAfterSub.map((item, index) => {
+            return (
+              <StyledMessage $right={userQuery.data.user.email == item.from_email} key={index}>
+                <p>{item.from_email}</p>
+                <p>{item.body}</p>
+              </StyledMessage>
+            );
+          })}
+        </div>
+      </StyledMessageContainer>
       <form onSubmit={(e) => handleMessage(e)}>
         <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
       </form>

@@ -10,6 +10,7 @@ import StyledButtonContainer from "../../../ui/StyledButtonContainer";
 import { UserQuery } from "api/userApi";
 
 import UserDropDown from "./UserDropDown";
+import userEvent from "@testing-library/user-event";
 
 const StyledUserContainer = styled(StyledButtonContainer)`
   width: fit-content;
@@ -33,6 +34,11 @@ const StyledUserContainer = styled(StyledButtonContainer)`
 
   &:active {
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  }
+
+  @media (max-width: 800px) {
+    border: none;
+    box-shadow: none;
   }
 `;
 
@@ -81,7 +87,9 @@ function NavUser() {
         {userQuery.isLoading || userQuery.isError ? (
           <FontAwesomeIcon className="user" icon={faCircleUser} />
         ) : (
-          <Avatar src={userQuery.data.user.image} size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
+          userQuery.isSuccess && (
+            <Avatar src={userQuery.data.user.image} size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
+          )
         )}
       </StyledUserContainer>
       <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
@@ -90,3 +98,32 @@ function NavUser() {
 }
 
 export default NavUser;
+
+export const ReponsiveNavUser = () => {
+  const [showDropDown, setShowDropDown] = useState(false);
+  const userQuery = UserQuery();
+  const [becomeHost, setBecomeHost] = useState(false);
+
+  function onClickDropDown() {
+    setShowDropDown(!showDropDown);
+  }
+
+  function onBlurDropDown() {
+    setShowDropDown(false);
+  }
+
+  return (
+    <StyledContainer>
+      <StyledUserContainer className="navbar-dropdown" onClick={onClickDropDown}>
+        {userQuery.isLoading || userQuery.isError ? (
+          <FontAwesomeIcon className="user" icon={faCircleUser} />
+        ) : (
+          userQuery.isSuccess && (
+            <Avatar src={userQuery.data.user.image} size="30px" textSizeRatio={2} round={true} name={userQuery.data.user.first_name} />
+          )
+        )}
+      </StyledUserContainer>
+      <UserDropDown showDropDown={showDropDown} blur={onBlurDropDown} className="dropdown" />
+    </StyledContainer>
+  );
+};

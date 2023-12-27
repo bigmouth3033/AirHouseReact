@@ -92,8 +92,6 @@ const StyledWelcome = styled.div`
   margin: 0 -25px;
 `;
 
-
-
 const SignupStep1 = ({ state, dispatch }) => {
   const [errorText, setErrorText] = useState(false);
   const [notUnique, setNotUnique] = useState(false);
@@ -136,7 +134,7 @@ const SignupStep1 = ({ state, dispatch }) => {
             {notUnique && <span>Someone is already using this email</span>}
           </StyledError>
         </StyledFormContainer>
-        <StyledButtonSubmit onClick={validateForm}>Continute</StyledButtonSubmit>
+        <StyledButtonSubmit onClick={validateForm}>Continute</StyledButtonSubmit>\
       </StyledForm>
     </StyledContainer>
   );

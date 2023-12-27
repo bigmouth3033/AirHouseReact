@@ -11,11 +11,18 @@ const StyledContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   & .PageNumber {
-    border: solid thin black;
-    padding: 10px;
+    & button {
+      background-color: white;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 17px;
+    }
   }
   & .PageNumberContainer {
     display: flex;
+    justify-content: flex-end;
     gap: 10px;
   }
 `;
@@ -28,8 +35,8 @@ const StyledItems = styled.div`
 `;
 
 export default function Content(props) {
-  const [secletedPage, setSecletedPage] = useState();
-
+  const [secletedPage, setSecletedPage] = useState("1");
+  let totalPage = null;
   const fethCurrentPage = async (secletedPage, UserTitle) => {
     const response = await axiosClient.get(`getBookingByUser?page=${secletedPage}&status=${UserTitle}`);
     return response.data;
@@ -46,17 +53,21 @@ export default function Content(props) {
   };
 
   const handlePagination = (pageNumber) => {
+    window.scrollTo(0, 0);
     setSecletedPage(pageNumber);
   };
   const currentPageByUserQuery = CurrentPageByUserQuery(secletedPage, props.UserTitle);
 
-  let totalPage = null;
+  useEffect(() => {
+    console.log(currentPageByUserQuery.data);
+  }, [currentPageByUserQuery.isSuccess, props.UserTitle]);
+
   if (currentPageByUserQuery.isSuccess) {
     totalPage = Math.ceil(currentPageByUserQuery.data.total / 10);
   }
 
   if (currentPageByUserQuery.data?.data?.length === 0) {
-    if (secletedPage != 1) {
+    if (secletedPage > 1) {
       setSecletedPage(secletedPage - 1);
     }
   }
@@ -76,9 +87,10 @@ export default function Content(props) {
   return (
     <StyledContainer>
       <StyledItems>
-        {currentPageByUserQuery.data.data.map((item, index) => {
-          return <BookingItem key={index} BookingItem={item} />;
-        })}
+        {currentPageByUserQuery.data.data &&
+          currentPageByUserQuery.data.data.map((item, index) => {
+            return <BookingItem key={index} BookingItem={item} />;
+          })}
       </StyledItems>
       <div className="PageNumberContainer">
         {Array(totalPage)

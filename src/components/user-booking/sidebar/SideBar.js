@@ -13,14 +13,15 @@ const StyledBox = styled.div`
     transition: all 0.05s;
   }
   & .title-list-container li:hover {
-    background-color: rgba(118, 118, 118, 0.5);
+    background-color: rgba(118, 118, 118, 0.1);
   }
 `;
 export default function SideBar({ setUserTitle }) {
-  const [titleArray, setTitleArray] = useState(["all", "accepted", "denied", "success", "waiting"]);
+  const titleArray = ["all", "accepted", "denied", "success", "waiting", "expired"];
 
   const handleTitle = (item) => {
     setUserTitle(item);
+    console.log(item);
   };
 
   return (
@@ -28,7 +29,7 @@ export default function SideBar({ setUserTitle }) {
       <ul className="title-list-container">
         {titleArray.map((item, index) => {
           return (
-            <li key={index} onClick={(e) => handleTitle(item)}>
+            <li key={index} onClick={() => handleTitle(item)}>
               <Knot title={item.charAt(0).toUpperCase() + item.slice(1)} />
             </li>
           );

@@ -6,7 +6,7 @@ import styled from "styled-components";
 const StyledGroupVote = styled.div`
   border: 1px black solid;
   border-radius: 5px;
-  width: 500px;
+  max-width: 500px;
   height: 40px;
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -44,7 +44,7 @@ const RatingStart = ({ property_id, page }) => {
     color: #717171;
     font-size: 14px;
     line-height: 1.5;
-    width: 500px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 1rem 0;
   `;

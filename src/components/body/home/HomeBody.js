@@ -7,6 +7,7 @@ import { useStateContext } from "contexts/ContextProvider";
 import { BodyItemSkeleton } from "./BodyItem";
 import { useNavigate } from "react-router-dom";
 import FilterBody from "./FilterBody";
+import PropertyNotFound from "components/PropertyNotFound";
 
 const StyledBody = styled.div``;
 
@@ -87,6 +88,7 @@ function HomeBody() {
 
   return (
     <StyledBody>
+      {propertyQuery.isSuccess && propertyQuery.data.length == 0 && <PropertyNotFound />}
       {clickFilter && <FilterBody setShowPopUp={setClickFilter} />}
       <StyledContainer>
         {propertyQuery.isSuccess &&

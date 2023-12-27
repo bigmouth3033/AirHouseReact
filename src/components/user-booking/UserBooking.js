@@ -27,7 +27,7 @@ function UserBooking() {
   return (
     <Box>
       <div className="grid-container-user-booking">
-        <p>Booking</p> <p></p>
+        <p>My Bookings</p> <p></p>
         <SideBar setUserTitle={setUserTitle} />
         <Content UserTitle={userTitle} />
       </div>

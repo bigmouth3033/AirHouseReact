@@ -199,3 +199,50 @@ export const UpdateImageMutation = () => {
 
   return mutation;
 };
+
+const onRegisterAdmin = async (payload) => {
+  const response = await axiosClient.post("admin/signup", payload);
+  return response.data;
+};
+
+export const RegisterAdminMutation = () => {
+  const mutation = useMutation({
+    mutationFn: onRegisterAdmin,
+  });
+
+  return mutation;
+};
+
+export const UserDashboardQuery = () => {
+  const queryClient = useQueryClient();
+};
+
+const getFullInfoUserById = async (query) => {
+  const id = query.queryKey[1];
+  const response = await axiosClient.get("/profile/dashboard/" + id);
+
+  return response.data;
+};
+
+export const DefaultViewUserQuery = (id) => {
+  const userQuery = useQuery({
+    queryKey: ["user", id],
+    queryFn: getFullInfoUserById,
+  });
+
+  return userQuery;
+};
+
+const selfDashboardGetUser = async () => {
+  let response = await axiosClient.get("user/profile/your-dashboard");
+  return response.data;
+};
+
+export const GuestViewUserQuery = () => {
+  const userQuery = useQuery({
+    queryKey: ["selfDashboard"],
+    queryFn: selfDashboardGetUser,
+  });
+
+  return userQuery;
+};
