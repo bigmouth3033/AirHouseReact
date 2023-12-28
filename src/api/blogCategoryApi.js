@@ -32,7 +32,7 @@ const deleteBlogCategory = async (id) => {
 
 const filterById = async (query) => {
   const id = query.queryKey[1];
-  const response = await axiosClient.get("filterByIdBlogCategory?id=" + id);
+  const response = await axiosClient.get("filterByIdBlogCategory/" + id);
   return response.data;
 };
 
@@ -55,7 +55,7 @@ const filterById = async (query) => {
 
 export const BlogCategoryQueryId = (id) => {
   const categoryQuery = useQuery({
-    queryKey: ["category", id],
+    queryKey: ["BlogCategoryQueryId", id],
     queryFn: filterById,
   });
 
@@ -81,7 +81,7 @@ export const UpdateBlogCategoryMutation = () => {
   const categoryMutation = useMutation({
     mutationFn: updateBlogCategory,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["BlogCategory"] });
+      // queryClient.invalidateQueries({ queryKey: ["UpdateBlogCategory"] });
     },
   });
 
@@ -111,7 +111,7 @@ export const BlogCategoryQuery = (page) => {
 };
 export const CategoryValueQuery = () => {
   const categoryValueQuery = useQuery({
-    queryKey: ["BlogCategory"],
+    queryKey: ["CategoryValue"],
     queryFn: readCateValueFn,
   });
 
